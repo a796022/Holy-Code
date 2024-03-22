@@ -1,4 +1,4 @@
-#include <gtk/gtk.h>
+#include "window.h"
 
 GtkWidget *crear_ventana() {
     GtkWidget *window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
@@ -21,9 +21,6 @@ void establecer_tamano_minimo_ventana(GtkWidget *window, int ancho, int alto) {
     gtk_widget_set_size_request(window, ancho, alto);
 }
 
-// Conecta la señal "destroy" de la ventana a la función gtk_main_quit()
-// Esto hace que cuando se cierre la ventana, también se termine el bucle
-// principal de eventos de GTK (y por lo tanto, termine el programa)
 void establecer_terminar_programa_cerrado_ventana(GtkWidget *window) {
     g_signal_connect(window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
 }

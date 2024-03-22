@@ -1,5 +1,5 @@
 # Nombre del ejecutable
-TARGET = wizard
+TARGET = bin/wizard
 
 # Compilador
 CC = gcc
@@ -10,11 +10,14 @@ CFLAGS = -Wall `pkg-config --cflags gtk+-3.0`
 # Bibliotecas necesarias
 LIBS = `pkg-config --libs gtk+-3.0`
 
-# Fuentes
-SRCS = src/main.c
+# Directorios
+SRCDIR = src
+INCDIR = include
+OBJDIR = obj
 
-# Objetos
-OBJS = $(SRCS:.c=.o)
+# Fuentes
+SRCS = $(wildcard $(SRCDIR)/*.c)
+OBJS = $(patsubst $(SRCDIR)/%.c,$(OBJDIR)/%.o,$(SRCS))
 
 # Reglas de construcción
 all: $(TARGET)
@@ -22,8 +25,8 @@ all: $(TARGET)
 $(TARGET): $(OBJS)
 	$(CC) $(CFLAGS) -o $(TARGET) $(OBJS) $(LIBS)
 
-.c.o:
-	$(CC) $(CFLAGS) -c $< -o $@
+$(OBJDIR)/%.o: $(SRCDIR)/%.c
+	$(CC) $(CFLAGS) -I$(INCDIR) -c $< -o $@
 
 clean:
 	rm -f $(OBJS) $(TARGET)

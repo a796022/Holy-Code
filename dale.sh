@@ -1,2 +1,2 @@
 #!/bin/bash
-make && ./wizard && make clean
+make && bin/wizard && make clean
