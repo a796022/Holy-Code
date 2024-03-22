@@ -1,6 +1,7 @@
 #include <gtk/gtk.h>
 
 #include "window.h"
+#include "tree.h"
 
 int main(int argc, char *argv[]) {
     // Ventana principal
