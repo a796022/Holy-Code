@@ -1,7 +1,11 @@
 #include <gtk/gtk.h>
 
+#include "window.c"
+
 int main(int argc, char *argv[]) {
+    // Ventana principal
     GtkWidget *window;
+
     GtkWidget *tree_view;
     GtkListStore *store;
     GtkTreeIter iter;
@@ -9,16 +13,14 @@ int main(int argc, char *argv[]) {
     // Inicializar GTK
     gtk_init(&argc, &argv);
 
-    // Crear una nueva ventana
-    window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-    gtk_window_set_title(GTK_WINDOW(window), "Wizard");
+    // Crear y configurar la ventana
+    window = crear_ventana();
+    establecer_nombre_ventana(window, "Wizard");
+    establecer_tamano_por_defecto_ventana(window, 300, 200);
+    establecer_redimensionable_ventana(window, TRUE);
+    establecer_tamano_minimo_ventana(window, 300, 200);
+    establecer_terminar_programa_cerrado_ventana(window);
     
-    // Establecer la ventana y sus propiedades
-    gtk_window_set_default_size(GTK_WINDOW(window), 300, 200);
-    gtk_window_set_resizable(GTK_WINDOW(window), TRUE);
-    gtk_widget_set_size_request(window, 300, 200);
-    g_signal_connect(window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
-
     /**
      * Esta función crea un nuevo modelo de lista con una columna y especifica
      * el tipo de datos que contendrá esa columna. En este caso, el modelo de
@@ -47,10 +49,10 @@ int main(int argc, char *argv[]) {
     gtk_list_store_set(store, &iter, 0, "Elemento 3", -1);
 
     // Agregar el TreeView a la ventana
-    gtk_container_add(GTK_CONTAINER(window), tree_view);
+    agregar_widget_ventana(window, tree_view);
 
     // Mostrar la ventana
-    gtk_widget_show_all(window);
+    mostrar_ventana(window);
 
     // Iniciar el bucle principal de eventos de GTK
     gtk_main();
