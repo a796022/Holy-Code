@@ -3,6 +3,7 @@
         "tree.h": "c",
         "menu_bar.h": "c",
         "gtk.h": "c",
-        "box.h": "c"
+        "box.h": "c",
+        "window.h": "c"
     }
 }
