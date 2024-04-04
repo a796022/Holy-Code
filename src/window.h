@@ -22,4 +22,6 @@ void agregar_widget_ventana(GtkWidget *window, GtkWidget *widget);
 
 void mostrar_ventana(GtkWidget *window);
 
+void cerrar_ventana(GtkWidget *window);
+
 #endif /* WINDOW_H */

@@ -32,3 +32,7 @@ void agregar_widget_ventana(GtkWidget *window, GtkWidget *widget) {
 void mostrar_ventana(GtkWidget *window) {
     gtk_widget_show_all(window);
 }
+
+void cerrar_ventana(GtkWidget *window) {
+    gtk_widget_destroy(window);
+}

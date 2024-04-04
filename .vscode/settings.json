@@ -4,6 +4,7 @@
         "menu_bar.h": "c",
         "gtk.h": "c",
         "box.h": "c",
-        "window.h": "c"
+        "window.h": "c",
+        "window_manager.h": "c"
     }
 }

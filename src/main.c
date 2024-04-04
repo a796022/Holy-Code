@@ -1,14 +1,11 @@
 #include <gtk/gtk.h>
 
-#include "window.h"
+#include "window_manager.h"
 #include "tree.h"
-#include "menu_bar_setup.h"
+#include "menu_bar_manager.h"
 #include "box.h"
 
 int main(int argc, char *argv[]) {
-    // Ventana principal
-    GtkWidget *window;
-
     // Modelo de datos del arbol
     GtkTreeStore *model;
 
@@ -24,16 +21,11 @@ int main(int argc, char *argv[]) {
     // Inicializar GTK
     gtk_init(&argc, &argv);
 
-    // Crear y configurar la ventana
-    window = crear_ventana();
-    establecer_nombre_ventana(window, "Wizard");
-    establecer_tamano_por_defecto_ventana(window, 900, 500);
-    establecer_redimensionable_ventana(window, TRUE);
-    establecer_tamano_minimo_ventana(window, 300, 200);
-    establecer_terminar_programa_cerrado_ventana(window);
-
     // Crear un contenedor de caja vertical para el menu_bar y lo demás
     vbox = crear_box(GTK_ORIENTATION_VERTICAL, 0);
+
+    // Crear y configurar la ventana
+    inicializar_ventana_principal(vbox);
 
     // Crear el menu_bar
     menu_bar = inicializar_menu_bar_ventana_principal();
@@ -56,12 +48,9 @@ int main(int argc, char *argv[]) {
 
     // Agregar el TreeView al contenedor de la caja vertical
     agregar_widget_box(vbox, tree_view, TRUE, TRUE, 0);
-    
-    // Agregar la caja vertical a la ventana
-    agregar_widget_ventana(window, vbox);
 
     // Mostrar la ventana
-    mostrar_ventana(window);
+    mostrar_ventana_principal();
 
     // Iniciar el bucle principal de eventos de GTK
     gtk_main();
