@@ -5,7 +5,7 @@ void abrir() {
 }
 
 void salir() {
-    g_print("Salir\n");
+    cerrar_ventana_principal();
 }
 
 void mostrar_info_ventana() {
