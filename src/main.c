@@ -2,7 +2,7 @@
 
 #include "window.h"
 #include "tree.h"
-#include "menu_bar.h"
+#include "menu_bar_setup.h"
 #include "box.h"
 
 int main(int argc, char *argv[]) {
