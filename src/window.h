@@ -24,4 +24,10 @@ void mostrar_ventana(GtkWidget *window);
 
 void cerrar_ventana(GtkWidget *window);
 
+void mostrar_dialogo(GtkWidget *window, const char *mensaje, const char *titulo);
+
+int obtener_ancho_ventana(GtkWindow *window);
+
+int obtener_alto_ventana(GtkWindow *window);
+
 #endif /* WINDOW_H */

@@ -4,12 +4,14 @@ void abrir() {
     g_print("Abrir\n");
 }
 
+// Salir de la aplicación
 void salir() {
     cerrar_ventana_principal();
 }
 
+// Mostrar una ventanita informativa con un texto de prueba
 void mostrar_info_ventana() {
-    g_print("Mostrar información de la ventana\n");
+    mostrar_ventana_info_ventana();
 }
 
 GtkWidget *inicializar_menu_bar_ventana_principal() {

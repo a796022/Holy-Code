@@ -32,3 +32,25 @@ void mostrar_ventana_principal() {
 void cerrar_ventana_principal() {
     cerrar_ventana(main_window);
 }
+
+int obtener_ancho_ventana_principal() {
+    return obtener_ancho_ventana(GTK_WINDOW(main_window));
+}
+
+int obtener_alto_ventana_principal() {
+    return obtener_alto_ventana(GTK_WINDOW(main_window));
+}
+
+void mostrar_ventana_info_ventana() {
+    const int ancho = obtener_ancho_ventana_principal();
+    const int alto = obtener_alto_ventana_principal();
+
+    char mensaje[100]; // Ajusta el tamaño según sea necesario
+    sprintf(mensaje,    "Anchura: %dpx\n"
+                        "Altura: %dpx",
+                        ancho, alto);
+    
+    const char* titulo = "Información de la ventana";
+    
+    mostrar_dialogo(main_window, mensaje, titulo);
+}
