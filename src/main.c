@@ -4,7 +4,7 @@
 #include "tree.h"
 #include "menu_bar_manager.h"
 #include "box.h"
-#include "atajos_teclado.h"
+#include "atajos_teclado_manager.h"
 
 int main(int argc, char *argv[]) {
     // Modelo de datos del arbol
@@ -50,8 +50,8 @@ int main(int argc, char *argv[]) {
     // Agregar el TreeView al contenedor de la caja vertical
     agregar_widget_box(vbox, tree_view, TRUE, TRUE, 0);
 
-    // Crear un atajo de teclado para cerrar la ventana
-    asociar_atajo_senial(MENUBAR_SALIR, "activate", GDK_KEY_Q, GDK_CONTROL_MASK);
+    // Inicializar los atajos de teclado
+    inicializar_atajos_teclado();
 
     // Mostrar la ventana
     mostrar_ventana_principal();
