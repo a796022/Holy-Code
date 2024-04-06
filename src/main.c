@@ -4,6 +4,7 @@
 #include "tree.h"
 #include "menu_bar_manager.h"
 #include "box.h"
+#include "atajos_teclado.h"
 
 int main(int argc, char *argv[]) {
     // Modelo de datos del arbol
@@ -48,6 +49,12 @@ int main(int argc, char *argv[]) {
 
     // Agregar el TreeView al contenedor de la caja vertical
     agregar_widget_box(vbox, tree_view, TRUE, TRUE, 0);
+
+    ///////////
+    guint key = GDK_KEY_Q;
+    GdkModifierType modifiers = GDK_CONTROL_MASK;
+    gtk_widget_add_accelerator(get_prueba(), "activate", gtk_accel_group_new(), key, modifiers, GTK_ACCEL_VISIBLE);
+    ///////////
 
     // Mostrar la ventana
     mostrar_ventana_principal();

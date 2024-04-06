@@ -5,6 +5,7 @@
         "gtk.h": "c",
         "box.h": "c",
         "window.h": "c",
-        "window_manager.h": "c"
+        "window_manager.h": "c",
+        "atajos_teclado.h": "c"
     }
 }

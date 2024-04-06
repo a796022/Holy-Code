@@ -8,4 +8,6 @@
 
 GtkWidget *inicializar_menu_bar_ventana_principal();
 
+GtkWidget *get_prueba();
+
 #endif /* MENU_BAR_MANAGER */

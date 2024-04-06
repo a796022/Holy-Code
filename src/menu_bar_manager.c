@@ -14,6 +14,12 @@ void mostrar_info_ventana() {
     mostrar_ventana_info_ventana();
 }
 
+GtkWidget *opcion_salir;
+
+GtkWidget *get_prueba() {
+    return opcion_salir;
+}
+
 GtkWidget *inicializar_menu_bar_ventana_principal() {
     // Crear el menú
     GtkWidget *menu_bar_ventana_principal = crear_menu_bar();
@@ -21,7 +27,7 @@ GtkWidget *inicializar_menu_bar_ventana_principal() {
     // Crear las pestañas y agregar los elementos
     GtkWidget *menu_file = agregar_pestania_menu_bar(menu_bar_ventana_principal, "Archivo");
     GtkWidget *opcion_abrir = agregar_elemento_menu_bar(menu_file, "Abrir");
-    GtkWidget *opcion_salir = agregar_elemento_menu_bar(menu_file, "Salir");
+    opcion_salir = agregar_elemento_menu_bar(menu_file, "Salir");
 
     GtkWidget *menu_tools = agregar_pestania_menu_bar(menu_bar_ventana_principal, "Ayuda");
     GtkWidget *opcion_mostrar_info_ventana = agregar_elemento_menu_bar(menu_tools, "Mostrar información de la ventana");
