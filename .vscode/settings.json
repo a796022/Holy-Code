@@ -6,6 +6,7 @@
         "box.h": "c",
         "window.h": "c",
         "window_manager.h": "c",
-        "atajos_teclado.h": "c"
+        "atajos_teclado.h": "c",
+        "menu_bar_manager.h": "c"
     }
 }

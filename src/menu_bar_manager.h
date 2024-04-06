@@ -6,8 +6,13 @@
 #include "menu_bar.h"
 #include "window_manager.h"
 
-GtkWidget *inicializar_menu_bar_ventana_principal();
+// Menú "Archivo"
+extern GtkWidget *MENUBAR_ABRIR;
+extern GtkWidget *MENUBAR_SALIR;
 
-GtkWidget *get_prueba();
+// Menú "Ayuda"
+extern GtkWidget *MENUBAR_MOSTRAR_INFO_VENTANA;
+
+GtkWidget *inicializar_menu_bar_ventana_principal();
 
 #endif /* MENU_BAR_MANAGER */
