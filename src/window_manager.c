@@ -7,38 +7,38 @@ const gboolean REDIMENSIONABLE = TRUE;
 const int ANCHO_MINIMO_VENTANA = 300;
 const int ALTO_MINIMO_VENTANA = 200;
 
-GtkWidget *main_window;
+GtkWidget *MAIN_WINDOW;
 
 // Inicializa la ventana con el widget pasado por parámetro
 void inicializar_ventana_principal(GtkWidget *box) {
     // Crear y configurar la ventana
-    main_window = crear_ventana();
-    establecer_nombre_ventana(main_window, "Wizard");
-    establecer_tamano_por_defecto_ventana(main_window, 900, 500);
-    establecer_redimensionable_ventana(main_window, TRUE);
-    establecer_tamano_minimo_ventana(main_window, 300, 200);
-    establecer_terminar_programa_cerrado_ventana(main_window);
+    MAIN_WINDOW = crear_ventana();
+    establecer_nombre_ventana(MAIN_WINDOW, "Wizard");
+    establecer_tamano_por_defecto_ventana(MAIN_WINDOW, 900, 500);
+    establecer_redimensionable_ventana(MAIN_WINDOW, TRUE);
+    establecer_tamano_minimo_ventana(MAIN_WINDOW, 300, 200);
+    establecer_terminar_programa_cerrado_ventana(MAIN_WINDOW);
 
     // Agregar el componente principal a la ventana
-    agregar_widget_ventana(main_window, box);
+    agregar_widget_ventana(MAIN_WINDOW, box);
 }
 
 // Muestra la ventana principal
 void mostrar_ventana_principal() {
-    mostrar_ventana(main_window);
+    mostrar_ventana(MAIN_WINDOW);
 }
 
 // Cerrar la ventana principal
 void cerrar_ventana_principal() {
-    cerrar_ventana(main_window);
+    cerrar_ventana(MAIN_WINDOW);
 }
 
 int obtener_ancho_ventana_principal() {
-    return obtener_ancho_ventana(GTK_WINDOW(main_window));
+    return obtener_ancho_ventana(GTK_WINDOW(MAIN_WINDOW));
 }
 
 int obtener_alto_ventana_principal() {
-    return obtener_alto_ventana(GTK_WINDOW(main_window));
+    return obtener_alto_ventana(GTK_WINDOW(MAIN_WINDOW));
 }
 
 void mostrar_ventana_info_ventana() {
@@ -52,9 +52,9 @@ void mostrar_ventana_info_ventana() {
     
     const char* titulo = "Información de la ventana";
     
-    mostrar_dialogo(main_window, mensaje, titulo);
+    mostrar_dialogo(MAIN_WINDOW, mensaje, titulo);
 }
 
 GtkWidget *get_ventana() {
-    return main_window;
+    return MAIN_WINDOW;
 }

@@ -13,6 +13,6 @@
 */
 void asociar_atajo_senial(GtkWidget *widget, const gchar *senial, guint key, GdkModifierType modifiers) {
     GtkAccelGroup *accel_group = gtk_accel_group_new();
-    gtk_window_add_accel_group(GTK_WINDOW(get_ventana()), accel_group);
+    gtk_window_add_accel_group(GTK_WINDOW(MAIN_WINDOW), accel_group);
     gtk_widget_add_accelerator(widget, senial, accel_group, key, modifiers, GTK_ACCEL_VISIBLE);
 }
