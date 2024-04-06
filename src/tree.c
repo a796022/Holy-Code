@@ -1,3 +1,5 @@
+#include <gtk/gtk.h>
+
 #include "tree.h"
 
 GtkTreeStore *crear_modelo_datos_tree() {

@@ -1,8 +1,6 @@
 #ifndef ATAJOS_TECLADO_H
 #define ATAJOS_TECLADO_H
 
-#include <gtk/gtk.h>
-
 /**
  * Crea un grupo de aceleración para la ventana.
  * 

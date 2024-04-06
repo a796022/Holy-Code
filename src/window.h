@@ -1,8 +1,6 @@
 #ifndef WINDOW_H
 #define WINDOW_H
 
-#include <gtk/gtk.h>
-
 GtkWidget *crear_ventana();
 
 void establecer_nombre_ventana(GtkWidget *window, const char *nombre);

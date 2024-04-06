@@ -1,3 +1,5 @@
+#include <gtk/gtk.h>
+
 #include "window.h"
 
 GtkWidget *crear_ventana() {

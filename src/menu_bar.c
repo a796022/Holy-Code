@@ -1,3 +1,5 @@
+#include <gtk/gtk.h>
+
 #include "menu_bar.h"
 
 GtkWidget *crear_menu_bar() {

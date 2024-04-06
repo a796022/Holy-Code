@@ -1,8 +1,6 @@
 #ifndef TREE_H
 #define TREE_H
 
-#include <gtk/gtk.h>
-
 // GtkTreeView debe estar asociado a un modelo de datos para mostrar información
 GtkTreeStore *crear_modelo_datos_tree();
 

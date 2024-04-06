@@ -1,3 +1,6 @@
+#include <gtk/gtk.h>
+
+#include "window.h"
 #include "window_manager.h"
 
 const char *NOMBRE_VENTANA = "Wizard";

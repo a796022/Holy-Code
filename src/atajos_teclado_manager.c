@@ -1,3 +1,5 @@
+#include <gtk/gtk.h>
+
 #include "atajos_teclado_manager.h"
 #include "atajos_teclado.h"
 #include "window_manager.h"

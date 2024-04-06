@@ -1,4 +1,8 @@
+#include <gtk/gtk.h>
+
 #include "menu_bar_manager.h"
+#include "menu_bar.h"
+#include "window_manager.h"
 
 // Menú "Archivo"
 GtkWidget *MENUBAR_ABRIR;

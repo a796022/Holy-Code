@@ -1,3 +1,5 @@
+#include <gtk/gtk.h>
+
 #include "box.h"
 
 /**
