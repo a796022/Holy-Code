@@ -54,3 +54,7 @@ void mostrar_ventana_info_ventana() {
     
     mostrar_dialogo(main_window, mensaje, titulo);
 }
+
+GtkWidget *get_ventana() {
+    return main_window;
+}

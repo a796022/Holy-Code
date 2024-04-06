@@ -13,4 +13,6 @@ void cerrar_ventana_principal();
 
 void mostrar_ventana_info_ventana();
 
+GtkWidget *get_ventana();
+
 #endif /* WINDOW_MANAGER_H */

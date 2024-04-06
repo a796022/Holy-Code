@@ -51,9 +51,12 @@ int main(int argc, char *argv[]) {
     agregar_widget_box(vbox, tree_view, TRUE, TRUE, 0);
 
     ///////////
+    GtkAccelGroup *accel_group = gtk_accel_group_new();
+    gtk_window_add_accel_group(get_ventana(), accel_group);
+
     guint key = GDK_KEY_Q;
     GdkModifierType modifiers = GDK_CONTROL_MASK;
-    gtk_widget_add_accelerator(get_prueba(), "activate", gtk_accel_group_new(), key, modifiers, GTK_ACCEL_VISIBLE);
+    gtk_widget_add_accelerator(get_prueba(), "activate", accel_group, key, modifiers, GTK_ACCEL_VISIBLE);
     ///////////
 
     // Mostrar la ventana
