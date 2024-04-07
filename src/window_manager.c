@@ -2,6 +2,7 @@
 
 #include "window.h"
 #include "window_manager.h"
+#include "box.h"
 
 const char *NOMBRE_VENTANA = "Wizard";
 const int ANCHO_VENTANA = 900;
@@ -19,7 +20,10 @@ GtkWidget *MAIN_WINDOW;
  * 
  * @return void
 */
-void inicializar_ventana_principal(GtkWidget *box) {
+GtkWidget *inicializar_ventana_principal() {
+    // Caja que contendrá todos los widgets
+    GtkWidget *main_vbox;
+
     // Crear y configurar la ventana
     MAIN_WINDOW = crear_ventana();
     establecer_nombre_ventana(MAIN_WINDOW, "Wizard");
@@ -28,8 +32,13 @@ void inicializar_ventana_principal(GtkWidget *box) {
     establecer_tamano_minimo_ventana(MAIN_WINDOW, 300, 200);
     establecer_terminar_programa_cerrado_ventana(MAIN_WINDOW);
 
-    // Agregar el componente principal a la ventana
-    agregar_widget_ventana(MAIN_WINDOW, box);
+    // Crear un contenedor de caja vertical para el menu_bar y lo demás
+    main_vbox = crear_box(GTK_ORIENTATION_VERTICAL, 0);
+
+    // Agregar el contenedor principal a la ventana
+    agregar_widget_ventana(MAIN_WINDOW, main_vbox);
+
+    return main_vbox;
 }
 
 /**

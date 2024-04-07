@@ -10,7 +10,7 @@ extern GtkWidget *MAIN_WINDOW;
  * 
  * @return void
 */
-void inicializar_ventana_principal(GtkWidget *box);
+GtkWidget *inicializar_ventana_principal();
 
 /**
  * Muestra la ventana principal.

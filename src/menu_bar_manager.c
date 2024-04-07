@@ -3,6 +3,7 @@
 #include "menu_bar_manager.h"
 #include "menu_bar.h"
 #include "window_manager.h"
+#include "tree_manager.h"
 
 // Menú "Archivo"
 GtkWidget *MENUBAR_ABRIR;
@@ -11,8 +12,13 @@ GtkWidget *MENUBAR_SALIR;
 // Menú "Ayuda"
 GtkWidget *MENUBAR_MOSTRAR_INFO_VENTANA;
 
+/**
+ * Carga el árbol de la ventana principal de un fichero.
+ * 
+ * @return void
+*/
 void abrir() {
-    g_print("Abrir\n");
+    cargar_arbol_principal();
 }
 
 /**
