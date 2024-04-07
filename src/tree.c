@@ -79,10 +79,10 @@ void crear_columna_tree_view(GtkWidget *tree_view, const char *titulo) {
  * @return void
 */
 void cargar_arbol(GtkTreeStore *model, const char *filename) {
-    // FILE *file = fopen(filename, "r");
-    // if (file == NULL) {
-    //     return;
-    // }
+    FILE *file = fopen(filename, "r");
+    if (file == NULL) {
+        return;
+    }
 
     // char line[256];
     // while (fgets(line, sizeof(line), file)) {
