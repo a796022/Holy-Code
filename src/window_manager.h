@@ -33,4 +33,11 @@ void cerrar_ventana_principal();
 */
 void mostrar_ventana_info_ventana();
 
+/**
+ * Muestra una ventana de selector de archivos y devuelve la ruta del archivo seleccionado.
+ * 
+ * @return char*
+*/
+char *mostrar_ventana_selector_archivos();
+
 #endif /* WINDOW_MANAGER_H */

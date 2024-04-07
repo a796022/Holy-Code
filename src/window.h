@@ -88,6 +88,15 @@ void mostrar_ventana(GtkWidget *window);
 void cerrar_ventana(GtkWidget *window);
 
 /**
+ * Muestra un diálogo general y devuelve la respuesta.
+ * 
+ * @param dialog Diálogo a mostrar.
+ * 
+ * @return gint
+*/
+gint mostrar_dialogo(GtkWidget *dialog);
+
+/**
  * Muestra un diálogo con un mensaje.
  * 
  * @param window Ventana a la que se asociará el diálogo.
@@ -96,7 +105,7 @@ void cerrar_ventana(GtkWidget *window);
  * 
  * @return void
 */
-void mostrar_dialogo(GtkWidget *window, const char *mensaje, const char *titulo);
+void mostrar_dialogo_mensaje(GtkWidget *window, const char *mensaje, const char *titulo);
 
 /**
  * Obtiene el ancho de la ventana.
@@ -115,5 +124,23 @@ int obtener_ancho_ventana(GtkWindow *window);
  * @return int
 */
 int obtener_alto_ventana(GtkWindow *window);
+
+/**
+ * Crea un diálogo selector de archivos.
+ * 
+ * @param parent Ventana padre del diálogo.
+ * 
+ * @return GtkWidget*
+*/
+GtkWidget *crear_dialogo_selector_archivos(GtkWidget *parent);
+
+/**
+ * Obtiene el fichero seleccionado de un diálogo selector.
+ * 
+ * @param dialog Diálogo selector de archivos.
+ * 
+ * @return char*
+*/
+char *obtener_fichero_seleccionado(GtkWidget *dialog);
 
 #endif /* WINDOW_H */

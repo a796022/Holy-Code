@@ -108,6 +108,17 @@ void cerrar_ventana(GtkWidget *window) {
 }
 
 /**
+ * Muestra un diálogo general y devuelve la respuesta.
+ * 
+ * @param dialog Diálogo a mostrar.
+ * 
+ * @return gint
+*/
+gint mostrar_dialogo(GtkWidget *dialog) {
+    return gtk_dialog_run(GTK_DIALOG(dialog));
+}
+
+/**
  * Muestra un diálogo con un mensaje.
  * 
  * @param window Ventana a la que se asociará el diálogo.
@@ -116,7 +127,7 @@ void cerrar_ventana(GtkWidget *window) {
  * 
  * @return void
 */
-void mostrar_dialogo(GtkWidget *window, const char *mensaje, const char *titulo) {
+void mostrar_dialogo_mensaje(GtkWidget *window, const char *mensaje, const char *titulo) {
     GtkWidget *dialog = gtk_message_dialog_new(GTK_WINDOW(window),
                                                GTK_DIALOG_MODAL,
                                                GTK_MESSAGE_INFO,
@@ -127,7 +138,7 @@ void mostrar_dialogo(GtkWidget *window, const char *mensaje, const char *titulo)
         gtk_window_set_title(GTK_WINDOW(dialog), titulo);
     }
 
-    gtk_dialog_run(GTK_DIALOG(dialog));
+    mostrar_dialogo(dialog);
     gtk_widget_destroy(dialog);
 }
 
@@ -155,4 +166,33 @@ int obtener_alto_ventana(GtkWindow *window) {
     gint width, height;
     gtk_window_get_size(window, &width, &height);
     return height;
+}
+
+/**
+ * Crea un diálogo selector de archivos.
+ * 
+ * @param parent Ventana padre del diálogo.
+ * 
+ * @return GtkWidget*
+*/
+GtkWidget *crear_dialogo_selector_archivos(GtkWidget *parent) {
+    return gtk_file_chooser_dialog_new("Abrir archivo",
+                                       GTK_WINDOW(parent),
+                                       GTK_FILE_CHOOSER_ACTION_OPEN,
+                                       "Cancelar",
+                                       GTK_RESPONSE_CANCEL,
+                                       "Abrir",
+                                       GTK_RESPONSE_ACCEPT,
+                                       NULL);
+}
+
+/**
+ * Obtiene el fichero seleccionado de un diálogo selector.
+ * 
+ * @param dialog Diálogo selector de archivos.
+ * 
+ * @return char*
+*/
+char *obtener_fichero_seleccionado(GtkWidget *dialog) {
+    return gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
 }

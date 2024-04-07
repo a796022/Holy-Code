@@ -93,5 +93,34 @@ void mostrar_ventana_info_ventana() {
     
     const char* titulo = "Información de la ventana";
     
-    mostrar_dialogo(MAIN_WINDOW, mensaje, titulo);
+    mostrar_dialogo_mensaje(MAIN_WINDOW, mensaje, titulo);
+}
+
+/**
+ * Muestra una ventana de selector de archivos y devuelve la ruta del archivo seleccionado.
+ * 
+ * @return char*
+*/
+char *mostrar_ventana_selector_archivos() {
+    // Seleccionar un fichero desde el sistema de archivos
+    GtkWidget *dialog = crear_dialogo_selector_archivos(MAIN_WINDOW);
+
+    // Mostrar el diálogo
+    gint res = mostrar_dialogo(dialog);
+
+    // Si el usuario ha seleccionado un archivo
+    if (res == GTK_RESPONSE_ACCEPT) {
+        // Obtener la ruta del archivo
+        char *filename = obtener_fichero_seleccionado(dialog);
+
+        // Cerrar el diálogo
+        gtk_widget_destroy(dialog);
+
+        return filename;
+    }
+
+    // Cerrar el diálogo
+    gtk_widget_destroy(dialog);
+
+    return NULL;
 }

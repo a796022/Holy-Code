@@ -2,6 +2,7 @@
 
 #include "tree_manager.h"
 #include "tree.h"
+#include "window_manager.h"
 
 GtkTreeStore *MAIN_TREE_MODEL;
 
@@ -36,5 +37,9 @@ GtkWidget *inicializar_arbol_principal() {
  * @return void
  */
 void cargar_arbol_principal() {
-    cargar_arbol(NULL, NULL);
+    // Seleccionar un fichero desde el sistema de archivos
+    char* filename = mostrar_ventana_selector_archivos();
+
+    // Cargar el árbol desde el fichero
+    cargar_arbol(MAIN_TREE_MODEL, filename);
 }
