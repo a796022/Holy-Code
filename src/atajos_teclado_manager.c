@@ -8,6 +8,11 @@
 // Grupos de aceleracion
 GtkAccelGroup *main_window_accel_group;
 
+/**
+ * Inicializa los atajos de teclado de la aplicación
+ * 
+ * @return void
+*/
 void inicializar_atajos_teclado() {
     // Inicializar los grupos de aceleración (uno por ventana)
     main_window_accel_group = crear_grupo_aceleracion(GTK_WINDOW(MAIN_WINDOW));

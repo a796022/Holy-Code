@@ -15,16 +15,29 @@ void abrir() {
     g_print("Abrir\n");
 }
 
-// Salir de la aplicación
+/**
+ * Cierra la ventana principal.
+ * 
+ * @return void
+*/
 void salir() {
     cerrar_ventana_principal();
 }
 
-// Mostrar una ventanita informativa con un texto de prueba
+/**
+ * Muestra una ventana emergente con la información del ancho y alto de la ventana principal.
+ * 
+ * @return void
+*/
 void mostrar_info_ventana() {
     mostrar_ventana_info_ventana();
 }
 
+/**
+ * Inicializa el menú de la ventana principal.
+ * 
+ * @return GtkWidget*
+*/
 GtkWidget *inicializar_menu_bar_ventana_principal() {
     // Crear el menú
     GtkWidget *menu_bar_ventana_principal = crear_menu_bar();

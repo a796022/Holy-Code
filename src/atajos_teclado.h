@@ -13,6 +13,7 @@ GtkAccelGroup *crear_grupo_aceleracion(GtkWindow *window);
 /**
  * Asocia un atajo de teclado a una señal de un widget.
  * 
+ * @param accel_group Grupo de aceleración al que se asociará el atajo de teclado.
  * @param widget Widget al que se le asociará el atajo de teclado.
  * @param senial Señal a la que se asociará el atajo de teclado.
  * @param key Tecla que activará el atajo de teclado.
