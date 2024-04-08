@@ -187,9 +187,18 @@ void cargar_arbol(GtkTreeStore *model, const char *filename) {
     // Construcción del árbol
     char line[max_line_length + 1];
     while (fgets(line, max_line_length + 1, file) != NULL) {
-        // Imprimo el número de tabulaciones al inicio de la línea
+        // Obtengo el número de tabulaciones al inicio de la línea
         // int num_tabs = obtener_numero_tabulaciones(line);
         // printf("%d\n", num_tabs);
+
+        // Elimino del string las tabulaciones y espacios iniciales
+        int i = 0;
+        while (line[i] == ' ' || line[i] == '\t') {
+            i++;
+        }
+        char *line_content = line + i;
+
+        printf("%s", line_content);
     }
 
     fclose(file);
