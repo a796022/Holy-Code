@@ -134,6 +134,7 @@ void obtener_maximo_caracteres_tabulaciones(const char *filename, int *max_line_
         *max_tabs = racha_tabulaciones;
     }
 
+    *max_line_length += 1;
     *max_tabs /= 4;
 
     fclose(file);
@@ -191,6 +192,9 @@ void cargar_arbol(GtkTreeStore *model, const char *filename) {
         // int num_tabs = obtener_numero_tabulaciones(line);
         // printf("%d\n", num_tabs);
 
+        // Elimino el salto de línea
+        line[strcspn(line, "\n")] = 0;
+
         // Elimino del string las tabulaciones y espacios iniciales
         int i = 0;
         while (line[i] == ' ' || line[i] == '\t') {
@@ -198,7 +202,9 @@ void cargar_arbol(GtkTreeStore *model, const char *filename) {
         }
         char *line_content = line + i;
 
-        printf("%s", line_content);
+        // Agrego el nodo al árbol
+        // GtkTreeIter padre;
+        agregar_nodo_tree(model, NULL, line_content);
     }
 
     fclose(file);
