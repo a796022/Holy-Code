@@ -3,6 +3,7 @@
 #include "tree_manager.h"
 #include "tree.h"
 #include "window_manager.h"
+#include "session_manager.h"
 
 GtkTreeStore *MAIN_TREE_MODEL;
 
@@ -18,12 +19,14 @@ GtkWidget *inicializar_arbol_principal() {
     // Crear un modelo de árbol para el TreeView
     MAIN_TREE_MODEL = crear_modelo_datos_tree();
 
-    // Agregar algunos elementos al modelo de árbol
-    agregar_nodo_tree(MAIN_TREE_MODEL, NULL, "Elemento 1");
-    agregar_nodo_tree(MAIN_TREE_MODEL, NULL, "Elemento 2");
-
     // Crear el TreeView
     tree_view = crear_tree_view(MAIN_TREE_MODEL);
+
+    // Obtener el último fichero abierto
+    char* filename = read_last_opened_file();
+
+    // Guardo la ruta del último fichero abierto
+    // ...
 
     // Crear una columna para el TreeView
     crear_columna_tree_view(tree_view, "Árbol sin nombre");
