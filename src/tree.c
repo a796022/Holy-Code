@@ -1,6 +1,7 @@
 #include <gtk/gtk.h>
 
 #include "tree.h"
+#include "tree_string.h"
 
 /**
  * Crea un modelo de datos para un árbol.
@@ -73,95 +74,6 @@ void crear_columna_tree_view(GtkWidget *tree_view, const char *titulo) {
 }
 
 /**
- * Obtiene el máximo de caracteres y tabulaciones (considerando tabulaciones a
- * el caracter '\t' o 4 espacios seguidos) de un fichero.
- * 
- * @param filename Nombre del fichero
- * @param max_line_length Puntero a la variable donde se almacenará el máximo de caracteres
- * @param max_tabs Puntero a la variable donde se almacenará el máximo de tabulaciones
- * 
- * @return void
-*/
-void obtener_maximo_caracteres_tabulaciones(const char *filename, int *max_line_length, int *max_tabs) {
-    FILE *file = fopen(filename, "r");
-    if (file == NULL) {
-        return;
-    }
-
-    int current_line_length = 0;
-    char c;
-
-    int nueva_linea = 1;
-    int racha_tabulaciones = 0;
-
-    while ((c = fgetc(file)) != EOF) {
-        if (c == '\n') {
-            // Para obtener el máximo de caracteres
-            if (current_line_length > *max_line_length) {
-                *max_line_length = current_line_length;
-            }
-            current_line_length = 0;
-
-            // Para obtener el máximo de tabulaciones
-            if (racha_tabulaciones > *max_tabs) {
-                *max_tabs = racha_tabulaciones;
-            }
-            racha_tabulaciones = 0;
-            nueva_linea = 1;
-        } else {
-            // Para obtener el máximo de caracteres
-            current_line_length++;
-
-            // Para obtener el máximo de tabulaciones
-            if (nueva_linea) {
-                if (c == ' ') {
-                    racha_tabulaciones++;
-                } else if (c == '\t') {
-                    racha_tabulaciones += 4;
-                } else {
-                    if (racha_tabulaciones > *max_tabs) {
-                        *max_tabs = racha_tabulaciones;
-                    }
-                    racha_tabulaciones = 0;
-                    nueva_linea = 0;
-                }
-            }
-        }
-    }
-
-    if (current_line_length > *max_line_length) {
-        *max_line_length = current_line_length;
-    }
-    if (racha_tabulaciones > *max_tabs) {
-        *max_tabs = racha_tabulaciones;
-    }
-
-    *max_line_length += 1;
-    *max_tabs /= 4;
-
-    fclose(file);
-}
-
-/**
- * Devuelve el número de tabulaciones o grupos de 4 espacios al inicio de un string.
- * 
- * @param str String
- * 
- * @return int
-*/
-int obtener_numero_tabulaciones(const char *str) {
-    int num_tabs = 0;
-    for (int i = 0; str[i] == ' ' || str[i] == '\t'; i++) {
-        if (str[i] == '\t') {
-            num_tabs += 4;
-        } else {
-            num_tabs++;
-        }
-    }
-    return num_tabs / 4;
-}
-
-/**
  * Carga un árbol de un fichero
  * 
  * @param model Modelo de datos del árbol
@@ -194,22 +106,13 @@ void cargar_arbol(GtkTreeStore *model, const char *filename) {
         // Obtengo el número de tabulaciones al inicio de la línea
         int current_node_level = obtener_numero_tabulaciones(line);
 
-        //////////////
-        // Elimino el salto de línea
-        line[strcspn(line, "\n")] = 0;
-
-        // Elimino del string las tabulaciones y espacios iniciales
-        int i = 0;
-        while (line[i] == ' ' || line[i] == '\t') {
-            i++;
-        }
-        char *line_content = line + i;
-        //////////////
+        // Elimino del string los carácteres innecesarios
+        string_to_string_nodo(line);
 
         // Agrego el nodo al árbol
         if (current_node_level == 0) {
             if (last_node_level == -1) {
-                padres[0] = agregar_nodo_tree(model, NULL, line_content);
+                padres[0] = agregar_nodo_tree(model, NULL, line);
                 last_node_level = 0;
             } else {
                 return;
@@ -225,7 +128,7 @@ void cargar_arbol(GtkTreeStore *model, const char *filename) {
                 }
             }
 
-            padres[current_node_level] = agregar_nodo_tree(model, &padres[current_node_level - 1], line_content);
+            padres[current_node_level] = agregar_nodo_tree(model, &padres[current_node_level - 1], line);
             last_node_level = current_node_level;
         }
     }
