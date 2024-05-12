@@ -10,6 +10,7 @@
         "menu_bar_manager.h": "c",
         "atajos_teclado_manager.h": "c",
         "components_manager.h": "c",
-        "tree_files.h": "c"
+        "tree_files.h": "c",
+        "tree_string.h": "c"
     }
 }
