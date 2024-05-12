@@ -24,9 +24,9 @@ GtkWidget *crear_tree_view(GtkTreeStore *store);
  * @param padre Nodo padre del nodo a agregar. Si es NULL, se agrega un nodo raíz.
  * @param texto Texto a agregar en el nodo.
  * 
- * @return void
+ * @return GtkTreeIter
 */
-void agregar_nodo_tree(GtkTreeStore *store, GtkTreeIter *padre, const char *texto);
+GtkTreeIter agregar_nodo_tree(GtkTreeStore *store, GtkTreeIter *padre, const char *texto);
 
 /**
  * Crea una columna para un TreeView.
