@@ -44,8 +44,8 @@ void crear_columna_tree_view(GtkWidget *tree_view, const char *titulo);
  * @param model Modelo de datos del árbol
  * @param filename Nombre del fichero
  * 
- * @return void
+ * @return int
 */
-void cargar_arbol(GtkTreeStore *model, const char *filename);
+int cargar_arbol(GtkTreeStore *model, const char *filename);
 
 #endif /* TREE_H */

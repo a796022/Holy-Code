@@ -10,12 +10,18 @@
  * @param model Modelo de datos del árbol
  * @param filename Nombre del fichero
  * 
- * @return void
+ * @return int status
+ * 
+ * status:
+ * 0: éxito
+ * 1: error en la jerarquía de nodos, se encontraron dos nodos raíz
+ * 2: error en la jerarquía de nodos, ausencia de nodos padre
+ * -1: error al abrir el fichero
  */
-void cargar_fichero_arbol(GtkTreeStore *model, const char *filename) {
+int cargar_fichero_arbol(GtkTreeStore *model, const char *filename) {
     FILE *file = fopen(filename, "r");
     if (file == NULL) {
-        return;
+        return -1;
     }
 
     // Hago una primera lectura del árbol para obtener el tamaño máximo de línea
@@ -30,6 +36,7 @@ void cargar_fichero_arbol(GtkTreeStore *model, const char *filename) {
     // Construcción del árbol
     char line[max_line_length + 1];
     int last_node_level = -1;
+    int status = 0;
     while (fgets(line, max_line_length + 1, file) != NULL) {
         // Obtengo el número de tabulaciones al inicio de la línea
         int current_node_level = obtener_numero_tabulaciones(line);
@@ -43,7 +50,7 @@ void cargar_fichero_arbol(GtkTreeStore *model, const char *filename) {
                 padres[0] = agregar_nodo_tree(model, NULL, line);
                 last_node_level = 0;
             } else {
-                return;
+                return 1;
             }
         } else {
             if (current_node_level > last_node_level + 1) {
@@ -54,6 +61,8 @@ void cargar_fichero_arbol(GtkTreeStore *model, const char *filename) {
                         padres[i] = agregar_nodo_tree(model, &padres[i - 1], "[NULL]");
                     }
                 }
+
+                status = 2;
             }
 
             padres[current_node_level] = agregar_nodo_tree(model, &padres[current_node_level - 1], line);
@@ -62,4 +71,6 @@ void cargar_fichero_arbol(GtkTreeStore *model, const char *filename) {
     }
 
     fclose(file);
+
+    return status;
 }

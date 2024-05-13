@@ -7,6 +7,8 @@
 
 GtkTreeStore *MAIN_TREE_MODEL;
 
+char *PATH_FICHERO_ARBOL = NULL;
+
 /**
  * Inicializa el árbol de la ventana principal.
  * 
@@ -23,12 +25,14 @@ GtkWidget *inicializar_arbol_principal() {
     tree_view = crear_tree_view(MAIN_TREE_MODEL);
 
     // Obtener el último fichero abierto
-    char* filename = read_last_opened_file();
+    PATH_FICHERO_ARBOL = read_last_opened_file();
+    
+    // Si hay un fichero en sesión, se carga
+    if (PATH_FICHERO_ARBOL != NULL) {
+        cargar_arbol(MAIN_TREE_MODEL, PATH_FICHERO_ARBOL);
+    }
 
-    // Guardo la ruta del último fichero abierto
-    // ...
-
-    // Crear una columna para el TreeView
+    // Se crea una columna para el TreeView
     crear_columna_tree_view(tree_view, "Árbol sin nombre");
 
     return tree_view;
@@ -45,4 +49,8 @@ void cargar_arbol_principal() {
 
     // Cargar el árbol desde el fichero
     cargar_arbol(MAIN_TREE_MODEL, filename);
+
+    // Guardar el último fichero abierto
+    write_last_opened_file(filename);
+    PATH_FICHERO_ARBOL = filename;
 }
