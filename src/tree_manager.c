@@ -47,6 +47,11 @@ void cargar_arbol_principal() {
     // Seleccionar un fichero desde el sistema de archivos
     char* filename = mostrar_ventana_selector_archivos();
 
+    // Si el usuario no ha seleccionado un archivo, no se hace nada
+    if (filename == NULL) {
+        return;
+    }
+
     // Cargar el árbol desde el fichero
     cargar_arbol(MAIN_TREE_MODEL, filename);
 
