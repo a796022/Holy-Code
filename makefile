@@ -14,9 +14,10 @@ LIBS = `pkg-config --libs gtk+-3.0`
 SRCDIR = src
 INCDIR = include
 OBJDIR = obj
+LIBDIRS = lib/background_keyboard_imput lib/clipboard external/sds
 
 # Fuentes
-SRCS = $(wildcard $(SRCDIR)/*.c)
+SRCS = $(wildcard $(SRCDIR)/*.c) $(foreach dir,$(LIBDIRS),$(wildcard $(dir)/*.c))
 OBJS = $(patsubst $(SRCDIR)/%.c,$(OBJDIR)/%.o,$(SRCS))
 
 # Reglas de construcción
@@ -28,5 +29,8 @@ $(TARGET): $(OBJS)
 $(OBJDIR)/%.o: $(SRCDIR)/%.c
 	$(CC) $(CFLAGS) -I$(INCDIR) -c $< -o $@
 
+$(OBJDIR)/%.o: $(LIBDIRS:%=%)/%.c
+	$(CC) $(CFLAGS) -I$(INCDIR) -c $< -o $@
+
 clean:
-	rm -f $(OBJS) $(TARGET)
+	rm -f $(OBJDIR)/*.o $(TARGET)

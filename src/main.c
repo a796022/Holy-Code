@@ -1,20 +1,44 @@
 #include <gtk/gtk.h>
+#include <stdint.h>
+
+// REMINDER: reasons to make an auxiliary file:
+// - Working with a file
+// - Making a wrapper of a library (only this file can access the library)
 
 #include "window_manager.h"
 #include "components_manager.h"
+#include "background_keyboard_imput_wrapper.h"
 
 int main(int argc, char *argv[]) {
-    // Inicializar GTK
+    // Initialization of personal libraries
+    u_int8_t (*init_functions[])() = {
+        init_background_keyboard_imput_wrapper
+    };
+    for (u_int8_t i = 0; i < sizeof(init_functions) / sizeof(init_functions[0]); i++) {
+        if (init_functions[i]()) {
+            return 1;
+        }
+    }
+
+    // Initialize GTK
     gtk_init(&argc, &argv);
 
-    // Inicializar los componentes de la ventana principal
+    // Initialize the components of the main window
     inicializar_componentes_ventana_principal();
 
-    // Mostrar la ventana
+    // Show the main window
     mostrar_ventana_principal();
 
-    // Iniciar el bucle principal de eventos de GTK
+    // Start the main GTK event loop
     gtk_main();
+
+    // Close the personal libraries
+    u_int8_t (*close_functions[])() = {
+        close_background_keyboard_imput_wrapper
+    };
+    for (u_int8_t i = 0; i < sizeof(close_functions) / sizeof(close_functions[0]); i++) {
+        close_functions[i]();
+    }
 
     return 0;
 }

@@ -109,3 +109,33 @@ void string_to_string_nodo(char *line) {
 
     strcpy(line, line_content);
 }
+
+/**
+ * @brief Remove all line breaks from the string. Then, remove leading tabs and leading spaces.
+ * 
+ * @param line String to be cleaned
+ * 
+ * @return void
+ */
+void clean_string(char *line) {
+    // Remove all line breaks
+    char *src = line, *dst = line;
+    while (*src) {
+        if (*src != '\n' && *src != '\r') {
+            *dst++ = *src;
+        }
+        src++;
+    }
+    *dst = '\0';  // Null-terminate the cleaned string
+
+    // Remove leading tabs and leading spaces
+    src = line;
+    while (*src == ' ' || *src == '\t') {
+        src++;
+    }
+
+    // If src moved, shift the string to the left
+    if (src != line) {
+        memmove(line, src, strlen(src) + 1);
+    }
+}
