@@ -52,7 +52,6 @@ void detect_double_ctrl_c() {
             char* clipboard_content = get_clipboard_content();
             clean_string(clipboard_content);
             add_text_to_selected_node(clipboard_content);
-            printf("Clipboard content: %s\n", clipboard_content);
         }
         last_ctrlc_press = current_time;
     }

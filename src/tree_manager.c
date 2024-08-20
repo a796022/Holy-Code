@@ -82,7 +82,6 @@ void add_text_to_selected_node(const char *text) {
         GtkTreeStore *store = GTK_TREE_STORE(model);
         agregar_nodo_tree(store, &iter, text);
     } else {
-        GtkTreeIter root;
         agregar_nodo_tree(MAIN_TREE_MODEL, NULL, text);
     }
 }
