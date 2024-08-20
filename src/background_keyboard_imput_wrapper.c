@@ -2,6 +2,9 @@
 #include <time.h>
 
 #include "../lib/background_keyboard_imput/background_keyboard_imput.h"
+#include "../lib/clipboard/clipboard.h"
+#include "tree_manager.h"
+#include "tree_string.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 // PRIVATE /////////////////////////////////////////////////////////////////////
@@ -45,8 +48,11 @@ void detect_double_ctrl_c() {
     if (ctrl_pressed) {
         time_t current_time = time(NULL);
 
-        if (difftime(current_time, last_ctrlc_press) < 0.75) {
-            printf("Ctrl+C+C detected\n");
+        if (difftime(current_time, last_ctrlc_press) < 1) {
+            char* clipboard_content = get_clipboard_content();
+            clean_string(clipboard_content);
+            add_text_to_selected_node(clipboard_content);
+            printf("Clipboard content: %s\n", clipboard_content);
         }
         last_ctrlc_press = current_time;
     }

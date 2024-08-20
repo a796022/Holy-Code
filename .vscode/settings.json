@@ -21,6 +21,8 @@
         "unistd.h": "c",
         "input.h": "c",
         "pthread.h": "c",
-        "background_shortcuts.h": "c"
+        "background_shortcuts.h": "c",
+        "background_keyboard_imput.h": "c",
+        "sds.h": "c"
     }
 }

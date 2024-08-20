@@ -31,4 +31,13 @@ int obtener_numero_tabulaciones(const char *str);
 */
 void string_to_string_nodo(char *line);
 
+/**
+ * @brief Remove all line breaks from the string. Then, remove leading tabs and leading spaces.
+ * 
+ * @param line String to be cleaned
+ * 
+ * @return void
+ */
+void clean_string(char *line);
+
 #endif /* TREE_STRING_H */

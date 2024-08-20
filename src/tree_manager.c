@@ -5,37 +5,44 @@
 #include "window_manager.h"
 #include "session_manager.h"
 
+// Main window tree data model
 GtkTreeStore *MAIN_TREE_MODEL;
 
-char *PATH_FICHERO_ARBOL = NULL;
+// Widget of the main window tree
+GtkWidget *MAIN_TREE_VIEW;
+
+// Path of the file in session
+char *TREE_PATH_FILE = NULL;
 
 /**
- * Inicializa el árbol de la ventana principal.
+ * @brief Initializes the main window tree.
  * 
- * @return void
+ * - Creates a tree model for the TreeView.
+ * - Creates the TreeView.
+ * - Gets the last opened file.
+ * - If there is a file in session, it is loaded.
+ * 
+ * @return GtkWidget* The TreeView widget
 */
 GtkWidget *inicializar_arbol_principal() {
-    // Widget del TreeView
-    GtkWidget *tree_view;
-
     // Crear un modelo de árbol para el TreeView
     MAIN_TREE_MODEL = crear_modelo_datos_tree();
 
     // Crear el TreeView
-    tree_view = crear_tree_view(MAIN_TREE_MODEL);
+    MAIN_TREE_VIEW = crear_tree_view(MAIN_TREE_MODEL);
 
     // Obtener el último fichero abierto
-    PATH_FICHERO_ARBOL = read_last_opened_file();
+    TREE_PATH_FILE = read_last_opened_file();
     
     // Si hay un fichero en sesión, se carga
-    if (PATH_FICHERO_ARBOL != NULL) {
-        cargar_arbol(MAIN_TREE_MODEL, PATH_FICHERO_ARBOL);
+    if (TREE_PATH_FILE != NULL) {
+        cargar_arbol(MAIN_TREE_MODEL, TREE_PATH_FILE);
     }
 
     // Se crea una columna para el TreeView
-    crear_columna_tree_view(tree_view, "Árbol sin nombre");
+    crear_columna_tree_view(MAIN_TREE_VIEW, "Árbol sin nombre");
 
-    return tree_view;
+    return MAIN_TREE_VIEW;
 }
 
 /**
@@ -57,5 +64,25 @@ void cargar_arbol_principal() {
 
     // Guardar el último fichero abierto
     write_last_opened_file(filename);
-    PATH_FICHERO_ARBOL = filename;
+    TREE_PATH_FILE = filename;
+}
+
+/**
+ * @brief Add the input text to the selected node.
+ * 
+ * @param text Text to add
+ * 
+ * @return void
+ */
+void add_text_to_selected_node(const char *text) {
+    GtkTreeSelection *selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(MAIN_TREE_VIEW));
+    GtkTreeIter iter;
+    GtkTreeModel *model;
+    if (gtk_tree_selection_get_selected(selection, &model, &iter)) {
+        GtkTreeStore *store = GTK_TREE_STORE(model);
+        agregar_nodo_tree(store, &iter, text);
+    } else {
+        GtkTreeIter root;
+        agregar_nodo_tree(MAIN_TREE_MODEL, NULL, text);
+    }
 }
