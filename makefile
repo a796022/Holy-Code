@@ -33,4 +33,4 @@ $(OBJDIR)/%.o: $(LIBDIR)/%.c
 	$(CC) $(CFLAGS) -I$(INCDIR) -c $< -o $@
 
 clean:
-	rm -f $(OBJS) $(TARGET)
+	rm -f $(OBJDIR)/*.o $(TARGET)
