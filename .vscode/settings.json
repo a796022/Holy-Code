@@ -13,6 +13,14 @@
         "tree_files.h": "c",
         "tree_string.h": "c",
         "session_manager.h": "c",
-        "stat.h": "c"
+        "stat.h": "c",
+        "fstream": "cpp",
+        "stdint.h": "c",
+        "stdio.h": "c",
+        "fcntl.h": "c",
+        "unistd.h": "c",
+        "input.h": "c",
+        "pthread.h": "c",
+        "background_shortcuts.h": "c"
     }
 }
