@@ -86,5 +86,5 @@ int cargar_arbol(GtkTreeStore *model, const char *filename) {
     gtk_tree_store_clear(model);
     
     // Cargo el árbol
-    return cargar_fichero_arbol(model, filename);
+    return read_tree_file(model, filename);
 }

@@ -3,6 +3,7 @@
 
 // REMINDER: reasons to make an auxiliary file:
 // - Working with a file
+// - Managing a type of file
 // - Making a wrapper of a library (only this file can access the library)
 
 #include "window_manager.h"

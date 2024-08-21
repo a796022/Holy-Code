@@ -18,6 +18,7 @@ void inicializar_atajos_teclado() {
     main_window_accel_group = crear_grupo_aceleracion(GTK_WINDOW(MAIN_WINDOW));
 
     // Atajos de teclado de la ventana principal
-    asociar_atajo_senial(main_window_accel_group, MENUBAR_SALIR, "activate", GDK_KEY_Q, GDK_CONTROL_MASK);
+    asociar_atajo_senial(main_window_accel_group, MENUBAR_GUARDAR, "activate", GDK_KEY_S, GDK_CONTROL_MASK);
     asociar_atajo_senial(main_window_accel_group, MENUBAR_ABRIR, "activate", GDK_KEY_O, GDK_CONTROL_MASK);
+    asociar_atajo_senial(main_window_accel_group, MENUBAR_SALIR, "activate", GDK_KEY_Q, GDK_CONTROL_MASK);
 }

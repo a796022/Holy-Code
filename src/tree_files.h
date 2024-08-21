@@ -15,6 +15,16 @@
  * 2: error en la jerarquía de nodos, ausencia de nodos padre
  * -1: error al abrir el fichero
  */
-int cargar_fichero_arbol(GtkTreeStore *model, const char *filename);
+int read_tree_file(GtkTreeStore *model, const char *filename);
+
+/**
+ * @brief Write a tree to a file.
+ * 
+ * @param model Tree data model
+ * @param filename File name
+ * 
+ * @return int status
+ */
+int write_tree_file(GtkTreeStore *model, const char *filename);
 
 #endif /* TREE_FILES_H */

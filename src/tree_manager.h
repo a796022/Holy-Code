@@ -13,6 +13,18 @@ extern GtkTreeStore *MAIN_TREE_MODEL;
 GtkWidget *inicializar_arbol_principal();
 
 /**
+ * Saves the tree of the main window in a file.
+ * 
+ * - If this is a new file, ask for the file name.
+ * - If the user has not selected a file, do nothing.
+ * - Save the file.
+ * - Save the last opened file, it is done again in case it is a new file.
+ * 
+ * @return void
+ */
+void save_tree();
+
+/**
  * Carga un árbol de un fichero
  * 
  * @return void

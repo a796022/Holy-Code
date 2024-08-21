@@ -6,11 +6,21 @@
 #include "tree_manager.h"
 
 // Menú "Archivo"
+GtkWidget *MENUBAR_GUARDAR;
 GtkWidget *MENUBAR_ABRIR;
 GtkWidget *MENUBAR_SALIR;
 
 // Menú "Ayuda"
 GtkWidget *MENUBAR_MOSTRAR_INFO_VENTANA;
+
+/**
+ * Guarda el árbol de la ventana principal en un fichero.
+ * 
+ * @return void
+ */
+void guardar() {
+    save_tree();
+}
 
 /**
  * Carga el árbol de la ventana principal de un fichero.
@@ -50,6 +60,7 @@ GtkWidget *inicializar_menu_bar_ventana_principal() {
 
     // Crear las pestañas y agregar los elementos
     GtkWidget *menu_file = agregar_pestania_menu_bar(menu_bar_ventana_principal, "Archivo");
+    MENUBAR_GUARDAR = agregar_elemento_menu_bar(menu_file, "Guardar");
     MENUBAR_ABRIR = agregar_elemento_menu_bar(menu_file, "Abrir");
     MENUBAR_SALIR = agregar_elemento_menu_bar(menu_file, "Salir");
 
@@ -57,6 +68,7 @@ GtkWidget *inicializar_menu_bar_ventana_principal() {
     MENUBAR_MOSTRAR_INFO_VENTANA = agregar_elemento_menu_bar(menu_tools, "Mostrar información de la ventana");
 
     // Conectar las señales
+    g_signal_connect(MENUBAR_GUARDAR, "activate", G_CALLBACK(guardar), NULL);
     g_signal_connect(MENUBAR_ABRIR, "activate", G_CALLBACK(abrir), NULL);
     g_signal_connect(MENUBAR_SALIR, "activate", G_CALLBACK(salir), NULL);
     g_signal_connect(MENUBAR_MOSTRAR_INFO_VENTANA, "activate", G_CALLBACK(mostrar_info_ventana), NULL);

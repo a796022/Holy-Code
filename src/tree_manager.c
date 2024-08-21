@@ -4,6 +4,7 @@
 #include "tree.h"
 #include "window_manager.h"
 #include "session_manager.h"
+#include "tree_files.h"
 
 // Main window tree data model
 GtkTreeStore *MAIN_TREE_MODEL;
@@ -43,6 +44,37 @@ GtkWidget *inicializar_arbol_principal() {
     crear_columna_tree_view(MAIN_TREE_VIEW, "Árbol sin nombre");
 
     return MAIN_TREE_VIEW;
+}
+
+/**
+ * Saves the tree of the main window in a file.
+ * 
+ * - If this is a new file, ask for the file name.
+ * - If the user has not selected a file, do nothing.
+ * - Save the file.
+ * - Save the last opened file, it is done again in case it is a new file.
+ * 
+ * @return void
+ */
+void save_tree() {
+    // If this is a new file, ask for the file name
+    if (TREE_PATH_FILE == NULL) {
+        // TODO: Ask for the file name
+    }
+
+    // If the user has not selected a file, do nothing
+    if (TREE_PATH_FILE == NULL) {
+        return;
+    }
+
+    // Save the file
+    int status = write_tree_file(MAIN_TREE_MODEL, TREE_PATH_FILE);
+    if (status == -1) {
+        return;
+    }
+
+    // Save the last opened file, it is done again in case it is a new file.
+    write_last_opened_file(TREE_PATH_FILE);
 }
 
 /**

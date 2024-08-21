@@ -4,21 +4,62 @@
 #include "tree_string.h"
 #include "tree.h"
 
+////////////////////////////////////////////////////////////////////////////////
+// PRIVATE /////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+
 /**
- * Carga un árbol de un fichero
+ * @brief write the current node, then call the child, then call the next sibling
  * 
- * @param model Modelo de datos del árbol
- * @param filename Nombre del fichero
+ * @param model Tree data model
+ * @param iter Current node
+ * @param file File to write
+ * @param level Level of the node
+ * 
+ * @return void
+ */
+void write_tree_file_recursive(GtkTreeStore *model, GtkTreeIter *iter, FILE *file, int level) {
+    // Write the node to the file
+    gchar *text;
+    gtk_tree_model_get(GTK_TREE_MODEL(model), iter, 0, &text, -1);
+    for (int i = 0; i < level; i++) {
+        fprintf(file, "\t");
+    }
+    fprintf(file, "%s\n", text);
+    g_free(text);
+
+    // Call the child
+    GtkTreeIter child;
+    if (gtk_tree_model_iter_children(GTK_TREE_MODEL(model), &child, iter)) {
+        write_tree_file_recursive(model, &child, file, level + 1);
+    }
+
+    // Call the next sibling
+    GtkTreeIter sibling = *iter;
+    if (gtk_tree_model_iter_next(GTK_TREE_MODEL(model), &sibling)) {
+        write_tree_file_recursive(model, &sibling, file, level);
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// PUBLIC //////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * @brief Load a tree from a file.
+ * 
+ * @param model Tree data model
+ * @param filename File name
  * 
  * @return int status
  * 
  * status:
- * 0: éxito
- * 1: error en la jerarquía de nodos, se encontraron dos nodos raíz
- * 2: error en la jerarquía de nodos, ausencia de nodos padre
- * -1: error al abrir el fichero
+ * 0: success
+ * 1: error in node hierarchy, two root nodes found.
+ * 2: error in the node hierarchy, no parent node found
+ * -1: error opening the file
  */
-int cargar_fichero_arbol(GtkTreeStore *model, const char *filename) {
+int read_tree_file(GtkTreeStore *model, const char *filename) {
     FILE *file = fopen(filename, "r");
     if (file == NULL) {
         return -1;
@@ -73,4 +114,28 @@ int cargar_fichero_arbol(GtkTreeStore *model, const char *filename) {
     fclose(file);
 
     return status;
+}
+
+/**
+ * @brief Write a tree to a file.
+ * 
+ * @param model Tree data model
+ * @param filename File name
+ * 
+ * @return int status
+ */
+int write_tree_file(GtkTreeStore *model, const char *filename) {
+    FILE *file = fopen(filename, "w");
+    if (file == NULL) {
+        return -1;
+    }
+
+    GtkTreeIter iter;
+    if (gtk_tree_model_get_iter_first(GTK_TREE_MODEL(model), &iter)) {
+        write_tree_file_recursive(model, &iter, file, 0);
+    }
+
+    fclose(file);
+
+    return 0;
 }
