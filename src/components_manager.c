@@ -5,7 +5,7 @@
 #include "box.h"
 #include "menu_bar_manager.h"
 #include "tree_manager.h"
-#include "atajos_teclado_manager.h"
+#include "GtkAccelGroup_wrapper.h"
 #include "paned_manager.h"
 
 /**
@@ -46,5 +46,5 @@ void inicializar_componentes_ventana_principal() {
     agregar_widget_paned_derecha(paned, right_label_panel, TRUE, FALSE);
 
     // Inicializar los atajos de teclado
-    inicializar_atajos_teclado();
+    initialize_keyboard_shortcuts();
 }
