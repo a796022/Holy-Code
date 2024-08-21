@@ -92,25 +92,6 @@ int obtener_numero_tabulaciones(const char *str) {
 }
 
 /**
- * Elimina del string el salto de línea y las tabulaciones y espacios iniciales.
- * 
- * @param line String
- * 
- * @return void
-*/
-void string_to_string_nodo(char *line) {
-    line[strcspn(line, "\n")] = 0;
-
-    int i = 0;
-    while (line[i] == ' ' || line[i] == '\t') {
-        i++;
-    }
-    char *line_content = line + i;
-
-    strcpy(line, line_content);
-}
-
-/**
  * @brief Remove all line breaks from the string. Then, remove leading tabs and leading spaces.
  * 
  * @param line String to be cleaned

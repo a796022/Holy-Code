@@ -23,15 +23,6 @@ void obtener_maximo_caracteres_tabulaciones(const char *filename, int *max_line_
 int obtener_numero_tabulaciones(const char *str);
 
 /**
- * Elimina del string el salto de línea y las tabulaciones y espacios iniciales.
- * 
- * @param str String
- * 
- * @return void
-*/
-void string_to_string_nodo(char *line);
-
-/**
  * @brief Remove all line breaks from the string. Then, remove leading tabs and leading spaces.
  * 
  * @param line String to be cleaned

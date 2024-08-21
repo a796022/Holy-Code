@@ -83,7 +83,7 @@ int read_tree_file(GtkTreeStore *model, const char *filename) {
         int current_node_level = obtener_numero_tabulaciones(line);
 
         // Elimino del string los carácteres innecesarios
-        string_to_string_nodo(line);
+        clean_string(line);
 
         // Agrego el nodo al árbol
         if (current_node_level == 0) {
