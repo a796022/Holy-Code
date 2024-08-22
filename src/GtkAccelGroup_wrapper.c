@@ -1,7 +1,6 @@
 #include <gtk/gtk.h>
 
-#include "GtkAccelGroup_wrapper.h"
-#include "menu_bar_manager.h"
+#include "gtk_menu_bar_wrapper.h"
 #include "window_manager.h"
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -30,7 +29,8 @@ void initialize_keyboard_shortcuts() {
     gtk_window_add_accel_group(GTK_WINDOW(MAIN_WINDOW), main_window_accel_group);
 
     // Main window keyboard shortcuts
-    gtk_widget_add_accelerator(MENUBAR_GUARDAR, "activate", main_window_accel_group, GDK_KEY_S, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
-    gtk_widget_add_accelerator(MENUBAR_ABRIR, "activate", main_window_accel_group, GDK_KEY_O, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
-    gtk_widget_add_accelerator(MENUBAR_SALIR, "activate", main_window_accel_group, GDK_KEY_Q, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
+    gtk_widget_add_accelerator(MENUBAR_SAVE, "activate", main_window_accel_group, GDK_KEY_S, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
+    gtk_widget_add_accelerator(MENUBAR_OPEN_FILE, "activate", main_window_accel_group, GDK_KEY_O, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
+    gtk_widget_add_accelerator(MENUBAR_EXIT, "activate", main_window_accel_group, GDK_KEY_Q, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
+    gtk_widget_add_accelerator(MENUBAR_DELETE, "activate", main_window_accel_group, GDK_KEY_Delete, 0, GTK_ACCEL_VISIBLE);
 }

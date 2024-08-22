@@ -13,7 +13,7 @@ extern GtkTreeStore *MAIN_TREE_MODEL;
 GtkWidget *inicializar_arbol_principal();
 
 /**
- * Saves the tree of the main window in a file.
+ * @brief Saves the tree of the main window in a file.
  * 
  * - If this is a new file, ask for the file name.
  * - If the user has not selected a file, do nothing.
@@ -39,5 +39,12 @@ void cargar_arbol_principal();
  * @return void
  */
 void add_text_to_selected_node(const char *text);
+
+/**
+ * @brief Deletes the selected node.
+ * 
+ * @return void
+ */
+void delete_selected_node();
 
 #endif /* TREE_MANAGER */

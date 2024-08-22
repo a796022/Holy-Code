@@ -3,7 +3,7 @@
 #include "components_manager.h"
 #include "window_manager.h"
 #include "box.h"
-#include "menu_bar_manager.h"
+#include "gtk_menu_bar_wrapper.h"
 #include "tree_manager.h"
 #include "GtkAccelGroup_wrapper.h"
 #include "paned_manager.h"
@@ -30,7 +30,7 @@ void inicializar_componentes_ventana_principal() {
     main_vbox = inicializar_ventana_principal();
 
     // Crear el menu_bar
-    menu_bar = inicializar_menu_bar_ventana_principal();
+    menu_bar = initialize_menu_bar_main_window();
     agregar_widget_box(main_vbox, menu_bar, FALSE, FALSE, 0);
 
     // Crear el GtkPaned (divisor)

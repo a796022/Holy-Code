@@ -47,7 +47,7 @@ GtkWidget *inicializar_arbol_principal() {
 }
 
 /**
- * Saves the tree of the main window in a file.
+ * @brief Saves the tree of the main window in a file.
  * 
  * - If this is a new file, ask for the file name.
  * - If the user has not selected a file, do nothing.
@@ -115,5 +115,33 @@ void add_text_to_selected_node(const char *text) {
         agregar_nodo_tree(store, &iter, text);
     } else {
         agregar_nodo_tree(MAIN_TREE_MODEL, NULL, text);
+    }
+}
+
+/**
+ * @brief Deletes the selected node.
+ * 
+ * - Checks if the selected node is a root node.
+ * - If it is a root node, it is deleted.
+ * 
+ * @return void
+ */
+void delete_selected_node() {
+    // Get the selected node
+    GtkTreeSelection *selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(MAIN_TREE_VIEW));
+    GtkTreeIter iter;
+    GtkTreeModel *model;
+    if (gtk_tree_selection_get_selected(selection, &model, &iter)) {
+        
+        // Check if the selected node is a root node
+        GtkTreeStore *store = GTK_TREE_STORE(model);
+        GtkTreeIter parent;
+        if (gtk_tree_model_iter_parent(model, &parent, &iter)) {
+
+            // Delete the selected node
+            gtk_tree_store_remove(store, &iter);
+
+        }
+
     }
 }
