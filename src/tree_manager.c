@@ -151,6 +151,16 @@ void delete_selected_node() {
         GtkTreeIter parent;
         if (gtk_tree_model_iter_parent(model, &parent, &iter)) {
 
+            // Get the text of the node
+            gchar *node_text;
+            gtk_tree_model_get(model, &iter, 0, &node_text, -1);
+
+            // Add the action to the history
+            GtkTreePath *path = gtk_tree_model_get_path(model, &iter);
+            gchar *path_str = gtk_tree_path_to_string(path);
+            gtk_tree_path_free(path);
+            store_delete_operation(node_text, path_str);
+
             // Delete the selected node
             gtk_tree_store_remove(store, &iter);
 

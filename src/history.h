@@ -45,4 +45,17 @@ uint8_t close_history();
  */
 void store_aggregate_operation(char *node_text, gchar *path_str);
 
+/**
+ * @brief Stores a delete operation.
+ * 
+ * - The operation is stored in the undo stack.
+ * - The redo stack is cleared.
+ * 
+ * @param node_text Text of the node
+ * @param path_str Path of the deleted node
+ * 
+ * @return void
+ */
+void store_delete_operation(char *node_text, gchar *path_str);
+
 #endif /* HISTORY */
