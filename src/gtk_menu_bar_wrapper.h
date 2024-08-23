@@ -7,6 +7,8 @@ extern GtkWidget *MENUBAR_OPEN_FILE;
 extern GtkWidget *MENUBAR_EXIT;
 
 // "Editar" Menu
+extern GtkWidget *MENUBAR_UNDO;
+extern GtkWidget *MENUBAR_REDO;
 extern GtkWidget *MENUBAR_DELETE;
 
 // "Ayuda" Menu

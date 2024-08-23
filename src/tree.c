@@ -28,33 +28,23 @@ GtkWidget *crear_tree_view(GtkTreeStore *model) {
 }
 
 /**
- * Agrega un nodo al árbol.
+ * @brief Adds a node to the tree.
  * 
- * @param model Modelo de datos al que se le agrega el nodo.
- * @param padre Nodo padre del nodo a agregar. Si es NULL, se agrega un nodo raíz.
- * @param texto Texto a agregar en el nodo.
+ * @param model Data model to which the node is added.
+ * @param parent_node Parent node of the node to be added. If it is NULL, a root node is added.
+ * @param text Text to add to the node.
  * 
- * return GtkTreeIter
+ * return GtkTreeIter Iterator of the new node
 */
-GtkTreeIter agregar_nodo_tree(GtkTreeStore *model, GtkTreeIter *padre, const char *texto) {
+GtkTreeIter agregar_nodo_tree(GtkTreeStore *model, GtkTreeIter *parent_node, const char *text) {
     GtkTreeIter iter;
 
-    /**
-     * - model: modelo de datos al que se le agrega el nodo.
-     * - iter: iterador que apuntará al nodo agregado.
-     * - padre: iterador que apunta al nodo padre del nodo a agregar. Si es 
-     * NULL, se agrega un nodo raíz.
-    */
-    gtk_tree_store_append(model, &iter, padre);
+    // Adds a new node to the tree "model" (main tree model), under the parent node "parent_node".
+    // The iterator "iter" is updated to point to the new node.
+    gtk_tree_store_append(model, &iter, parent_node);
 
-    /**
-     * - model: modelo de datos al que se le agrega el nodo.
-     * - iter: iterador que apuntará al nodo agregado.
-     * - 0: columna en la que se agrega el texto (en principio, siempre 0).
-     * - texto: texto a agregar en la columna.
-     * - -1: fin de la lista de argumentos.
-    */
-    gtk_tree_store_set(model, &iter, 0, texto, -1);
+    // Sets the text of the node.
+    gtk_tree_store_set(model, &iter, 0, text, -1);
 
     return iter;
 }

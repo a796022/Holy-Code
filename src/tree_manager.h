@@ -38,7 +38,7 @@ void cargar_arbol_principal();
  * 
  * @return void
  */
-void add_text_to_selected_node(const char *text);
+void add_text_to_selected_node(char *text);
 
 /**
  * @brief Deletes the selected node.

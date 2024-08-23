@@ -2,6 +2,7 @@
 
 #include "window_manager.h"
 #include "tree_manager.h"
+#include "history.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 // PRIVATE /////////////////////////////////////////////////////////////////////
@@ -39,16 +40,30 @@ GtkWidget *add_menu_bar_item(GtkWidget *tab, const char *name) {
     return menu_item;
 }
 
+/**
+ * @brief Adds a separator to a tab of the menu bar.
+ * 
+ * @param tab Tab of the menu bar.
+ * 
+ * @return void
+ */
+void add_menu_bar_separator(GtkWidget *tab) {
+    GtkWidget *separator = gtk_separator_menu_item_new();
+    gtk_menu_shell_append(GTK_MENU_SHELL(tab), separator);
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 // PUBLIC //////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 
 // "Archivo" Menu
-GtkWidget *MENUBAR_SAVE;
 GtkWidget *MENUBAR_OPEN_FILE;
+GtkWidget *MENUBAR_SAVE;
 GtkWidget *MENUBAR_EXIT;
 
 // "Editar" Menu
+GtkWidget *MENUBAR_UNDO;
+GtkWidget *MENUBAR_REDO;
 GtkWidget *MENUBAR_DELETE;
 
 // "Ayuda" Menu
@@ -67,23 +82,31 @@ GtkWidget *initialize_menu_bar_main_window() {
     // Create the menu
     GtkWidget *menu_bar_main_window = gtk_menu_bar_new();
 
-    // Create the tabs and add the elements
+    // Create the tabs and add the elements and separators
     GtkWidget *menu_file = add_menu_bar_tab(menu_bar_main_window, "Archivo");
-    MENUBAR_SAVE = add_menu_bar_item(menu_file, "Guardar");
     MENUBAR_OPEN_FILE = add_menu_bar_item(menu_file, "Abrir");
+    MENUBAR_SAVE = add_menu_bar_item(menu_file, "Guardar");
+    add_menu_bar_separator(menu_file);
     MENUBAR_EXIT = add_menu_bar_item(menu_file, "Salir");
 
     GtkWidget *menu_edit = add_menu_bar_tab(menu_bar_main_window, "Editar");
+    MENUBAR_UNDO = add_menu_bar_item(menu_edit, "Deshacer");
+    MENUBAR_REDO = add_menu_bar_item(menu_edit, "Rehacer");
+    add_menu_bar_separator(menu_edit);
     MENUBAR_DELETE = add_menu_bar_item(menu_edit, "Eliminar");
 
     GtkWidget *menu_tools = add_menu_bar_tab(menu_bar_main_window, "Ayuda");
     MENUBAR_SHOW_WINDOW_INFORMATION = add_menu_bar_item(menu_tools, "Mostrar información de la ventana");
 
     // Connect the signals
-    g_signal_connect(MENUBAR_SAVE, "activate", G_CALLBACK(save_tree), NULL);
     g_signal_connect(MENUBAR_OPEN_FILE, "activate", G_CALLBACK(cargar_arbol_principal), NULL);
+    g_signal_connect(MENUBAR_SAVE, "activate", G_CALLBACK(save_tree), NULL);
     g_signal_connect(MENUBAR_EXIT, "activate", G_CALLBACK(cerrar_ventana_principal), NULL);
+
+    g_signal_connect(MENUBAR_UNDO, "activate", G_CALLBACK(undo), NULL);
+    g_signal_connect(MENUBAR_REDO, "activate", G_CALLBACK(redo), NULL);
     g_signal_connect(MENUBAR_DELETE, "activate", G_CALLBACK(delete_selected_node), NULL);
+
     g_signal_connect(MENUBAR_SHOW_WINDOW_INFORMATION, "activate", G_CALLBACK(mostrar_ventana_info_ventana), NULL);
 
     return menu_bar_main_window;

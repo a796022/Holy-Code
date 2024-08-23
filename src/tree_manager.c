@@ -5,6 +5,7 @@
 #include "window_manager.h"
 #include "session_manager.h"
 #include "tree_files.h"
+#include "history.h"
 
 // Main window tree data model
 GtkTreeStore *MAIN_TREE_MODEL;
@@ -106,15 +107,27 @@ void cargar_arbol_principal() {
  * 
  * @return void
  */
-void add_text_to_selected_node(const char *text) {
+void add_text_to_selected_node(char *text) {
+
+    // Get the selected node
     GtkTreeSelection *selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(MAIN_TREE_VIEW));
-    GtkTreeIter iter;
+    GtkTreeIter selected_node_iter;
+    GtkTreeIter added_node_iter;
     GtkTreeModel *model;
-    if (gtk_tree_selection_get_selected(selection, &model, &iter)) {
+    if (gtk_tree_selection_get_selected(selection, &model, &selected_node_iter)) {
+
+        // Add the text to the selected node
         GtkTreeStore *store = GTK_TREE_STORE(model);
-        agregar_nodo_tree(store, &iter, text);
+        added_node_iter = agregar_nodo_tree(store, &selected_node_iter, text);
+
+        // Add the action to the history
+        GtkTreePath *path = gtk_tree_model_get_path(model, &added_node_iter);
+        gchar *path_str = gtk_tree_path_to_string(path);
+        gtk_tree_path_free(path);
+        store_aggregate_operation(text, path_str);
+
     } else {
-        agregar_nodo_tree(MAIN_TREE_MODEL, NULL, text);
+        printf("Error: did not find any selected node\n");
     }
 }
 
