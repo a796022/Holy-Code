@@ -15,6 +15,7 @@
 #include <stdio.h>
 
 #include "tree_manager.h"
+#include "tree.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 // PRIVATE /////////////////////////////////////////////////////////////////////
@@ -183,7 +184,20 @@ void redo_aggregate_operation() {
     push_aggregate_stack(&UNDO_STACK_AGGREGATE, operation);
 
     // Redo the operation
-    printf("Redo aggregate operation\n");
+    // 1- Get the path of the parent node
+    GtkTreePath *parent_path = gtk_tree_path_new_from_string(operation.node_path);
+    gtk_tree_path_up(parent_path);
+    gchar *parent_path_str = gtk_tree_path_to_string(parent_path);
+    gtk_tree_path_free(parent_path);
+
+    // 2- Get the parent node
+    GtkTreeIter parent_iter;
+    gtk_tree_model_get_iter_from_string(GTK_TREE_MODEL(MAIN_TREE_MODEL), 
+                                        &parent_iter, 
+                                        parent_path_str);
+
+    // 3- Add the node to the parent node
+    agregar_nodo_tree(MAIN_TREE_MODEL, &parent_iter, operation.node_text);
 }
 
 // #3# Modify the clear_redo_stack to clear the new operation
