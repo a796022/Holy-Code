@@ -10,7 +10,7 @@ extern GtkTreeStore *MAIN_TREE_MODEL;
  * 
  * @return void
 */
-GtkWidget *inicializar_arbol_principal();
+GtkWidget *init_main_tree();
 
 /**
  * @brief Saves the tree of the main window in a file.
@@ -29,7 +29,7 @@ void save_tree();
  * 
  * @return void
  */
-void cargar_arbol_principal();
+void load_main_tree();
 
 /**
  * @brief Add the input text to the selected node.
@@ -39,6 +39,17 @@ void cargar_arbol_principal();
  * @return void
  */
 void add_text_to_selected_node(char *text);
+
+/**
+ * @brief Inserts a new node in the tree.
+ * 
+ * @param parent_iter Parent node of the new node
+ * @param position Position of the new node
+ * @param text Text of the new node
+ * 
+ * @return GtkTreeIter Iterator of the new node
+ */
+GtkTreeIter insert_node_at_position(GtkTreeIter *parent_iter, gint position, const gchar *text);
 
 /**
  * @brief Deletes the selected node.

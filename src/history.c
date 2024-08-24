@@ -59,6 +59,9 @@ void init_operation_stack(OperationStack *stack) {
         printf("Error: Memory allocation failed for creating operation stack\n");
         return;
     }
+
+    // Set the next node to NULL
+    stack->top->next = NULL;
 }
 
 /**
@@ -72,26 +75,23 @@ void init_operation_stack(OperationStack *stack) {
  * @return void
  */
 void push_operation_stack(OperationStack *stack, uint8_t id) {
-    if (stack->index <= 255) {
+    // Add the operation to the top node
+    stack->top->ids[stack->index] = id;
+    stack->index++;
 
-        // Add the operation to the top node
-        stack->top->ids[stack->index] = id;
-        stack->index++;
-
-    } else {
-
+    // If the top node is full, create a new node
+    if (stack->index >= 256) {
         // Create a new node
         OperationStackNode *new_node = (OperationStackNode *)malloc(sizeof(OperationStackNode));
         if (new_node == NULL) {
+            printf("Error: Memory allocation failed for operation stack node\n");
             return;
         }
-        new_node->ids[0] = id;
 
         // Add the new node to the top of the stack
         new_node->next = stack->top;
         stack->top = new_node;
-        stack->index = 1;
-
+        stack->index = 0;
     }
 }
 
@@ -106,7 +106,7 @@ void push_operation_stack(OperationStack *stack, uint8_t id) {
  */
 uint8_t pop_operation_stack(OperationStack *stack) {
     // Check if the stack is empty
-    if (stack->index == 0 && stack->top == NULL) {
+    if (stack->index == 0 && stack->top->next == NULL) {
         return -1;
     }
 
@@ -151,7 +151,7 @@ uint8_t peek_operation_stack(OperationStack *stack) {
  * @return void
  */
 void free_operation_stack(OperationStack *stack) {
-    while (stack->top != NULL) {
+    while (!(stack->index == 0 && stack->top->next == NULL)) {
         pop_operation_stack(stack);
     }
 }
@@ -466,20 +466,25 @@ void undo_delete_operation() {
     push_delete_stack(&REDO_STACK_DELETE, operation);
 
     // Undo the operation
-    // 1- Get the path of the node
+    // 1- Get the position of the node
     GtkTreePath *parent_path = gtk_tree_path_new_from_string(operation.node_path);
+    gint *position_list = gtk_tree_path_get_indices(parent_path);
+    int length = gtk_tree_path_get_depth(parent_path);
+    gint position = position_list[length - 1];
+
+    // 2- Get the path of the parent node
     gtk_tree_path_up(parent_path);
     gchar *parent_path_str = gtk_tree_path_to_string(parent_path);
     gtk_tree_path_free(parent_path);
 
-    // 2- Get the parent node
+    // 3- Get the parent node
     GtkTreeIter parent_iter;
     gtk_tree_model_get_iter_from_string(GTK_TREE_MODEL(MAIN_TREE_MODEL), 
                                         &parent_iter, 
                                         parent_path_str);
 
-    // 3- Add the node to the parent node
-    agregar_nodo_tree(MAIN_TREE_MODEL, &parent_iter, operation.node_text);
+    // 4- Add the node to the parent node
+    insert_node_at_position(&parent_iter, position, operation.node_text);
 }
 
 /**

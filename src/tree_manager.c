@@ -7,14 +7,22 @@
 #include "tree_files.h"
 #include "history.h"
 
-// Main window tree data model
-GtkTreeStore *MAIN_TREE_MODEL;
+////////////////////////////////////////////////////////////////////////////////
+// PRIVATE /////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 
 // Widget of the main window tree
 GtkWidget *MAIN_TREE_VIEW;
 
 // Path of the file in session
 char *TREE_PATH_FILE = NULL;
+
+////////////////////////////////////////////////////////////////////////////////
+// PUBLIC //////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+
+// Main window tree data model
+GtkTreeStore *MAIN_TREE_MODEL;
 
 /**
  * @brief Initializes the main window tree.
@@ -26,22 +34,22 @@ char *TREE_PATH_FILE = NULL;
  * 
  * @return GtkWidget* The TreeView widget
 */
-GtkWidget *inicializar_arbol_principal() {
-    // Crear un modelo de árbol para el TreeView
+GtkWidget *init_main_tree() {
+    // Create a data model for the tree
     MAIN_TREE_MODEL = crear_modelo_datos_tree();
 
-    // Crear el TreeView
+    // Create the TreeView
     MAIN_TREE_VIEW = crear_tree_view(MAIN_TREE_MODEL);
 
-    // Obtener el último fichero abierto
+    // Get the last opened file
     TREE_PATH_FILE = read_last_opened_file();
     
-    // Si hay un fichero en sesión, se carga
+    // If there is a file in session, it is loaded
     if (TREE_PATH_FILE != NULL) {
         cargar_arbol(MAIN_TREE_MODEL, TREE_PATH_FILE);
     }
 
-    // Se crea una columna para el TreeView
+    // Create a column for the TreeView
     crear_columna_tree_view(MAIN_TREE_VIEW, "Árbol sin nombre");
 
     return MAIN_TREE_VIEW;
@@ -83,7 +91,7 @@ void save_tree() {
  * 
  * @return void
  */
-void cargar_arbol_principal() {
+void load_main_tree() {
     // Seleccionar un fichero desde el sistema de archivos
     char* filename = mostrar_ventana_selector_archivos();
 
@@ -129,6 +137,27 @@ void add_text_to_selected_node(char *text) {
     } else {
         printf("Error: did not find any selected node\n");
     }
+}
+
+/**
+ * @brief Inserts a new node in the tree.
+ * 
+ * @param parent_iter Parent node of the new node
+ * @param position Position of the new node
+ * @param text Text of the new node
+ * 
+ * @return GtkTreeIter Iterator of the new node
+ */
+GtkTreeIter insert_node_at_position(GtkTreeIter *parent_iter, gint position, const gchar *text) {
+    GtkTreeIter new_iter;
+
+    // Insert a new node in the tree "store" (main tree model), under the parent node "parent_iter", at position "position"
+    gtk_tree_store_insert(MAIN_TREE_MODEL, &new_iter, parent_iter, position);
+
+    // Set the values of the new node
+    gtk_tree_store_set(MAIN_TREE_MODEL, &new_iter, 0, text, -1);
+
+    return new_iter;
 }
 
 /**

@@ -38,7 +38,7 @@ void inicializar_componentes_ventana_principal() {
     agregar_widget_box(main_vbox, paned, TRUE, TRUE, 0);
 
     // Crear contenido para el área izquierda del divisor (el treeview)
-    tree_view = inicializar_arbol_principal();
+    tree_view = init_main_tree();
     agregar_widget_paned_izquierda(paned, tree_view, TRUE, FALSE);
 
     // Crear contenido para el área derecha del divisor
