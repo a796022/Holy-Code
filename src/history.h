@@ -2,6 +2,22 @@
 #define HISTORY
 
 /**
+ * @brief Initializes the operations set.
+ * 
+ * @return void
+ */
+void init_operations_set();
+
+/**
+ * @brief Ends the operations set.
+ * 
+ * - Modify the last operation to mark the end of the set.
+ * 
+ * @return void
+ */
+void end_operations_set();
+
+/**
  * @brief Undo the last operation.
  * 
  * @return void

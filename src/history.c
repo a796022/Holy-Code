@@ -17,18 +17,29 @@
 #include "tree_manager.h"
 #include "tree.h"
 
+////////////////////////////////////////////////////////////////////////////////
+// PRIVATE /////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+
+#define SINGLE_OP 0
+#define SET_EXTREME_OP 1
+#define SET_INNER_OP 2
+
+#define NO_SET 0
+#define BEGGINING_SET 1
+#define IN_SET 2
+
+uint8_t set_state = NO_SET;
+
 // #1# Define the operation identifier
 
 #define AGGREGATE_OP 0
 #define DELETE_OP 1
 
-////////////////////////////////////////////////////////////////////////////////
-// PRIVATE /////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-
 // Structure for the operation stack nodes
 typedef struct OperationStackNode {
     uint8_t ids[256];
+    uint8_t sets[256];
     struct OperationStackNode *next;
 } OperationStackNode;
 
@@ -71,12 +82,14 @@ void init_operation_stack(OperationStack *stack) {
  * 
  * @param stack Operation stack
  * @param id Operation identifier
+ * @param set Set of operations
  * 
  * @return void
  */
-void push_operation_stack(OperationStack *stack, uint8_t id) {
-    // Add the operation to the top node
+void push_operation_stack_with_set(OperationStack *stack, uint8_t id, uint8_t set) {
+    // Add the operation to the top of the stack
     stack->top->ids[stack->index] = id;
+    stack->top->sets[stack->index] = set;
     stack->index++;
 
     // If the top node is full, create a new node
@@ -96,15 +109,42 @@ void push_operation_stack(OperationStack *stack, uint8_t id) {
 }
 
 /**
+ * @brief Pushes an operation to the stack.
+ * 
+ * - The operation is added to the top of the stack.
+ * 
+ * @param stack Operation stack
+ * @param id Operation identifier
+ * 
+ * @return void
+ */
+void push_operation_stack(OperationStack *stack, uint8_t id) {
+    // Get the set of operations
+    uint8_t set;
+    if (set_state == BEGGINING_SET) {
+        set = SET_EXTREME_OP;
+        set_state = IN_SET;
+    } else if (set_state == IN_SET) {
+        set = SET_INNER_OP;
+    } else { // NO_SET
+        set = SINGLE_OP;
+    }
+
+    // Push the operation to the stack
+    push_operation_stack_with_set(stack, id, set);
+}
+
+/**
  * @brief Pops an operation from the stack.
  * 
  * - The operation is removed from the top of the stack.
  * 
  * @param stack Operation stack
+ * @param set Set of operations
  * 
  * @return uint8_t Operation identifier
  */
-uint8_t pop_operation_stack(OperationStack *stack) {
+uint8_t pop_operation_stack(OperationStack *stack, uint8_t *set) {
     // Check if the stack is empty
     if (stack->index == 0 && stack->top->next == NULL) {
         return -1;
@@ -113,11 +153,16 @@ uint8_t pop_operation_stack(OperationStack *stack) {
     // Remove the top node
     if (stack->index > 0) {
         stack->index--;
+        *set = stack->top->sets[stack->index];
         return stack->top->ids[stack->index];
     } else {
         OperationStackNode *top_node = stack->top;
         stack->top = top_node->next;
+
+        stack->index = 255;
         uint8_t id = stack->top->ids[255];
+        *set = stack->top->sets[255];
+
         free(top_node);
         return id;
     }
@@ -127,18 +172,21 @@ uint8_t pop_operation_stack(OperationStack *stack) {
  * @brief Returns the top operation of the stack.
  * 
  * @param stack Operation stack
+ * @param set Set of operations
  * 
  * @return uint8_t Operation identifier
  */
-uint8_t peek_operation_stack(OperationStack *stack) {
+uint8_t peek_operation_stack(OperationStack *stack, uint8_t *set) {
     // Check if the stack is empty
-    if (stack->index == 0 && stack->top == NULL) {
+    if (stack->index == 0 && stack->top->next == NULL) {
         return -1;
     }
 
     if (stack->index > 0) {
+        *set = stack->top->sets[stack->index - 1];
         return stack->top->ids[stack->index - 1];
     } else {
+        *set = stack->top->next->sets[255];
         return stack->top->next->ids[255];
     }
 }
@@ -151,8 +199,9 @@ uint8_t peek_operation_stack(OperationStack *stack) {
  * @return void
  */
 void free_operation_stack(OperationStack *stack) {
+    uint8_t set;
     while (!(stack->index == 0 && stack->top->next == NULL)) {
-        pop_operation_stack(stack);
+        pop_operation_stack(stack, &set);
     }
 }
 
@@ -530,6 +579,46 @@ void clear_redo_stack() {
 // PUBLIC //////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 
+/**
+ * @brief Initializes the operations set.
+ * 
+ * @return void
+ */
+void init_operations_set() {
+    set_state = BEGGINING_SET;
+}
+
+/**
+ * @brief Ends the operations set.
+ * 
+ * - Modify the last operation to mark the end of the set.
+ * 
+ * @return void
+ */
+void end_operations_set() {
+    // Get the las operation
+    uint8_t set;
+    uint8_t last_operation = peek_operation_stack(&UNDO_STACK_OPERATIONS, &set);
+    if (last_operation == -1) {
+        return;
+    }
+
+    // Mark the end of the set in the last operation
+    if (set == SET_EXTREME_OP) {
+        set = SINGLE_OP;
+    } else if (set == SET_INNER_OP) {
+        set = SET_EXTREME_OP;
+    }
+    if (UNDO_STACK_OPERATIONS.index > 0) {
+        UNDO_STACK_OPERATIONS.top->sets[UNDO_STACK_OPERATIONS.index - 1] = set;
+    } else {
+        UNDO_STACK_OPERATIONS.top->next->sets[255] = set;
+    }
+
+    // Mark the end of the set in the global state
+    set_state = NO_SET;
+}
+
 // #5# Modify the undo and redo functions to deal with the new operation
 
 /**
@@ -547,7 +636,8 @@ void undo() {
     }
 
     // Get the last operation
-    uint8_t last_operation = pop_operation_stack(&UNDO_STACK_OPERATIONS);
+    uint8_t set;
+    uint8_t last_operation = pop_operation_stack(&UNDO_STACK_OPERATIONS, &set);
     switch (last_operation) {
         case AGGREGATE_OP:
             undo_aggregate_operation();
@@ -561,7 +651,19 @@ void undo() {
     }
 
     // Add the operation to the operation stack
-    push_operation_stack(&REDO_STACK_OPERATIONS, last_operation);
+    push_operation_stack_with_set(&REDO_STACK_OPERATIONS, last_operation, set);
+
+    // If there is a set of operations, undo all of them
+    if (set == SET_EXTREME_OP) {
+        if (set_state == NO_SET) {
+            set_state = IN_SET;
+            undo();
+        } else { // IN_SET
+            set_state = NO_SET;
+        }
+    } else if (set == SET_INNER_OP) {
+        undo();
+    }
 }
 
 /**
@@ -579,7 +681,8 @@ void redo() {
     }
 
     // Get the last operation
-    uint8_t last_operation = pop_operation_stack(&REDO_STACK_OPERATIONS);
+    uint8_t set;
+    uint8_t last_operation = pop_operation_stack(&REDO_STACK_OPERATIONS, &set);
     switch (last_operation) {
         case AGGREGATE_OP:
             redo_aggregate_operation();
@@ -593,7 +696,19 @@ void redo() {
     }
 
     // Add the operation to the operation stack
-    push_operation_stack(&UNDO_STACK_OPERATIONS, last_operation);
+    push_operation_stack_with_set(&UNDO_STACK_OPERATIONS, last_operation, set);
+
+    // If there is a set of operations, redo all of them
+    if (set == SET_EXTREME_OP) {
+        if (set_state == NO_SET) {
+            set_state = IN_SET;
+            redo();
+        } else { // IN_SET
+            set_state = NO_SET;
+        }
+    } else if (set == SET_INNER_OP) {
+        redo();
+    }
 }
 
 // #6# Modify the initialization and closing functions to deal with the new operation

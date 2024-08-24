@@ -17,6 +17,37 @@ GtkWidget *MAIN_TREE_VIEW;
 // Path of the file in session
 char *TREE_PATH_FILE = NULL;
 
+/**
+ * @brief Deletes a node recursively.
+ * 
+ * - Deletes the children of the node.
+ * - Deletes the node.
+ * 
+ * @param store Data model of the tree
+ * @param iter Iterator of the node
+ * 
+ * @return void
+ */
+void delete_node_recursive(GtkTreeStore *store, GtkTreeIter *iter) {
+    GtkTreeIter child;
+    while (gtk_tree_model_iter_children(GTK_TREE_MODEL(store), &child, iter)) {
+        delete_node_recursive(store, &child);
+    }
+    
+    // Get the text of the node
+    gchar *node_text;
+    gtk_tree_model_get(GTK_TREE_MODEL(store), iter, 0, &node_text, -1);
+
+    // Add the action to the history
+    GtkTreePath *path = gtk_tree_model_get_path(GTK_TREE_MODEL(store), iter);
+    gchar *path_str = gtk_tree_path_to_string(path);
+    gtk_tree_path_free(path);
+    store_delete_operation(node_text, path_str);
+
+    // Delete the node
+    gtk_tree_store_remove(store, iter);
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 // PUBLIC //////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
@@ -169,6 +200,7 @@ GtkTreeIter insert_node_at_position(GtkTreeIter *parent_iter, gint position, con
  * @return void
  */
 void delete_selected_node() {
+
     // Get the selected node
     GtkTreeSelection *selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(MAIN_TREE_VIEW));
     GtkTreeIter iter;
@@ -180,20 +212,13 @@ void delete_selected_node() {
         GtkTreeIter parent;
         if (gtk_tree_model_iter_parent(model, &parent, &iter)) {
 
-            // Get the text of the node
-            gchar *node_text;
-            gtk_tree_model_get(model, &iter, 0, &node_text, -1);
-
-            // Add the action to the history
-            GtkTreePath *path = gtk_tree_model_get_path(model, &iter);
-            gchar *path_str = gtk_tree_path_to_string(path);
-            gtk_tree_path_free(path);
-            store_delete_operation(node_text, path_str);
-
-            // Delete the selected node
-            gtk_tree_store_remove(store, &iter);
+            // Call the recursive delete function
+            init_operations_set();
+            delete_node_recursive(store, &iter);
+            end_operations_set();
 
         }
 
     }
+    
 }
