@@ -571,6 +571,7 @@ void redo_delete_operation() {
  * @return void
  */
 void clear_redo_stack() {
+    free_operation_stack(&REDO_STACK_OPERATIONS);
     free_aggregate_stack(&REDO_STACK_AGGREGATE);
     free_delete_stack(&REDO_STACK_DELETE);
 }
