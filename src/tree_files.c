@@ -88,7 +88,7 @@ int read_tree_file(GtkTreeStore *model, const char *filename) {
         // Agrego el nodo al árbol
         if (current_node_level == 0) {
             if (last_node_level == -1) {
-                padres[0] = agregar_nodo_tree(model, NULL, line);
+                padres[0] = add_node(model, NULL, line);
                 last_node_level = 0;
             } else {
                 return 1;
@@ -97,16 +97,16 @@ int read_tree_file(GtkTreeStore *model, const char *filename) {
             if (current_node_level > last_node_level + 1) {
                 for (int i = last_node_level + 1; i < current_node_level; i++) {
                     if (i == 0) {
-                        padres[i] = agregar_nodo_tree(model, NULL, "[NULL]");
+                        padres[i] = add_node(model, NULL, "[NULL]");
                     } else {
-                        padres[i] = agregar_nodo_tree(model, &padres[i - 1], "[NULL]");
+                        padres[i] = add_node(model, &padres[i - 1], "[NULL]");
                     }
                 }
 
                 status = 2;
             }
 
-            padres[current_node_level] = agregar_nodo_tree(model, &padres[current_node_level - 1], line);
+            padres[current_node_level] = add_node(model, &padres[current_node_level - 1], line);
             last_node_level = current_node_level;
         }
     }

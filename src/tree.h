@@ -26,7 +26,7 @@ GtkWidget *crear_tree_view(GtkTreeStore *store);
  * 
  * @return GtkTreeIter
 */
-GtkTreeIter agregar_nodo_tree(GtkTreeStore *store, GtkTreeIter *padre, const char *texto);
+GtkTreeIter add_node(GtkTreeStore *store, GtkTreeIter *padre, const char *texto);
 
 /**
  * Crea una columna para un TreeView.

@@ -2,6 +2,7 @@
 
 #include "tree.h"
 #include "tree_files.h"
+#include "tree_manager.h"
 
 /**
  * Crea un modelo de datos para un árbol.
@@ -36,7 +37,7 @@ GtkWidget *crear_tree_view(GtkTreeStore *model) {
  * 
  * return GtkTreeIter Iterator of the new node
 */
-GtkTreeIter agregar_nodo_tree(GtkTreeStore *model, GtkTreeIter *parent_node, const char *text) {
+GtkTreeIter add_node(GtkTreeStore *model, GtkTreeIter *parent_node, const char *text) {
     GtkTreeIter iter;
 
     // Adds a new node to the tree "model" (main tree model), under the parent node "parent_node".
@@ -45,6 +46,11 @@ GtkTreeIter agregar_nodo_tree(GtkTreeStore *model, GtkTreeIter *parent_node, con
 
     // Sets the text of the node.
     gtk_tree_store_set(model, &iter, 0, text, -1);
+
+    // Expands the parent node
+    if (parent_node != NULL) {
+        gtk_tree_view_expand_row(GTK_TREE_VIEW(MAIN_TREE_VIEW), gtk_tree_model_get_path(GTK_TREE_MODEL(model), parent_node), FALSE);
+    }
 
     return iter;
 }

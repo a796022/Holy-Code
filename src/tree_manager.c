@@ -11,9 +11,6 @@
 // PRIVATE /////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 
-// Widget of the main window tree
-GtkWidget *MAIN_TREE_VIEW;
-
 // Path of the file in session
 char *TREE_PATH_FILE = NULL;
 
@@ -51,6 +48,9 @@ void delete_node_recursive(GtkTreeStore *store, GtkTreeIter *iter) {
 ////////////////////////////////////////////////////////////////////////////////
 // PUBLIC //////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
+
+// Widget of the main window tree
+GtkWidget *MAIN_TREE_VIEW;
 
 // Main window tree data model
 GtkTreeStore *MAIN_TREE_MODEL;
@@ -157,7 +157,7 @@ void add_text_to_selected_node(char *text) {
 
         // Add the text to the selected node
         GtkTreeStore *store = GTK_TREE_STORE(model);
-        added_node_iter = agregar_nodo_tree(store, &selected_node_iter, text);
+        added_node_iter = add_node(store, &selected_node_iter, text);
 
         // Add the action to the history
         GtkTreePath *path = gtk_tree_model_get_path(model, &added_node_iter);

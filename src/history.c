@@ -495,7 +495,7 @@ void redo_aggregate_operation() {
                                         parent_path_str);
 
     // 3- Add the node to the parent node
-    agregar_nodo_tree(MAIN_TREE_MODEL, &parent_iter, operation.node_text);
+    add_node(MAIN_TREE_MODEL, &parent_iter, operation.node_text);
 }
 
 /**

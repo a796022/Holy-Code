@@ -3,6 +3,10 @@
 
 #include <gtk/gtk.h>
 
+// Widget of the main window tree
+extern GtkWidget *MAIN_TREE_VIEW;
+
+// Main window tree data model
 extern GtkTreeStore *MAIN_TREE_MODEL;
 
 /**
