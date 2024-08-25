@@ -33,7 +33,18 @@ void save_tree();
  * 
  * @return void
  */
-void load_main_tree();
+void select_tree();
+
+/**
+ * @brief Adds a node to the tree.
+ * 
+ * @param model Data model to which the node is added.
+ * @param parent_node Parent node of the node to be added. If it is NULL, a root node is added.
+ * @param text Text to add to the node.
+ * 
+ * return GtkTreeIter Iterator of the new node
+*/
+GtkTreeIter add_node(GtkTreeStore *model, GtkTreeIter *parent_node, const char *text);
 
 /**
  * @brief Add the input text to the selected node.
@@ -42,7 +53,7 @@ void load_main_tree();
  * 
  * @return void
  */
-void add_text_to_selected_node(char *text);
+void add_node_to_selected_node(char *text);
 
 /**
  * @brief Inserts a new node in the tree.

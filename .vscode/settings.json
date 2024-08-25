@@ -26,6 +26,7 @@
         "sds.h": "c",
         "tree_manager.h": "c",
         "history.h": "c",
-        "atomic": "c"
+        "atomic": "c",
+        "clipboard.h": "c"
     }
 }

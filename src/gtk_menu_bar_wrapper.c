@@ -1,7 +1,7 @@
 #include <gtk/gtk.h>
 
 #include "window_manager.h"
-#include "tree_manager.h"
+#include "tree_wrapper.h"
 #include "history.h"
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -99,7 +99,7 @@ GtkWidget *initialize_menu_bar_main_window() {
     MENUBAR_SHOW_WINDOW_INFORMATION = add_menu_bar_item(menu_tools, "Mostrar información de la ventana");
 
     // Connect the signals
-    g_signal_connect(MENUBAR_OPEN_FILE, "activate", G_CALLBACK(load_main_tree), NULL);
+    g_signal_connect(MENUBAR_OPEN_FILE, "activate", G_CALLBACK(select_tree), NULL);
     g_signal_connect(MENUBAR_SAVE, "activate", G_CALLBACK(save_tree), NULL);
     g_signal_connect(MENUBAR_EXIT, "activate", G_CALLBACK(cerrar_ventana_principal), NULL);
 

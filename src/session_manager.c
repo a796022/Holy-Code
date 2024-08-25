@@ -14,7 +14,7 @@ const int MAX_PATH_LENGTH = 256;
  */
 void check_session_file() {
     // Obtengo el directori HOME del usuario
-    const char *home_dir = get_home_dir();
+    const char *home_dir = getenv("HOME");
     if (home_dir == NULL) {
         g_printerr("Error: HOME environment variable not set.\n");
         return;
@@ -60,7 +60,7 @@ char *read_last_opened_file() {
     check_session_file();
     
     // Obtengo el directorio HOME del usuario
-    const char *home_dir = get_home_dir();
+    const char *home_dir = getenv("HOME");
     if (home_dir == NULL) {
         g_printerr("Error: HOME environment variable not set.\n");
         return NULL;
@@ -120,7 +120,7 @@ void write_last_opened_file(const char *filename) {
     check_session_file();
     
     // Obtengo el directorio HOME del usuario
-    const char *home_dir = get_home_dir();
+    const char *home_dir = getenv("HOME");
     if (home_dir == NULL) {
         g_printerr("Error: HOME environment variable not set.\n");
         return;

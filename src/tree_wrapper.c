@@ -1,7 +1,6 @@
 #include <gtk/gtk.h>
 
-#include "tree_manager.h"
-#include "tree.h"
+#include "tree_wrapper.h"
 #include "window_manager.h"
 #include "session_manager.h"
 #include "tree_files.h"
@@ -13,6 +12,39 @@
 
 // Path of the file in session
 char *TREE_PATH_FILE = NULL;
+
+/**
+ * @brief Load a tree from a file.
+ * 
+ * - Clear the model.
+ * - Load the tree from the file.
+ * 
+ * @param model Tree data model where the tree is loaded
+ * @param filename File name to load
+ * 
+ * @return int
+*/
+int load_tree(GtkTreeStore *model, const char *filename) {
+    // Clear the model
+    gtk_tree_store_clear(model);
+    
+    // Load the tree from the file
+    return read_tree_file(model, filename);
+}
+
+/**
+ * Crea una columna para un TreeView.
+ * 
+ * @param tree_view TreeView al que se le agregará la columna.
+ * @param titulo Título de la columna.
+ * 
+ * @return void
+*/
+void create_treeview_column(GtkWidget *tree_view, const char *title) {
+    GtkCellRenderer *renderer = gtk_cell_renderer_text_new();
+    GtkTreeViewColumn *column = gtk_tree_view_column_new_with_attributes(title, renderer, "text", 0, NULL);
+    gtk_tree_view_append_column(GTK_TREE_VIEW(tree_view), column);
+}
 
 /**
  * @brief Deletes a node recursively.
@@ -66,22 +98,22 @@ GtkTreeStore *MAIN_TREE_MODEL;
  * @return GtkWidget* The TreeView widget
 */
 GtkWidget *init_main_tree() {
-    // Create a data model for the tree
-    MAIN_TREE_MODEL = crear_modelo_datos_tree();
+    // Create a data model for the tree (with one column of type string)
+    MAIN_TREE_MODEL = gtk_tree_store_new(1, G_TYPE_STRING);
 
     // Create the TreeView
-    MAIN_TREE_VIEW = crear_tree_view(MAIN_TREE_MODEL);
+    MAIN_TREE_VIEW = gtk_tree_view_new_with_model(GTK_TREE_MODEL(MAIN_TREE_MODEL));
 
     // Get the last opened file
     TREE_PATH_FILE = read_last_opened_file();
     
     // If there is a file in session, it is loaded
     if (TREE_PATH_FILE != NULL) {
-        cargar_arbol(MAIN_TREE_MODEL, TREE_PATH_FILE);
+        load_tree(MAIN_TREE_MODEL, TREE_PATH_FILE);
     }
 
     // Create a column for the TreeView
-    crear_columna_tree_view(MAIN_TREE_VIEW, "Árbol sin nombre");
+    create_treeview_column(MAIN_TREE_VIEW, "Árbol sin nombre");
 
     return MAIN_TREE_VIEW;
 }
@@ -118,25 +150,58 @@ void save_tree() {
 }
 
 /**
- * Carga un árbol de un fichero
+ * @brief Load a tree from a file.
+ * 
+ * - Select the file from the file selector.
+ * - If the user has not selected a file, do nothing.
+ * - Empty the tree.
+ * - Load the tree from the file.
+ * - Save the last opened file.
  * 
  * @return void
  */
-void load_main_tree() {
-    // Seleccionar un fichero desde el sistema de archivos
+void select_tree() {
+    // Select the file from the file selector
     char* filename = mostrar_ventana_selector_archivos();
 
-    // Si el usuario no ha seleccionado un archivo, no se hace nada
+    // If the user has not selected a file, do nothing
     if (filename == NULL) {
         return;
     }
 
-    // Cargar el árbol desde el fichero
-    cargar_arbol(MAIN_TREE_MODEL, filename);
+    // Empty the tree
+    load_tree(MAIN_TREE_MODEL, filename);
 
-    // Guardar el último fichero abierto
+    // Save the last opened file
     write_last_opened_file(filename);
     TREE_PATH_FILE = filename;
+}
+
+/**
+ * @brief Adds a node to the tree.
+ * 
+ * @param model Data model to which the node is added.
+ * @param parent_node Parent node of the node to be added. If it is NULL, a root node is added.
+ * @param text Text to add to the node.
+ * 
+ * return GtkTreeIter Iterator of the new node
+*/
+GtkTreeIter add_node(GtkTreeStore *model, GtkTreeIter *parent_node, const char *text) {
+    GtkTreeIter iter;
+
+    // Adds a new node to the tree "model" (main tree model), under the parent node "parent_node".
+    // The iterator "iter" is updated to point to the new node.
+    gtk_tree_store_append(model, &iter, parent_node);
+
+    // Sets the text of the node.
+    gtk_tree_store_set(model, &iter, 0, text, -1);
+
+    // Expands the parent node
+    if (parent_node != NULL) {
+        gtk_tree_view_expand_row(GTK_TREE_VIEW(MAIN_TREE_VIEW), gtk_tree_model_get_path(GTK_TREE_MODEL(model), parent_node), FALSE);
+    }
+
+    return iter;
 }
 
 /**
@@ -146,7 +211,7 @@ void load_main_tree() {
  * 
  * @return void
  */
-void add_text_to_selected_node(char *text) {
+void add_node_to_selected_node(char *text) {
 
     // Get the selected node
     GtkTreeSelection *selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(MAIN_TREE_VIEW));

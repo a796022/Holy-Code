@@ -3,7 +3,7 @@
 
 #include "../lib/background_keyboard_imput/background_keyboard_imput.h"
 #include "../lib/clipboard/clipboard.h"
-#include "tree_manager.h"
+#include "tree_wrapper.h"
 #include "tree_string.h"
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -51,7 +51,7 @@ void detect_double_ctrl_c() {
         if (difftime(current_time, last_ctrlc_press) < 1) {
             char* clipboard_content = get_clipboard_content();
             clean_string(clipboard_content);
-            add_text_to_selected_node(clipboard_content);
+            add_node_to_selected_node(clipboard_content);
         }
         last_ctrlc_press = current_time;
     }

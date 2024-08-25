@@ -4,7 +4,7 @@
 #include "window_manager.h"
 #include "box.h"
 #include "gtk_menu_bar_wrapper.h"
-#include "tree_manager.h"
+#include "tree_wrapper.h"
 #include "GtkAccelGroup_wrapper.h"
 #include "paned_manager.h"
 
