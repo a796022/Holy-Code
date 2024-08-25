@@ -3,6 +3,7 @@
 #include "tree_files.h"
 #include "tree_string.h"
 #include "tree_wrapper.h"
+#include "gtk_progress_bar.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 // PRIVATE /////////////////////////////////////////////////////////////////////
@@ -15,10 +16,12 @@
  * @param iter Current node
  * @param file File to write
  * @param level Level of the node
+ * @param num_nodes Number of nodes
+ * @param added_nodes Number of added nodes
  * 
  * @return void
  */
-void write_tree_file_recursive(GtkTreeStore *model, GtkTreeIter *iter, FILE *file, int level) {
+void write_tree_file_recursive(GtkTreeStore *model, GtkTreeIter *iter, FILE *file, int level, int num_nodes, int *added_nodes) {
     // Write the node to the file
     gchar *text;
     gtk_tree_model_get(GTK_TREE_MODEL(model), iter, 0, &text, -1);
@@ -28,16 +31,21 @@ void write_tree_file_recursive(GtkTreeStore *model, GtkTreeIter *iter, FILE *fil
     fprintf(file, "%s\n", text);
     g_free(text);
 
+    // Mark progress
+    (*added_nodes)++;
+    gdouble progress = (gdouble)(*added_nodes) / (gdouble)num_nodes;
+    set_progress_bar_value(progress);
+
     // Call the child
     GtkTreeIter child;
     if (gtk_tree_model_iter_children(GTK_TREE_MODEL(model), &child, iter)) {
-        write_tree_file_recursive(model, &child, file, level + 1);
+        write_tree_file_recursive(model, &child, file, level + 1, num_nodes, added_nodes);
     }
 
     // Call the next sibling
     GtkTreeIter sibling = *iter;
     if (gtk_tree_model_iter_next(GTK_TREE_MODEL(model), &sibling)) {
-        write_tree_file_recursive(model, &sibling, file, level);
+        write_tree_file_recursive(model, &sibling, file, level, num_nodes, added_nodes);
     }
 }
 
@@ -121,20 +129,32 @@ int read_tree_file(GtkTreeStore *model, const char *filename) {
  * 
  * @param model Tree data model
  * @param filename File name
+ * @param num_nodes Number of nodes
+ * @param added_nodes Number of added nodes
  * 
  * @return int status
  */
-int write_tree_file(GtkTreeStore *model, const char *filename) {
+int write_tree_file(GtkTreeStore *model, const char *filename, int num_nodes) {
+    // Open the file
     FILE *file = fopen(filename, "w");
     if (file == NULL) {
         return -1;
     }
 
+    // Show the progress bar
+    show_progress_bar();
+
+    // Write the tree to the file
     GtkTreeIter iter;
+    int added_nodes = 0;
     if (gtk_tree_model_get_iter_first(GTK_TREE_MODEL(model), &iter)) {
-        write_tree_file_recursive(model, &iter, file, 0);
+        write_tree_file_recursive(model, &iter, file, 0, num_nodes, &added_nodes);
     }
 
+    // Hide the progress bar
+    hide_progress_bar();
+
+    // Close the file
     fclose(file);
 
     return 0;

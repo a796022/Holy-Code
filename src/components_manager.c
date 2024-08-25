@@ -7,6 +7,7 @@
 #include "tree_wrapper.h"
 #include "GtkAccelGroup_wrapper.h"
 #include "paned_manager.h"
+#include "gtk_progress_bar.h"
 
 /**
  * Inicializa los componentes de la ventana principal.
@@ -36,6 +37,10 @@ void inicializar_componentes_ventana_principal() {
     // Crear el GtkPaned (divisor)
     paned = crear_paned_horizontal();
     agregar_widget_box(main_vbox, paned, TRUE, TRUE, 0);
+
+    // Include the progress bar
+    init_progress_bar();
+    agregar_widget_box(main_vbox, MAIN_PROGRESS_BAR, FALSE, FALSE, 0);
 
     // Crear contenido para el área izquierda del divisor (el treeview)
     tree_view = init_main_tree();

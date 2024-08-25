@@ -77,6 +77,33 @@ void delete_node_recursive(GtkTreeStore *store, GtkTreeIter *iter) {
     gtk_tree_store_remove(store, iter);
 }
 
+/**
+ * @brief Count the nodes of a tree.
+ * 
+ * - Counts the nodes of the tree.
+ * 
+ * @param model Tree data model
+ * @param iter Iterator of the node
+ * 
+ * @return int Number of nodes
+ */
+int count_nodes(GtkTreeModel *model, GtkTreeIter *iter)
+{
+    int counter = 1; 
+    GtkTreeIter hijo;
+
+    // Check if the current node has children
+    if (gtk_tree_model_iter_children(model, &hijo, iter))
+    {
+        // Call recursively for each child
+        do {
+            counter += count_nodes(model, &hijo);
+        } while (gtk_tree_model_iter_next(model, &hijo));
+    }
+
+    return counter;
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 // PUBLIC //////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
@@ -139,8 +166,17 @@ void save_tree() {
         return;
     }
 
+    // Get the number of nodes
+    GtkTreeIter iter;
+    int num_nodes = 0;
+    if (gtk_tree_model_get_iter_first(GTK_TREE_MODEL(MAIN_TREE_MODEL), &iter)) {
+        num_nodes = count_nodes(GTK_TREE_MODEL(MAIN_TREE_MODEL), &iter);
+    } else {
+        return;
+    }
+
     // Save the file
-    int status = write_tree_file(MAIN_TREE_MODEL, TREE_PATH_FILE);
+    int status = write_tree_file(MAIN_TREE_MODEL, TREE_PATH_FILE, num_nodes);
     if (status == -1) {
         return;
     }

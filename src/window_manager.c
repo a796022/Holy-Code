@@ -2,6 +2,7 @@
 
 #include "window_manager.h"
 #include "box.h"
+#include "gtk_progress_bar.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 // PRIVATE /////////////////////////////////////////////////////////////////////
@@ -149,7 +150,11 @@ void agregar_widget_ventana(GtkWidget *window, GtkWidget *widget) {
  * @return void
 */
 void mostrar_ventana(GtkWidget *window) {
+    // Muestro todos los widgets de la ventana
     gtk_widget_show_all(window);
+
+    // Oculto los windgets que deben estar ocultos al inicio
+    hide_progress_bar();
 }
 
 /**

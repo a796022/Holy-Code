@@ -22,9 +22,10 @@ int read_tree_file(GtkTreeStore *model, const char *filename);
  * 
  * @param model Tree data model
  * @param filename File name
+ * @param num_nodes Number of nodes
  * 
  * @return int status
  */
-int write_tree_file(GtkTreeStore *model, const char *filename);
+int write_tree_file(GtkTreeStore *model, const char *filename, int num_nodes);
 
 #endif /* TREE_FILES_H */
