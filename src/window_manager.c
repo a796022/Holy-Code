@@ -5,6 +5,7 @@
 #include "box.h"
 #include "gtk_progress_bar.h"
 #include "tree_wrapper.h"
+#include "history.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 // PRIVATE /////////////////////////////////////////////////////////////////////
@@ -125,13 +126,81 @@ void establecer_tamano_minimo_ventana(GtkWidget *window, int ancho, int alto) {
 }
 
 /**
- * Conecta la señal "destroy" de la ventana a la función gtk_main_quit() para que, cuando se cierre la ventana, también se termine el bucle principal de eventos de GTK (y por lo tanto, termine el programa).
+ * @brief Shows a dialog asking the user if they want to save the changes in case there are unsaved changes.
+ * 
+ * - Shows a dialog asking the user if they want to save the changes.
+ * - If the user chooses to save the changes, the tree is saved and the window is closed.
+ * - If the user chooses to discard the changes, the window is closed without saving.
+ * - If the user chooses to cancel, the window is not closed.
+ * 
+ * @param widget Window to which the "delete-event" signal will be set.
+ * @param event Event that triggered the signal.
+ * @param data Data passed to the signal.
+ * 
+ * @return gboolean TRUE if the window should not be closed, FALSE if the window should be closed.
+ */
+gboolean on_delete_event(GtkWidget *widget, GdkEvent *event, gpointer data) {
+    // If there are unsaved changes, ask the user if they want to save the changes
+    if (there_are_unsaved_changes()) {
+
+        // Show a dialog asking the user if they want to save the changes
+        GtkWidget *dialog = gtk_message_dialog_new(GTK_WINDOW(widget),
+                                                   GTK_DIALOG_MODAL,
+                                                   GTK_MESSAGE_WARNING,
+                                                   GTK_BUTTONS_NONE,
+                                                   "¿Guardar cambios?");
+        
+        gtk_dialog_add_buttons(GTK_DIALOG(dialog),
+                               "Cancelar", GTK_RESPONSE_CANCEL,
+                               "Descartar", GTK_RESPONSE_REJECT,
+                               "Guardar", GTK_RESPONSE_ACCEPT,
+                               NULL);
+
+        gint response = gtk_dialog_run(GTK_DIALOG(dialog));
+
+        // Close the dialog
+        gtk_widget_destroy(dialog);
+
+        // Process the response
+        switch (response) {
+            case GTK_RESPONSE_ACCEPT:
+                save_tree();
+                return FALSE;
+            case GTK_RESPONSE_REJECT:
+                return FALSE;
+            case GTK_RESPONSE_CANCEL:
+            default:
+                return TRUE;
+        }
+    }
+
+    // If there are no unsaved changes, close the window
+    return FALSE;
+}
+
+/**
+ * @brief Connects the window's “delete-event” signal to the on_delete_event() function.
+ * 
+ * - Connects the window's “delete-event” signal to the on_delete_event() function so that, when the window is closed, the user is asked if they want to save the changes if there are unsaved changes.
+ * 
+ * @param window Window to which the "delete-event" signal will be set.
+ * 
+ * @return void
+ */
+void configure_delete_event_signal(GtkWidget *window) {
+    g_signal_connect(window, "delete-event", G_CALLBACK(on_delete_event), NULL);
+}
+
+/**
+ * @brief Connects the window's “destroy” signal to the gtk_main_quit() function.
+ * 
+ * - Connects the window's “destroy” signal to the gtk_main_quit() function so that, when the window is closed, the GTK main event loop is also terminated (and thus terminates the program).
  * 
  * @param window Ventana a la que se le establecerá la señal "destroy".
  * 
  * @return void
 */
-void establecer_terminar_programa_cerrado_ventana(GtkWidget *window) {
+void configure_destroy_signal(GtkWidget *window) {
     g_signal_connect(window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
 }
 
@@ -260,7 +329,8 @@ GtkWidget *inicializar_ventana_principal() {
     establecer_tamano_por_defecto_ventana(MAIN_WINDOW, 900, 500);
     establecer_redimensionable_ventana(MAIN_WINDOW, TRUE);
     establecer_tamano_minimo_ventana(MAIN_WINDOW, 300, 200);
-    establecer_terminar_programa_cerrado_ventana(MAIN_WINDOW);
+    configure_destroy_signal(MAIN_WINDOW);
+    configure_delete_event_signal(MAIN_WINDOW);
 
     // Crear un contenedor de caja vertical para el menu_bar y lo demás
     main_vbox = crear_box(GTK_ORIENTATION_VERTICAL, 0);

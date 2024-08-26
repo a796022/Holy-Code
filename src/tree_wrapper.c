@@ -185,7 +185,7 @@ void save_tree() {
     write_last_opened_file(TREE_PATH_FILE);
 
     // Reset the last saved distance
-    reset_last_saved_distance();
+    set_changes_as_saved();
 }
 
 /**

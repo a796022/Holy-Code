@@ -42,8 +42,6 @@ uint8_t set_state = NO_SET;
 
 int64_t last_saved_distance = 0;
 
-void modify_last_saved_distance(int distance);
-
 // Structure for the operation stack nodes
 typedef struct OperationStackNode {
     uint8_t ids[256];
@@ -60,6 +58,25 @@ typedef struct OperationStack {
 // Stacks for undo and redo operations
 OperationStack UNDO_STACK_OPERATIONS;
 OperationStack REDO_STACK_OPERATIONS;
+
+/**
+ * @brief Modifies the last saved distance and modifies the title of the window if necessary to indicate if there are unsaved changes.
+ * 
+ * @param distance Distance to modify the last saved distance
+ * 
+ * @return void
+ */
+void modify_last_saved_distance(int distance) {
+    if (last_saved_distance == 0) {
+        set_title_unsaved();
+    }
+
+    last_saved_distance += distance;
+
+    if (last_saved_distance == 0) {
+        set_title_saved();
+    }
+}
 
 /**
  * @brief Initializes an operation stack.
@@ -600,34 +617,24 @@ void clear_redo_stack() {
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
- * @brief Modifies the last saved distance and modifies the title of the window if necessary to indicate if there are unsaved changes.
- * 
- * @param distance Distance to modify the last saved distance
- * 
- * @return void
- */
-void modify_last_saved_distance(int distance) {
-    if (last_saved_distance == 0) {
-        set_title_unsaved();
-    }
-
-    last_saved_distance += distance;
-
-    if (last_saved_distance == 0) {
-        set_title_saved();
-    }
-}
-
-/**
  * @brief Resets the last saved distance to 0 and modifies the title of the window to indicate that there are no unsaved changes.
  * 
  * - This function is called when the file is saved, so the last saved distance is set to 0.
  * 
  * @return void
  */
-void reset_last_saved_distance() {
+void set_changes_as_saved() {
     last_saved_distance = 0;
     set_title_saved();
+}
+
+/**
+ * @brief Returns 0 if there are unsaved changes, 1 otherwise.
+ * 
+ * @return uint8_t 0 if there are unsaved changes, 1 otherwise
+ */
+uint8_t there_are_unsaved_changes() {
+    return last_saved_distance != 0;
 }
 
 /**
