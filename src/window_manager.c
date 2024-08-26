@@ -351,11 +351,11 @@ void mostrar_ventana_principal() {
 }
 
 /**
- * Cierra la ventana principal.
+ * @brief Closes the main window
  * 
  * @return void
 */
-void cerrar_ventana_principal() {
+void close_main_window() {
     cerrar_ventana(MAIN_WINDOW);
 }
 

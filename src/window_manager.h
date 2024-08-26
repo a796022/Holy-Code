@@ -26,7 +26,7 @@ void mostrar_ventana_principal();
  * 
  * @return void
 */
-void cerrar_ventana_principal();
+void close_main_window();
 
 /**
  * Muestra una ventana emergente con la información del ancho y alto de la ventana principal.

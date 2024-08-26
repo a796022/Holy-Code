@@ -4,6 +4,7 @@
 // "Archivo" Menu
 extern GtkWidget *MENUBAR_SAVE;
 extern GtkWidget *MENUBAR_OPEN_FILE;
+extern GtkWidget *MENUBAR_CLOSE_WINDOW;
 extern GtkWidget *MENUBAR_EXIT;
 
 // "Editar" Menu
