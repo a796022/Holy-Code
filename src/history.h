@@ -2,6 +2,24 @@
 #define HISTORY
 
 /**
+ * @brief Modifies the last saved distance and modifies the title of the window if necessary to indicate if there are unsaved changes.
+ * 
+ * @param distance Distance to modify the last saved distance
+ * 
+ * @return void
+ */
+void modify_last_saved_distance(int distance);
+
+/**
+ * @brief Resets the last saved distance to 0 and modifies the title of the window to indicate that there are no unsaved changes.
+ * 
+ * - This function is called when the file is saved, so the last saved distance is set to 0.
+ * 
+ * @return void
+ */
+void reset_last_saved_distance();
+
+/**
  * @brief Initializes the operations set.
  * 
  * @return void

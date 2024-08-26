@@ -1,6 +1,8 @@
 #ifndef WINDOW_MANAGER_H
 #define WINDOW_MANAGER_H
 
+#include <gtk/gtk.h>
+
 extern GtkWidget *MAIN_WINDOW;
 
 /**
@@ -39,5 +41,23 @@ void mostrar_ventana_info_ventana();
  * @return char*
 */
 char *mostrar_ventana_selector_archivos();
+
+/**
+ * @brief Sets the title of the window as unsaved.
+ * 
+ * - Add a bullet and a space (• ) at the beginning of the title.
+ * 
+ * @return void
+ */
+void set_title_unsaved();
+
+/**
+ * @brief Sets the title of the window as saved.
+ * 
+ * - Remove the bullet and the space (• ) at the beginning of the title.
+ * 
+ * @return void
+ */
+void set_title_saved();
 
 #endif /* WINDOW_MANAGER_H */

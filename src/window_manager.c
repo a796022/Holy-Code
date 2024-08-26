@@ -1,14 +1,15 @@
 #include <gtk/gtk.h>
 
-#include "window_manager.h"
+#include "../external/sds/sds.h"
+
 #include "box.h"
 #include "gtk_progress_bar.h"
+#include "tree_wrapper.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 // PRIVATE /////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 
-const char *NOMBRE_VENTANA = "Wizard";
 const int ANCHO_VENTANA = 900;
 const int ALTO_VENTANA = 500;
 const gboolean REDIMENSIONABLE = TRUE;
@@ -42,21 +43,25 @@ int obtener_alto_ventana(GtkWindow *window) {
 }
 
 /**
- * Obtiene el ancho de la ventana principal.
+ * Get the width of the window.
+ * 
+ * @param window Window from which the width will be obtained.
  * 
  * @return int
 */
-int obtener_ancho_ventana_principal() {
-    return obtener_ancho_ventana(GTK_WINDOW(MAIN_WINDOW));
+int get_window_width(GtkWidget *window) {
+    return obtener_ancho_ventana(GTK_WINDOW(window));
 }
 
 /**
- * Obtiene el alto de la ventana principal.
+ * Get the height of the window.
+ * 
+ * @param window Window from which the height will be obtained.
  * 
  * @return int
 */
-int obtener_alto_ventana_principal() {
-    return obtener_alto_ventana(GTK_WINDOW(MAIN_WINDOW));
+int get_window_height(GtkWidget *window) {
+    return obtener_alto_ventana(GTK_WINDOW(window));
 }
 
 /**
@@ -251,7 +256,7 @@ GtkWidget *inicializar_ventana_principal() {
 
     // Crear y configurar la ventana
     MAIN_WINDOW = crear_ventana();
-    establecer_nombre_ventana(MAIN_WINDOW, "Wizard");
+    establecer_nombre_ventana(MAIN_WINDOW, "Sin Título - Wizard");
     establecer_tamano_por_defecto_ventana(MAIN_WINDOW, 900, 500);
     establecer_redimensionable_ventana(MAIN_WINDOW, TRUE);
     establecer_tamano_minimo_ventana(MAIN_WINDOW, 300, 200);
@@ -290,8 +295,8 @@ void cerrar_ventana_principal() {
  * @return void
 */
 void mostrar_ventana_info_ventana() {
-    const int ancho = obtener_ancho_ventana_principal();
-    const int alto = obtener_alto_ventana_principal();
+    const int ancho = get_window_width(MAIN_WINDOW);
+    const int alto = get_window_height(MAIN_WINDOW);
 
     char mensaje[100]; // Ajusta el tamaño según sea necesario
     sprintf(mensaje,    "Anchura: %dpx\n"
@@ -330,4 +335,47 @@ char *mostrar_ventana_selector_archivos() {
     gtk_widget_destroy(dialog);
 
     return NULL;
+}
+
+/**
+ * @brief Sets the title of the window as unsaved.
+ * 
+ * - Add a bullet and a space (• ) at the beginning of the title.
+ * 
+ * @return void
+ */
+void set_title_unsaved() {
+    // Get the title of the window
+    const char *title = gtk_window_get_title(GTK_WINDOW(MAIN_WINDOW));
+
+    // Add a bullet and a space (• ) at the beginning of the title
+    sds new_title = sdsnew("• ");
+    new_title = sdscat(new_title, title);
+
+    // Set the new title
+    gtk_window_set_title(GTK_WINDOW(MAIN_WINDOW), new_title);
+
+    // Free the memory
+    sdsfree(new_title);
+}
+
+/**
+ * @brief Sets the title of the window as saved.
+ * 
+ * - Remove the bullet and the space (• ) at the beginning of the title.
+ * 
+ * @return void
+ */
+void set_title_saved() {
+    // Get the title of the window
+    const char *title = gtk_window_get_title(GTK_WINDOW(MAIN_WINDOW));
+
+    // Remove the bullet and the space (• ) at the beginning of the title
+    sds new_title = sdsnew(title + 4);
+
+    // Set the new title
+    gtk_window_set_title(GTK_WINDOW(MAIN_WINDOW), new_title);
+
+    // Free the memory
+    sdsfree(new_title);
 }

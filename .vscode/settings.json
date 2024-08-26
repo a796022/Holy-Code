@@ -28,6 +28,7 @@
         "history.h": "c",
         "atomic": "c",
         "clipboard.h": "c",
-        "gtk_menu_bar_wrapper.h": "c"
+        "gtk_menu_bar_wrapper.h": "c",
+        "types.h": "c"
     }
 }

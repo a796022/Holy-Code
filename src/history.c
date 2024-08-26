@@ -15,6 +15,7 @@
 #include <stdio.h>
 
 #include "tree_wrapper.h"
+#include "window_manager.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 // PRIVATE /////////////////////////////////////////////////////////////////////
@@ -28,12 +29,20 @@
 #define BEGGINING_SET 1
 #define IN_SET 2
 
-uint8_t set_state = NO_SET;
+#define REASON_UNDO 0
+#define REASON_REDO 1
+#define REASON_ACTION 2
 
 // #1# Define the operation identifier
 
 #define AGGREGATE_OP 0
 #define DELETE_OP 1
+
+uint8_t set_state = NO_SET;
+
+int64_t last_saved_distance = 0;
+
+void modify_last_saved_distance(int distance);
 
 // Structure for the operation stack nodes
 typedef struct OperationStackNode {
@@ -82,10 +91,11 @@ void init_operation_stack(OperationStack *stack) {
  * @param stack Operation stack
  * @param id Operation identifier
  * @param set Set of operations
+ * @param reason Reason of the operation (undo, redo, action)
  * 
  * @return void
  */
-void push_operation_stack_with_set(OperationStack *stack, uint8_t id, uint8_t set) {
+void push_operation_stack_with_set(OperationStack *stack, uint8_t id, uint8_t set, uint8_t reason) {
     // Add the operation to the top of the stack
     stack->top->ids[stack->index] = id;
     stack->top->sets[stack->index] = set;
@@ -105,6 +115,15 @@ void push_operation_stack_with_set(OperationStack *stack, uint8_t id, uint8_t se
         stack->top = new_node;
         stack->index = 0;
     }
+
+    // Modify the last saved distance
+    if (!(reason == REASON_ACTION && last_saved_distance < 0)) {
+        if (stack == &UNDO_STACK_OPERATIONS) {
+            modify_last_saved_distance(1);
+        } else if (stack == &REDO_STACK_OPERATIONS) {
+            modify_last_saved_distance(-1);
+        }
+    }
 }
 
 /**
@@ -114,10 +133,11 @@ void push_operation_stack_with_set(OperationStack *stack, uint8_t id, uint8_t se
  * 
  * @param stack Operation stack
  * @param id Operation identifier
+ * @param reason Reason of the operation (undo, redo, action)
  * 
  * @return void
  */
-void push_operation_stack(OperationStack *stack, uint8_t id) {
+void push_operation_stack(OperationStack *stack, uint8_t id, uint8_t reason) {
     // Get the set of operations
     uint8_t set;
     if (set_state == BEGGINING_SET) {
@@ -130,7 +150,7 @@ void push_operation_stack(OperationStack *stack, uint8_t id) {
     }
 
     // Push the operation to the stack
-    push_operation_stack_with_set(stack, id, set);
+    push_operation_stack_with_set(stack, id, set, reason);
 }
 
 /**
@@ -580,6 +600,37 @@ void clear_redo_stack() {
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
+ * @brief Modifies the last saved distance and modifies the title of the window if necessary to indicate if there are unsaved changes.
+ * 
+ * @param distance Distance to modify the last saved distance
+ * 
+ * @return void
+ */
+void modify_last_saved_distance(int distance) {
+    if (last_saved_distance == 0) {
+        set_title_unsaved();
+    }
+
+    last_saved_distance += distance;
+
+    if (last_saved_distance == 0) {
+        set_title_saved();
+    }
+}
+
+/**
+ * @brief Resets the last saved distance to 0 and modifies the title of the window to indicate that there are no unsaved changes.
+ * 
+ * - This function is called when the file is saved, so the last saved distance is set to 0.
+ * 
+ * @return void
+ */
+void reset_last_saved_distance() {
+    last_saved_distance = 0;
+    set_title_saved();
+}
+
+/**
  * @brief Initializes the operations set.
  * 
  * @return void
@@ -651,7 +702,7 @@ void undo() {
     }
 
     // Add the operation to the operation stack
-    push_operation_stack_with_set(&REDO_STACK_OPERATIONS, last_operation, set);
+    push_operation_stack_with_set(&REDO_STACK_OPERATIONS, last_operation, set, REASON_UNDO);
 
     // If there is a set of operations, undo all of them
     if (set == SET_EXTREME_OP) {
@@ -696,7 +747,7 @@ void redo() {
     }
 
     // Add the operation to the operation stack
-    push_operation_stack_with_set(&UNDO_STACK_OPERATIONS, last_operation, set);
+    push_operation_stack_with_set(&UNDO_STACK_OPERATIONS, last_operation, set, REASON_REDO);
 
     // If there is a set of operations, redo all of them
     if (set == SET_EXTREME_OP) {
@@ -775,7 +826,7 @@ void store_aggregate_operation(char *node_text, gchar *path_str) {
     clear_redo_stack();
 
     // Add the operation to the operation stack
-    push_operation_stack(&UNDO_STACK_OPERATIONS, AGGREGATE_OP);
+    push_operation_stack(&UNDO_STACK_OPERATIONS, AGGREGATE_OP, REASON_ACTION);
 }
 
 /**
@@ -798,7 +849,7 @@ void store_delete_operation(char *node_text, gchar *path_str) {
     clear_redo_stack();
 
     // Add the operation to the operation stack
-    push_operation_stack(&UNDO_STACK_OPERATIONS, DELETE_OP);
+    push_operation_stack(&UNDO_STACK_OPERATIONS, DELETE_OP, REASON_ACTION);
 }
 
 // #8# Remember to modify the header file to include the new function

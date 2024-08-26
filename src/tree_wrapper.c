@@ -183,6 +183,9 @@ void save_tree() {
 
     // Save the last opened file, it is done again in case it is a new file.
     write_last_opened_file(TREE_PATH_FILE);
+
+    // Reset the last saved distance
+    reset_last_saved_distance();
 }
 
 /**
