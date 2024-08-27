@@ -46,10 +46,6 @@ void inicializar_componentes_ventana_principal() {
     init_progress_bar();
     agregar_widget_box(main_vbox, MAIN_PROGRESS_BAR, FALSE, FALSE, 0);
 
-    // // Crear contenido para el área izquierda del divisor (el treeview)
-    // tree_view = init_main_tree();
-    // agregar_widget_paned_izquierda(paned, tree_view, TRUE, FALSE);
-
     // Create the content for the left side of the divider (the scrolled window)
     scrolled_window = init_scrolled_window();
     agregar_widget_paned_izquierda(paned, scrolled_window, TRUE, FALSE);

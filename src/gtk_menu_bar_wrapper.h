@@ -2,6 +2,7 @@
 #define MENU_BAR_MANAGER
 
 // "Archivo" Menu
+extern GtkWidget *MENUBAR_NEW_FILE;
 extern GtkWidget *MENUBAR_SAVE;
 extern GtkWidget *MENUBAR_OPEN_FILE;
 extern GtkWidget *MENUBAR_CLOSE_WINDOW;

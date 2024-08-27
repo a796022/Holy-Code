@@ -57,6 +57,7 @@ void add_menu_bar_separator(GtkWidget *tab) {
 ////////////////////////////////////////////////////////////////////////////////
 
 // "Archivo" Menu
+GtkWidget *MENUBAR_NEW_FILE;
 GtkWidget *MENUBAR_OPEN_FILE;
 GtkWidget *MENUBAR_SAVE;
 GtkWidget *MENUBAR_CLOSE_WINDOW;
@@ -85,6 +86,7 @@ GtkWidget *initialize_menu_bar_main_window() {
 
     // Create the tabs and add the elements and separators
     GtkWidget *menu_file = add_menu_bar_tab(menu_bar_main_window, "Archivo");
+    MENUBAR_NEW_FILE = add_menu_bar_item(menu_file, "Nuevo");
     MENUBAR_OPEN_FILE = add_menu_bar_item(menu_file, "Abrir");
     MENUBAR_SAVE = add_menu_bar_item(menu_file, "Guardar");
     add_menu_bar_separator(menu_file);
@@ -103,6 +105,7 @@ GtkWidget *initialize_menu_bar_main_window() {
     MENUBAR_SHOW_WINDOW_INFORMATION = add_menu_bar_item(menu_tools, "Mostrar información de la ventana");
 
     // Connect the signals
+    g_signal_connect(MENUBAR_NEW_FILE, "activate", G_CALLBACK(create_new_window), NULL);
     g_signal_connect(MENUBAR_OPEN_FILE, "activate", G_CALLBACK(open_tree_file), NULL);
     g_signal_connect(MENUBAR_SAVE, "activate", G_CALLBACK(save_tree), NULL);
     g_signal_connect(MENUBAR_CLOSE_WINDOW, "activate", G_CALLBACK(close_main_window), NULL);

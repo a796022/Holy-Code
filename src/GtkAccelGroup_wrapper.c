@@ -29,6 +29,7 @@ void initialize_keyboard_shortcuts() {
     gtk_window_add_accel_group(GTK_WINDOW(MAIN_WINDOW), main_window_accel_group);
 
     // Main window keyboard shortcuts
+    gtk_widget_add_accelerator(MENUBAR_NEW_FILE, "activate", main_window_accel_group, GDK_KEY_N, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
     gtk_widget_add_accelerator(MENUBAR_OPEN_FILE, "activate", main_window_accel_group, GDK_KEY_O, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
     gtk_widget_add_accelerator(MENUBAR_SAVE, "activate", main_window_accel_group, GDK_KEY_S, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
     gtk_widget_add_accelerator(MENUBAR_CLOSE_WINDOW, "activate", main_window_accel_group, GDK_KEY_F4, GDK_MOD1_MASK, GTK_ACCEL_VISIBLE);

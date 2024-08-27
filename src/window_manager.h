@@ -60,4 +60,11 @@ void set_title_unsaved();
  */
 void set_title_saved();
 
+/**
+ * @brief Creates a new window with an empty tree proyect (no file is associated).
+ * 
+ * @return void
+ */
+void create_new_window();
+
 #endif /* WINDOW_MANAGER_H */

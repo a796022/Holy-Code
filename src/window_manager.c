@@ -17,61 +17,18 @@ const gboolean REDIMENSIONABLE = TRUE;
 const int ANCHO_MINIMO_VENTANA = 300;
 const int ALTO_MINIMO_VENTANA = 200;
 
-/**
- * Obtiene el ancho de la ventana.
- * 
- * @param window Ventana de la que se obtendrá el ancho.
- * 
- * @return int
-*/
-int obtener_ancho_ventana(GtkWindow *window) {
-    gint width, height;
-    gtk_window_get_size(window, &width, &height);
-    return width;
-}
+GList *WINDOWS_LIST = NULL;
 
 /**
- * Obtiene el alto de la ventana.
+ * @brief Adds a window to the list of windows.
  * 
- * @param window Ventana de la que se obtendrá el alto.
+ * - Adds a window to the list of windows.
  * 
- * @return int
-*/
-int obtener_alto_ventana(GtkWindow *window) {
-    gint width, height;
-    gtk_window_get_size(window, &width, &height);
-    return height;
-}
-
-/**
- * Get the width of the window.
- * 
- * @param window Window from which the width will be obtained.
- * 
- * @return int
-*/
-int get_window_width(GtkWidget *window) {
-    return obtener_ancho_ventana(GTK_WINDOW(window));
-}
-
-/**
- * Get the height of the window.
- * 
- * @param window Window from which the height will be obtained.
- * 
- * @return int
-*/
-int get_window_height(GtkWidget *window) {
-    return obtener_alto_ventana(GTK_WINDOW(window));
-}
-
-/**
- * Crea y devuelve una ventana.
- * 
- * @return GtkWidget*
-*/
-GtkWidget *crear_ventana() {
+ * @return GtkWidget* Window added to the list
+ */
+GtkWidget *create_window() {
     GtkWidget *window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+    WINDOWS_LIST = g_list_append(WINDOWS_LIST, window);
     return window;
 }
 
@@ -324,7 +281,7 @@ GtkWidget *inicializar_ventana_principal() {
     GtkWidget *main_vbox;
 
     // Crear y configurar la ventana
-    MAIN_WINDOW = crear_ventana();
+    MAIN_WINDOW = create_window();
     establecer_nombre_ventana(MAIN_WINDOW, "Sin Título - Wizard");
     establecer_tamano_por_defecto_ventana(MAIN_WINDOW, 900, 500);
     establecer_redimensionable_ventana(MAIN_WINDOW, TRUE);
@@ -369,13 +326,13 @@ void close_main_window() {
  * @return void
 */
 void mostrar_ventana_info_ventana() {
-    const int ancho = get_window_width(MAIN_WINDOW);
-    const int alto = get_window_height(MAIN_WINDOW);
+    gint width, height;
+    gtk_window_get_size(GTK_WINDOW(MAIN_WINDOW), &width, &height);
 
     char mensaje[100]; // Ajusta el tamaño según sea necesario
     sprintf(mensaje,    "Anchura: %dpx\n"
                         "Altura: %dpx",
-                        ancho, alto);
+                        width, height);
     
     const char* titulo = "Información de la ventana";
     
@@ -452,4 +409,13 @@ void set_title_saved() {
 
     // Free the memory
     sdsfree(new_title);
+}
+
+/**
+ * @brief Creates a new window with an empty tree proyect (no file is associated).
+ * 
+ * @return void
+ */
+void create_new_window() {
+    printf("Creating new window...\n");
 }
