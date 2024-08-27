@@ -356,7 +356,11 @@ void mostrar_ventana_principal() {
  * @return void
 */
 void close_main_window() {
-    cerrar_ventana(MAIN_WINDOW);
+    gboolean abort_closing = on_delete_event(MAIN_WINDOW, NULL, NULL);
+
+    if (!abort_closing) {
+        cerrar_ventana(MAIN_WINDOW);
+    }
 }
 
 /**
