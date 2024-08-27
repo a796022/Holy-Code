@@ -199,7 +199,7 @@ void save_tree() {
  * 
  * @return void
  */
-void select_tree() {
+void open_tree_file() {
     // Select the file from the file selector
     char* filename = mostrar_ventana_selector_archivos();
 

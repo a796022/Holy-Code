@@ -33,7 +33,7 @@ void save_tree();
  * 
  * @return void
  */
-void select_tree();
+void open_tree_file();
 
 /**
  * @brief Adds a node to the tree.
