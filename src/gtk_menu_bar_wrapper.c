@@ -78,14 +78,16 @@ GtkWidget *MENUBAR_SHOW_WINDOW_INFORMATION;
  * - Creates the tabs and adds the elements.
  * - Connects the signals.
  * 
+ * @param window window to which the menu will be added.
+ * 
  * @return GtkWidget* Menu bar
 */
-GtkWidget *initialize_menu_bar_main_window() {
+GtkWidget *init_menu_bar(GtkWidget *window) {
     // Create the menu
-    GtkWidget *menu_bar_main_window = gtk_menu_bar_new();
+    GtkWidget *menu_bar = gtk_menu_bar_new();
 
     // Create the tabs and add the elements and separators
-    GtkWidget *menu_file = add_menu_bar_tab(menu_bar_main_window, "Archivo");
+    GtkWidget *menu_file = add_menu_bar_tab(menu_bar, "Archivo");
     MENUBAR_NEW_FILE = add_menu_bar_item(menu_file, "Nuevo");
     MENUBAR_OPEN_FILE = add_menu_bar_item(menu_file, "Abrir");
     MENUBAR_SAVE = add_menu_bar_item(menu_file, "Guardar");
@@ -95,21 +97,21 @@ GtkWidget *initialize_menu_bar_main_window() {
     add_menu_bar_separator(menu_file);
     MENUBAR_EXIT = add_menu_bar_item(menu_file, "Salir");
 
-    GtkWidget *menu_edit = add_menu_bar_tab(menu_bar_main_window, "Editar");
+    GtkWidget *menu_edit = add_menu_bar_tab(menu_bar, "Editar");
     MENUBAR_UNDO = add_menu_bar_item(menu_edit, "Deshacer");
     MENUBAR_REDO = add_menu_bar_item(menu_edit, "Rehacer");
     add_menu_bar_separator(menu_edit);
     MENUBAR_DELETE = add_menu_bar_item(menu_edit, "Eliminar");
 
-    GtkWidget *menu_tools = add_menu_bar_tab(menu_bar_main_window, "Ayuda");
+    GtkWidget *menu_tools = add_menu_bar_tab(menu_bar, "Ayuda");
     MENUBAR_SHOW_WINDOW_INFORMATION = add_menu_bar_item(menu_tools, "Mostrar información de la ventana");
 
     // Connect the signals
     g_signal_connect(MENUBAR_NEW_FILE, "activate", G_CALLBACK(create_new_window), NULL);
     g_signal_connect(MENUBAR_OPEN_FILE, "activate", G_CALLBACK(open_tree_file), NULL);
     g_signal_connect(MENUBAR_SAVE, "activate", G_CALLBACK(save_tree), NULL);
-    g_signal_connect(MENUBAR_CLOSE_WINDOW, "activate", G_CALLBACK(close_main_window), NULL);
-    g_signal_connect(MENUBAR_EXIT, "activate", G_CALLBACK(close_main_window), NULL);
+    g_signal_connect(MENUBAR_CLOSE_WINDOW, "activate", G_CALLBACK(close_window), window);
+    g_signal_connect(MENUBAR_EXIT, "activate", G_CALLBACK(close_window), window);
 
     g_signal_connect(MENUBAR_UNDO, "activate", G_CALLBACK(undo), NULL);
     g_signal_connect(MENUBAR_REDO, "activate", G_CALLBACK(redo), NULL);
@@ -117,5 +119,5 @@ GtkWidget *initialize_menu_bar_main_window() {
 
     g_signal_connect(MENUBAR_SHOW_WINDOW_INFORMATION, "activate", G_CALLBACK(mostrar_ventana_info_ventana), NULL);
 
-    return menu_bar_main_window;
+    return menu_bar;
 }

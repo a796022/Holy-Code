@@ -189,17 +189,6 @@ void mostrar_ventana(GtkWidget *window) {
 }
 
 /**
- * Cierra la ventana.
- * 
- * @param window Ventana a cerrar.
- * 
- * @return void
-*/
-void cerrar_ventana(GtkWidget *window) {
-    gtk_widget_destroy(window);
-}
-
-/**
  * Muestra un diálogo general y devuelve la respuesta.
  * 
  * @param dialog Diálogo a mostrar.
@@ -270,13 +259,13 @@ char *obtener_fichero_seleccionado(GtkWidget *dialog) {
 GtkWidget *MAIN_WINDOW;
 
 /**
- * Inicializa la ventana principal.
+ * @brief Initializes the main window.
  * 
- * @param box Caja principal que contendrá el resto de widgets.
+ * @param window Reference to a pointer to GtkWidget. The pointer to the created window will be returned by reference in this variable.
  * 
- * @return void
+ * @return GtkWidget* Main box that will contain the rest of the widgets.
 */
-GtkWidget *inicializar_ventana_principal() {
+GtkWidget *init_window(GtkWidget **window) {
     // Caja que contendrá todos los widgets
     GtkWidget *main_vbox;
 
@@ -295,6 +284,9 @@ GtkWidget *inicializar_ventana_principal() {
     // Agregar el contenedor principal a la ventana
     agregar_widget_ventana(MAIN_WINDOW, main_vbox);
 
+    // Returns by reference the main window
+    *window = MAIN_WINDOW;
+
     return main_vbox;
 }
 
@@ -308,15 +300,22 @@ void mostrar_ventana_principal() {
 }
 
 /**
- * @brief Closes the main window
+ * @brief Closes a window
+ * 
+ * - Displays a dialog asking the user if they want to save the changes if there are unsaved changes.
+ * - The window is closed if the user chooses to save the changes or discard the changes.
+ * 
+ * @param menuitem Menu item that triggered the signal.
+ * @param user_data Data passed to the signal.
  * 
  * @return void
 */
-void close_main_window() {
-    gboolean abort_closing = on_delete_event(MAIN_WINDOW, NULL, NULL);
+void close_window(GtkMenuItem *menuitem, gpointer user_data) {
+    GtkWidget *window = GTK_WIDGET(user_data);
+    gboolean abort_closing = on_delete_event(window, NULL, NULL);
 
     if (!abort_closing) {
-        cerrar_ventana(MAIN_WINDOW);
+        gtk_widget_destroy(window);
     }
 }
 

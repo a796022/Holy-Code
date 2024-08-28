@@ -6,13 +6,13 @@
 extern GtkWidget *MAIN_WINDOW;
 
 /**
- * Inicializa la ventana principal.
+ * @brief Initializes the main window.
  * 
- * @param box Caja principal que contendrá el resto de widgets.
+ * @param window Reference to a pointer to GtkWidget. The pointer to the created window will be returned by reference in this variable.
  * 
- * @return void
+ * @return GtkWidget* Main box that will contain the rest of the widgets.
 */
-GtkWidget *inicializar_ventana_principal();
+GtkWidget *init_window(GtkWidget **window);
 
 /**
  * Muestra la ventana principal.
@@ -22,11 +22,17 @@ GtkWidget *inicializar_ventana_principal();
 void mostrar_ventana_principal();
 
 /**
- * Cierra la ventana principal.
+ * @brief Closes the main window
+ * 
+ * - Displays a dialog asking the user if they want to save the changes if there are unsaved changes.
+ * - The window is closed if the user chooses to save the changes or discard the changes.
+ * 
+ * @param menuitem Menu item that triggered the signal.
+ * @param user_data Data passed to the signal.
  * 
  * @return void
 */
-void close_main_window();
+void close_window(GtkMenuItem *menuitem, gpointer user_data);
 
 /**
  * Muestra una ventana emergente con la información del ancho y alto de la ventana principal.

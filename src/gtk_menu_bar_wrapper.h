@@ -23,8 +23,10 @@ extern GtkWidget *MENUBAR_SHOW_WINDOW_INFORMATION;
  * - Creates the tabs and adds the elements.
  * - Connects the signals.
  * 
+ * @param window window to which the menu will be added.
+ * 
  * @return GtkWidget* Menu bar
 */
-GtkWidget *initialize_menu_bar_main_window();
+GtkWidget *init_menu_bar(GtkWidget *window);
 
 #endif /* MENU_BAR_MANAGER */

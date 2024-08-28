@@ -31,11 +31,14 @@ void inicializar_componentes_ventana_principal() {
     // Scrolleable container for the treeview
     GtkWidget *scrolled_window;
 
+    // Window
+    GtkWidget *window;
+
     // Crear y configurar la ventana
-    main_vbox = inicializar_ventana_principal();
+    main_vbox = init_window(&window);
 
     // Crear el menu_bar
-    menu_bar = initialize_menu_bar_main_window();
+    menu_bar = init_menu_bar(window);
     agregar_widget_box(main_vbox, menu_bar, FALSE, FALSE, 0);
 
     // Crear el GtkPaned (divisor)
