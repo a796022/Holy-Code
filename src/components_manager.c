@@ -16,16 +16,16 @@
  * @return void
 */
 void inicializar_componentes_ventana_principal() {
-    // Caja que contendrá la barra de menú y el resto de widgets
+    // Box that will contain the menu bar and the rest of the widgets
     GtkWidget *main_vbox;
 
-    // Menú superior
+    // Top menu
     GtkWidget *menu_bar;
 
-    // Divisor vertical
+    // Vertical divider
     GtkWidget *paned;
 
-    // Árbol treeview
+    // Tree
     GtkWidget *tree_view;
 
     // Scrolleable container for the treeview
@@ -34,14 +34,14 @@ void inicializar_componentes_ventana_principal() {
     // Window
     GtkWidget *window;
 
-    // Crear y configurar la ventana
+    // Create and configure the window
     main_vbox = init_window(&window);
 
-    // Crear el menu_bar
+    // Create the menu_bar
     menu_bar = init_menu_bar(window);
     agregar_widget_box(main_vbox, menu_bar, FALSE, FALSE, 0);
 
-    // Crear el GtkPaned (divisor)
+    // Create the GtkPaned (divider)
     paned = crear_paned_horizontal();
     agregar_widget_box(main_vbox, paned, TRUE, TRUE, 0);
 
@@ -57,10 +57,10 @@ void inicializar_componentes_ventana_principal() {
     tree_view = init_main_tree();
     add_widget_to_scrolled_window(scrolled_window, tree_view);
 
-    // Crear contenido para el área derecha del divisor
+    // Create content for the right area of the divider
     GtkWidget *right_label_panel = gtk_label_new("Contenido derecho");
     agregar_widget_paned_derecha(paned, right_label_panel, TRUE, FALSE);
 
-    // Inicializar los atajos de teclado
-    initialize_keyboard_shortcuts();
+    // Initialize the keyboard shortcuts
+    initialize_keyboard_shortcuts(window);
 }
