@@ -11,6 +11,6 @@
  * 
  * @return void
 */
-void initialize_keyboard_shortcuts(GtkWidget *window);
+void init_keyboard_shortcuts(GtkWidget *window);
 
 #endif /* GTKACCELGROUP_WRAPPER_H */

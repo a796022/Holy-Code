@@ -174,21 +174,6 @@ void agregar_widget_ventana(GtkWidget *window, GtkWidget *widget) {
 }
 
 /**
- * Muestra la ventana.
- * 
- * @param window Ventana a mostrar.
- * 
- * @return void
-*/
-void mostrar_ventana(GtkWidget *window) {
-    // Muestro todos los widgets de la ventana
-    gtk_widget_show_all(window);
-
-    // Oculto los windgets que deben estar ocultos al inicio
-    hide_progress_bar();
-}
-
-/**
  * Muestra un diálogo general y devuelve la respuesta.
  * 
  * @param dialog Diálogo a mostrar.
@@ -291,12 +276,18 @@ GtkWidget *init_window(GtkWidget **window) {
 }
 
 /**
- * Muestra la ventana principal.
+ * Muestra la ventana.
+ * 
+ * @param window Ventana a mostrar.
  * 
  * @return void
 */
-void mostrar_ventana_principal() {
-    mostrar_ventana(MAIN_WINDOW);
+void show_window(GtkWidget *window) {
+    // Muestro todos los widgets de la ventana
+    gtk_widget_show_all(window);
+
+    // Oculto los windgets que deben estar ocultos al inicio
+    hide_progress_bar();
 }
 
 /**

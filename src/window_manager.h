@@ -15,11 +15,13 @@ extern GtkWidget *MAIN_WINDOW;
 GtkWidget *init_window(GtkWidget **window);
 
 /**
- * Muestra la ventana principal.
+ * Muestra la ventana.
+ * 
+ * @param window Ventana a mostrar.
  * 
  * @return void
 */
-void mostrar_ventana_principal();
+void show_window(GtkWidget *window);
 
 /**
  * @brief Closes the main window

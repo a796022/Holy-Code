@@ -29,9 +29,6 @@ int main(int argc, char *argv[]) {
     // Initialize the components of the main window
     inicializar_componentes_ventana_principal();
 
-    // Show the main window
-    mostrar_ventana_principal();
-
     // Start the main GTK event loop
     gtk_main();
 

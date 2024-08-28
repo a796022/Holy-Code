@@ -23,7 +23,7 @@
  * 
  * @return void
 */
-void initialize_keyboard_shortcuts(GtkWidget *window) {
+void init_keyboard_shortcuts(GtkWidget *window) {
     // Create the acceleration groups
     GtkAccelGroup *accel_group = gtk_accel_group_new();
 

@@ -62,5 +62,8 @@ void inicializar_componentes_ventana_principal() {
     agregar_widget_paned_derecha(paned, right_label_panel, TRUE, FALSE);
 
     // Initialize the keyboard shortcuts
-    initialize_keyboard_shortcuts(window);
+    init_keyboard_shortcuts(window);
+
+    // Show the window
+    show_window(window);
 }
