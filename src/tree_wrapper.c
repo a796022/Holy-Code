@@ -270,7 +270,7 @@ void add_node_to_selected_node(char *text) {
         store_aggregate_operation(text, path_str);
 
     } else {
-        printf("Error: did not find any selected node\n");
+        perror("Error: did not find any selected node\n");
     }
 }
 

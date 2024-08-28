@@ -88,7 +88,7 @@ uint8_t init_background_keyboard_imput() {
     // Open keyboard event file
     input_fd = open("/dev/input/event0", O_RDWR);
     if (input_fd == -1) {
-        printf("Error: could not open keyboard event file\n");
+        perror("Error: could not open keyboard event file\n");
         return 1;
     }
 
@@ -98,7 +98,7 @@ uint8_t init_background_keyboard_imput() {
 
     // Create thread
     if (pthread_create(&thread_id, NULL, keyboard_thread, NULL) != 0) {
-        printf("Error: could not create thread to read keyboard events\n");
+        perror("Error: could not create thread to read keyboard events\n");
         return 1;
     }
 

@@ -92,7 +92,7 @@ void init_operation_stack(OperationStack *stack) {
     // Create the top node
     stack->top = (OperationStackNode *)malloc(sizeof(OperationStackNode));
     if (stack->top == NULL) {
-        printf("Error: Memory allocation failed for creating operation stack\n");
+        perror("Error: Memory allocation failed for creating operation stack\n");
         return;
     }
 
@@ -123,7 +123,7 @@ void push_operation_stack_with_set(OperationStack *stack, uint8_t id, uint8_t se
         // Create a new node
         OperationStackNode *new_node = (OperationStackNode *)malloc(sizeof(OperationStackNode));
         if (new_node == NULL) {
-            printf("Error: Memory allocation failed for operation stack node\n");
+            perror("Error: Memory allocation failed for operation stack node\n");
             return;
         }
 
@@ -319,7 +319,7 @@ void push_aggregate_stack(AggregateStack *stack, AggregateOperation data) {
     // Create a new node
     AggregateStackNode *new_node = (AggregateStackNode *)malloc(sizeof(AggregateStackNode));
     if (new_node == NULL) {
-        printf("Error: Memory allocation failed for aggregate stack node\n");
+        perror("Error: Memory allocation failed for aggregate stack node\n");
         return;
     }
     new_node->data = data;
@@ -343,7 +343,7 @@ void push_delete_stack(DeleteStack *stack, DeleteOperation data) {
     // Create a new node
     DeleteStackNode *new_node = (DeleteStackNode *)malloc(sizeof(DeleteStackNode));
     if (new_node == NULL) {
-        printf("Error: Memory allocation failed for delete stack node\n");
+        perror("Error: Memory allocation failed for delete stack node\n");
         return;
     }
     new_node->data = data;
@@ -365,7 +365,7 @@ void push_delete_stack(DeleteStack *stack, DeleteOperation data) {
 AggregateOperation pop_aggregate_stack(AggregateStack *stack) {
     // Check if the stack is empty
     if (stack->top == NULL) {
-        printf("Error: Aggregate stack is empty\n");
+        perror("Error: Aggregate stack is empty\n");
         AggregateOperation empty_operation = {NULL, NULL};
         return empty_operation;
     }
@@ -395,7 +395,7 @@ AggregateOperation pop_aggregate_stack(AggregateStack *stack) {
 DeleteOperation pop_delete_stack(DeleteStack *stack) {
     // Check if the stack is empty
     if (stack->top == NULL) {
-        printf("Error: Delete stack is empty\n");
+        perror("Error: Delete stack is empty\n");
         DeleteOperation empty_operation = {NULL, NULL};
         return empty_operation;
     }
@@ -423,7 +423,7 @@ DeleteOperation pop_delete_stack(DeleteStack *stack) {
 AggregateOperation peek_aggregate_stack(AggregateStack *stack) {
     // Check if the stack is empty
     if (stack->top == NULL) {
-        printf("Error: Aggregate stack is empty\n");
+        perror("Error: Aggregate stack is empty\n");
         AggregateOperation empty_operation = {NULL, NULL};
         return empty_operation;
     }
@@ -441,7 +441,7 @@ AggregateOperation peek_aggregate_stack(AggregateStack *stack) {
 DeleteOperation peek_delete_stack(DeleteStack *stack) {
     // Check if the stack is empty
     if (stack->top == NULL) {
-        printf("Error: Delete stack is empty\n");
+        perror("Error: Delete stack is empty\n");
         DeleteOperation empty_operation = {NULL, NULL};
         return empty_operation;
     }
@@ -704,7 +704,7 @@ void undo() {
             undo_delete_operation();
             break;
         default:
-            printf("Error: Unknown operation\n");
+            perror("Error: Unknown operation\n");
             break;
     }
 
@@ -749,7 +749,7 @@ void redo() {
             redo_delete_operation();
             break;
         default:
-            printf("Error: Unknown operation\n");
+            perror("Error: Unknown operation\n");
             break;
     }
 

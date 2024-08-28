@@ -311,22 +311,37 @@ void close_window(GtkMenuItem *menuitem, gpointer user_data) {
 }
 
 /**
- * Muestra una ventana emergente con la información del ancho y alto de la ventana principal.
+ * @brief Show a popup window with the width and height information of the window.
+ * 
+ * @param menuitem Menu item that triggered the signal.
+ * @param user_data Data passed to the signal.
  * 
  * @return void
 */
-void mostrar_ventana_info_ventana() {
+void show_window_info(GtkMenuItem *menuitem, gpointer user_data) {
+    // Get the width and height of the window
     gint width, height;
-    gtk_window_get_size(GTK_WINDOW(MAIN_WINDOW), &width, &height);
+    GtkWidget *window = GTK_WIDGET(user_data);
+    gtk_window_get_size(GTK_WINDOW(window), &width, &height);
 
-    char mensaje[100]; // Ajusta el tamaño según sea necesario
-    sprintf(mensaje,    "Anchura: %dpx\n"
-                        "Altura: %dpx",
-                        width, height);
+    // Calculate the size of the message
+    int size = snprintf(NULL, 0, "Anchura: %dpx\nAltura: %dpx", width, height);
+
+    // Allocate memory for the message
+    char *message = (char *)malloc(size + 1);
+    if (message == NULL) {
+        perror("Error allocating memory for the window information message");
+        return;
+    }
+
+    // Create the message
+    snprintf(message, size + 1, "Anchura: %dpx\nAltura: %dpx", width, height);
+    const char* title = "Información de la ventana";
     
-    const char* titulo = "Información de la ventana";
-    
-    mostrar_dialogo_mensaje(MAIN_WINDOW, mensaje, titulo);
+    mostrar_dialogo_mensaje(window, message, title);
+
+    // Free the memory
+    free(message);
 }
 
 /**

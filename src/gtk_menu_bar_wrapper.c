@@ -117,7 +117,7 @@ GtkWidget *init_menu_bar(GtkWidget *window) {
     g_signal_connect(MENUBAR_REDO, "activate", G_CALLBACK(redo), NULL);
     g_signal_connect(MENUBAR_DELETE, "activate", G_CALLBACK(delete_selected_node), NULL);
 
-    g_signal_connect(MENUBAR_SHOW_WINDOW_INFORMATION, "activate", G_CALLBACK(mostrar_ventana_info_ventana), NULL);
+    g_signal_connect(MENUBAR_SHOW_WINDOW_INFORMATION, "activate", G_CALLBACK(show_window_info), window);
 
     return menu_bar;
 }

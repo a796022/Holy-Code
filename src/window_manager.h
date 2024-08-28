@@ -37,11 +37,14 @@ void show_window(GtkWidget *window);
 void close_window(GtkMenuItem *menuitem, gpointer user_data);
 
 /**
- * Muestra una ventana emergente con la información del ancho y alto de la ventana principal.
+ * @brief Show a popup window with the width and height information of the window.
+ * 
+ * @param menuitem Menu item that triggered the signal.
+ * @param user_data Data passed to the signal.
  * 
  * @return void
 */
-void mostrar_ventana_info_ventana();
+void show_window_info(GtkMenuItem *menuitem, gpointer user_data);
 
 /**
  * Muestra una ventana de selector de archivos y devuelve la ruta del archivo seleccionado.
