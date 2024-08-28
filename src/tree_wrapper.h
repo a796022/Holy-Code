@@ -29,11 +29,20 @@ GtkWidget *init_main_tree();
 void save_tree();
 
 /**
- * Carga un árbol de un fichero
+ * @brief Load a tree from a file.
+ * 
+ * - Select the file from the file selector.
+ * - If the user has not selected a file, do nothing.
+ * - Empty the tree.
+ * - Load the tree from the file.
+ * - Save the last opened file.
+ * 
+ * @param menuitem Menu item that triggered the signal.
+ * @param user_data Data passed to the signal.
  * 
  * @return void
  */
-void open_tree_file();
+void open_tree_file(GtkMenuItem *menuitem, gpointer user_data);
 
 /**
  * @brief Adds a node to the tree.

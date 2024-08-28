@@ -1,6 +1,22 @@
-Estrategias
-	Muros agresivos
-		Blanco
-			Animate Wall
-		Rojo
-			Aetherflame Wall
+Código
+	set_title_unsaved
+		modify_last_saved_distance
+	set_title_saved
+		modify_last_saved_distance
+			push_operation_stack_with_set
+				push_operation_stack
+					store_aggregate_operation
+						add_node_to_selected_node
+							detect_double_ctrl_c
+								register_keyboard_press_event
+									init_background_keyboard_imput_wrapper
+										main
+					store_delete_operation
+						delete_node_recursive
+							delete_node_recursive
+							delete_selected_node
+								init_menu_bar
+				undo
+					init_menu_bar
+				redo
+					init_menu_bar

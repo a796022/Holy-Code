@@ -197,11 +197,15 @@ void save_tree() {
  * - Load the tree from the file.
  * - Save the last opened file.
  * 
+ * @param menuitem Menu item that triggered the signal.
+ * @param user_data Data passed to the signal.
+ * 
  * @return void
  */
-void open_tree_file() {
+void open_tree_file(GtkMenuItem *menuitem, gpointer user_data) {
     // Select the file from the file selector
-    char* filename = mostrar_ventana_selector_archivos();
+    GtkWidget *window = GTK_WIDGET(user_data);
+    char* filename = show_file_selector_window(window);
 
     // If the user has not selected a file, do nothing
     if (filename == NULL) {

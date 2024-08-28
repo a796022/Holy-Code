@@ -345,13 +345,19 @@ void show_window_info(GtkMenuItem *menuitem, gpointer user_data) {
 }
 
 /**
- * Muestra una ventana de selector de archivos y devuelve la ruta del archivo seleccionado.
+ * @brief Shows a file selector window and returns the path of the selected file.
+ * 
+ * - Shows a file selector window.
+ * - Returns the path of the selected file.
+ * - If the user has not selected a file, returns NULL.
+ * 
+ * @param window Window to which the dialog will be associated.
  * 
  * @return char*
 */
-char *mostrar_ventana_selector_archivos() {
+char *show_file_selector_window(GtkWidget *window) {
     // Seleccionar un fichero desde el sistema de archivos
-    GtkWidget *dialog = crear_dialogo_selector_archivos(MAIN_WINDOW);
+    GtkWidget *dialog = crear_dialogo_selector_archivos(window);
 
     // Mostrar el diálogo
     gint res = mostrar_dialogo(dialog);

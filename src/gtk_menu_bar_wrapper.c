@@ -108,7 +108,7 @@ GtkWidget *init_menu_bar(GtkWidget *window) {
 
     // Connect the signals
     g_signal_connect(MENUBAR_NEW_FILE, "activate", G_CALLBACK(create_new_window), NULL);
-    g_signal_connect(MENUBAR_OPEN_FILE, "activate", G_CALLBACK(open_tree_file), NULL);
+    g_signal_connect(MENUBAR_OPEN_FILE, "activate", G_CALLBACK(open_tree_file), window);
     g_signal_connect(MENUBAR_SAVE, "activate", G_CALLBACK(save_tree), NULL);
     g_signal_connect(MENUBAR_CLOSE_WINDOW, "activate", G_CALLBACK(close_window), window);
     g_signal_connect(MENUBAR_EXIT, "activate", G_CALLBACK(close_window), window);
