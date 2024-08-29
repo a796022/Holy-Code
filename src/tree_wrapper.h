@@ -58,11 +58,12 @@ GtkTreeIter add_node(GtkTreeStore *model, GtkTreeIter *parent_node, const char *
 /**
  * @brief Add the input text to the selected node.
  * 
- * @param text Text to add
+ * @param window Window with the tree to which the text will be added.
+ * @param data Text to add
  * 
  * @return void
  */
-void add_node_to_selected_node(char *text);
+void add_text_to_selected_node(GtkWidget *window, void *data);
 
 /**
  * @brief Inserts a new node in the tree.
@@ -78,8 +79,14 @@ GtkTreeIter insert_node_at_position(GtkTreeIter *parent_iter, gint position, con
 /**
  * @brief Deletes the selected node.
  * 
+ * - Checks if the selected node is a root node.
+ * - If it is a root node, it is deleted.
+ * 
+ * @param menuitem Menu item that triggered the signal.
+ * @param user_data Data passed to the signal. In this case, the window with the tree to which the node belongs.
+ * 
  * @return void
  */
-void delete_selected_node();
+void delete_selected_node(GtkMenuItem *menuitem, gpointer user_data);
 
 #endif /* TREE_MANAGER */

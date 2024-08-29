@@ -17,6 +17,7 @@ const gboolean REDIMENSIONABLE = TRUE;
 const int ANCHO_MINIMO_VENTANA = 300;
 const int ALTO_MINIMO_VENTANA = 200;
 
+// List of windows
 GList *WINDOWS_LIST = NULL;
 
 /**
@@ -30,6 +31,24 @@ GtkWidget *create_window() {
     GtkWidget *window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
     WINDOWS_LIST = g_list_append(WINDOWS_LIST, window);
     return window;
+}
+/**
+ * @brief Runs a function for all windows.
+ * 
+ * - The function is executed for all windows.
+ * - The function receives the window and the data as arguments.
+ * 
+ * @param funcion Function to run for all windows.
+ * @param datos Data to pass to the function.
+ * 
+ * @return void
+ */
+void run_for_all_windows(void (*funcion)(GtkWidget*, void*), void *datos) {
+    GList *iterator;
+    for (iterator = WINDOWS_LIST; iterator != NULL; iterator = iterator->next) {
+        GtkWidget *ventana = (GtkWidget*)iterator->data;
+        funcion(ventana, datos);
+    }
 }
 
 /**
@@ -241,8 +260,6 @@ char *obtener_fichero_seleccionado(GtkWidget *dialog) {
 // PUBLIC //////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 
-GtkWidget *MAIN_WINDOW;
-
 /**
  * @brief Initializes the main window.
  * 
@@ -254,23 +271,23 @@ GtkWidget *init_window(GtkWidget **window) {
     // Caja que contendrá todos los widgets
     GtkWidget *main_vbox;
 
-    // Crear y configurar la ventana
-    MAIN_WINDOW = create_window();
-    establecer_nombre_ventana(MAIN_WINDOW, "Sin Título - Wizard");
-    establecer_tamano_por_defecto_ventana(MAIN_WINDOW, 900, 500);
-    establecer_redimensionable_ventana(MAIN_WINDOW, TRUE);
-    establecer_tamano_minimo_ventana(MAIN_WINDOW, 300, 200);
-    configure_destroy_signal(MAIN_WINDOW);
-    configure_delete_event_signal(MAIN_WINDOW);
+    // Create and configure the main window
+    GtkWidget *new_window = create_window();
+    establecer_nombre_ventana(new_window, "Sin Título - Wizard");
+    establecer_tamano_por_defecto_ventana(new_window, 900, 500);
+    establecer_redimensionable_ventana(new_window, TRUE);
+    establecer_tamano_minimo_ventana(new_window, 300, 200);
+    configure_destroy_signal(new_window);
+    configure_delete_event_signal(new_window);
 
     // Crear un contenedor de caja vertical para el menu_bar y lo demás
     main_vbox = crear_box(GTK_ORIENTATION_VERTICAL, 0);
 
     // Agregar el contenedor principal a la ventana
-    agregar_widget_ventana(MAIN_WINDOW, main_vbox);
+    agregar_widget_ventana(new_window, main_vbox);
 
     // Returns by reference the main window
-    *window = MAIN_WINDOW;
+    *window = new_window;
 
     return main_vbox;
 }
@@ -386,16 +403,16 @@ char *show_file_selector_window(GtkWidget *window) {
  * 
  * @return void
  */
-void set_title_unsaved() {
+void set_title_unsaved(GtkWidget *window) {
     // Get the title of the window
-    const char *title = gtk_window_get_title(GTK_WINDOW(MAIN_WINDOW));
+    const char *title = gtk_window_get_title(GTK_WINDOW(window));
 
     // Add a bullet and a space (• ) at the beginning of the title
     sds new_title = sdsnew("• ");
     new_title = sdscat(new_title, title);
 
     // Set the new title
-    gtk_window_set_title(GTK_WINDOW(MAIN_WINDOW), new_title);
+    gtk_window_set_title(GTK_WINDOW(window), new_title);
 
     // Free the memory
     sdsfree(new_title);
@@ -408,15 +425,15 @@ void set_title_unsaved() {
  * 
  * @return void
  */
-void set_title_saved() {
+void set_title_saved(GtkWidget *window) {
     // Get the title of the window
-    const char *title = gtk_window_get_title(GTK_WINDOW(MAIN_WINDOW));
+    const char *title = gtk_window_get_title(GTK_WINDOW(window));
 
     // Remove the bullet and the space (• ) at the beginning of the title
     sds new_title = sdsnew(title + 4);
 
     // Set the new title
-    gtk_window_set_title(GTK_WINDOW(MAIN_WINDOW), new_title);
+    gtk_window_set_title(GTK_WINDOW(window), new_title);
 
     // Free the memory
     sdsfree(new_title);

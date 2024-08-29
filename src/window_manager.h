@@ -3,6 +3,22 @@
 
 #include <gtk/gtk.h>
 
+// List of windows
+extern GList *WINDOWS_LIST;
+
+/**
+ * @brief Runs a function for all windows.
+ * 
+ * - The function is executed for all windows.
+ * - The function receives the window and the data as arguments.
+ * 
+ * @param funcion Function to run for all windows.
+ * @param datos Data to pass to the function.
+ * 
+ * @return void
+ */
+void run_for_all_windows(void (*funcion)(GtkWidget*, void*), void *datos);
+
 /**
  * @brief Initializes the main window.
  * 

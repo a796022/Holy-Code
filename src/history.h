@@ -36,16 +36,28 @@ void end_operations_set();
 /**
  * @brief Undo the last operation.
  * 
+ * - The last operation is undone.
+ * - The operation is added to the redo stack.
+ * 
+ * @param menuitem Menu item that triggered the signal.
+ * @param user_data Data passed to the signal, in this case the window where the operation will be undone.
+ * 
  * @return void
  */
-void undo();
+void undo(GtkMenuItem *menuitem, gpointer user_data);
 
 /**
  * @brief Redo the last operation.
  * 
+ * - The last operation is redone.
+ * - The operation is added to the undo stack.
+ * 
+ * @param menuitem Menu item that triggered the signal.
+ * @param user_data Data passed to the signal, in this case the window where the operation will be redone.
+ * 
  * @return void
  */
-void redo();
+void redo(GtkMenuItem *menuitem, gpointer user_data);
 
 /**
  * @brief Initializes the history.
@@ -69,13 +81,15 @@ uint8_t close_history();
  * @brief Stores an aggregate operation.
  * 
  * - The operation is stored in the undo stack.
+ * - The redo stack is cleared.
  * 
+ * @param window Window with the tree to which the text will be added.
  * @param node_text Text of the node
  * @param path_str Path of the added node
  * 
  * @return void
  */
-void store_aggregate_operation(char *node_text, gchar *path_str);
+void store_aggregate_operation(GtkWidget *window, char *node_text, gchar *path_str);
 
 /**
  * @brief Stores a delete operation.
@@ -83,11 +97,12 @@ void store_aggregate_operation(char *node_text, gchar *path_str);
  * - The operation is stored in the undo stack.
  * - The redo stack is cleared.
  * 
+ * @param window Window with the tree to which the node belongs
  * @param node_text Text of the node
  * @param path_str Path of the deleted node
  * 
  * @return void
  */
-void store_delete_operation(char *node_text, gchar *path_str);
+void store_delete_operation(GtkWidget *window, char *node_text, gchar *path_str);
 
 #endif /* HISTORY */

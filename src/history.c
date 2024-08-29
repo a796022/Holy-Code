@@ -66,15 +66,15 @@ OperationStack REDO_STACK_OPERATIONS;
  * 
  * @return void
  */
-void modify_last_saved_distance(int distance) {
+void modify_last_saved_distance(GtkWidget *window, int distance) {
     if (last_saved_distance == 0) {
-        set_title_unsaved();
+        set_title_unsaved(window);
     }
 
     last_saved_distance += distance;
 
     if (last_saved_distance == 0) {
-        set_title_saved();
+        set_title_saved(window);
     }
 }
 
@@ -112,7 +112,7 @@ void init_operation_stack(OperationStack *stack) {
  * 
  * @return void
  */
-void push_operation_stack_with_set(OperationStack *stack, uint8_t id, uint8_t set, uint8_t reason) {
+void push_operation_stack_with_set(GtkWidget *window, OperationStack *stack, uint8_t id, uint8_t set, uint8_t reason) {
     // Add the operation to the top of the stack
     stack->top->ids[stack->index] = id;
     stack->top->sets[stack->index] = set;
@@ -136,9 +136,9 @@ void push_operation_stack_with_set(OperationStack *stack, uint8_t id, uint8_t se
     // Modify the last saved distance
     if (!(reason == REASON_ACTION && last_saved_distance < 0)) {
         if (stack == &UNDO_STACK_OPERATIONS) {
-            modify_last_saved_distance(1);
+            modify_last_saved_distance(window, 1);
         } else if (stack == &REDO_STACK_OPERATIONS) {
-            modify_last_saved_distance(-1);
+            modify_last_saved_distance(window, -1);
         }
     }
 }
@@ -154,7 +154,7 @@ void push_operation_stack_with_set(OperationStack *stack, uint8_t id, uint8_t se
  * 
  * @return void
  */
-void push_operation_stack(OperationStack *stack, uint8_t id, uint8_t reason) {
+void push_operation_stack(GtkWidget *window, OperationStack *stack, uint8_t id, uint8_t reason) {
     // Get the set of operations
     uint8_t set;
     if (set_state == BEGGINING_SET) {
@@ -167,7 +167,7 @@ void push_operation_stack(OperationStack *stack, uint8_t id, uint8_t reason) {
     }
 
     // Push the operation to the stack
-    push_operation_stack_with_set(stack, id, set, reason);
+    push_operation_stack_with_set(window, stack, id, set, reason);
 }
 
 /**
@@ -685,9 +685,12 @@ void end_operations_set() {
  * - The last operation is undone.
  * - The operation is added to the redo stack.
  * 
+ * @param menuitem Menu item that triggered the signal.
+ * @param user_data Data passed to the signal, in this case the window where the operation will be undone.
+ * 
  * @return void
  */
-void undo() {
+void undo(GtkMenuItem *menuitem, gpointer user_data) {
     // If the operation stack is empty, do nothing
     if (UNDO_STACK_OPERATIONS.index == 0 && UNDO_STACK_OPERATIONS.top->next == NULL) {
         return;
@@ -709,18 +712,19 @@ void undo() {
     }
 
     // Add the operation to the operation stack
-    push_operation_stack_with_set(&REDO_STACK_OPERATIONS, last_operation, set, REASON_UNDO);
+    GtkWidget *window = GTK_WIDGET(user_data);
+    push_operation_stack_with_set(window, &REDO_STACK_OPERATIONS, last_operation, set, REASON_UNDO);
 
     // If there is a set of operations, undo all of them
     if (set == SET_EXTREME_OP) {
         if (set_state == NO_SET) {
             set_state = IN_SET;
-            undo();
+            undo(menuitem, user_data);
         } else { // IN_SET
             set_state = NO_SET;
         }
     } else if (set == SET_INNER_OP) {
-        undo();
+        undo(menuitem, user_data);
     }
 }
 
@@ -730,9 +734,12 @@ void undo() {
  * - The last operation is redone.
  * - The operation is added to the undo stack.
  * 
+ * @param menuitem Menu item that triggered the signal.
+ * @param user_data Data passed to the signal, in this case the window where the operation will be redone.
+ * 
  * @return void
  */
-void redo() {
+void redo(GtkMenuItem *menuitem, gpointer user_data) {
     // If the operation stack is empty, do nothing
     if (REDO_STACK_OPERATIONS.index == 0 && REDO_STACK_OPERATIONS.top->next == NULL) {
         return;
@@ -754,18 +761,19 @@ void redo() {
     }
 
     // Add the operation to the operation stack
-    push_operation_stack_with_set(&UNDO_STACK_OPERATIONS, last_operation, set, REASON_REDO);
+    GtkWidget *window = GTK_WIDGET(user_data);
+    push_operation_stack_with_set(window, &UNDO_STACK_OPERATIONS, last_operation, set, REASON_REDO);
 
     // If there is a set of operations, redo all of them
     if (set == SET_EXTREME_OP) {
         if (set_state == NO_SET) {
             set_state = IN_SET;
-            redo();
+            redo(menuitem, user_data);
         } else { // IN_SET
             set_state = NO_SET;
         }
     } else if (set == SET_INNER_OP) {
-        redo();
+        redo(menuitem, user_data);
     }
 }
 
@@ -819,12 +827,13 @@ uint8_t close_history() {
  * - The operation is stored in the undo stack.
  * - The redo stack is cleared.
  * 
+ * @param window Window with the tree to which the text will be added.
  * @param node_text Text of the node
  * @param path_str Path of the added node
  * 
  * @return void
  */
-void store_aggregate_operation(char *node_text, gchar *path_str) {
+void store_aggregate_operation(GtkWidget *window, char *node_text, gchar *path_str) {
     // Create and store the operation
     AggregateOperation operation = {node_text, path_str};
     push_aggregate_stack(&UNDO_STACK_AGGREGATE, operation);
@@ -833,7 +842,7 @@ void store_aggregate_operation(char *node_text, gchar *path_str) {
     clear_redo_stack();
 
     // Add the operation to the operation stack
-    push_operation_stack(&UNDO_STACK_OPERATIONS, AGGREGATE_OP, REASON_ACTION);
+    push_operation_stack(window, &UNDO_STACK_OPERATIONS, AGGREGATE_OP, REASON_ACTION);
 }
 
 /**
@@ -842,12 +851,13 @@ void store_aggregate_operation(char *node_text, gchar *path_str) {
  * - The operation is stored in the undo stack.
  * - The redo stack is cleared.
  * 
+ * @param window Window with the tree to which the node belongs
  * @param node_text Text of the node
  * @param path_str Path of the deleted node
  * 
  * @return void
  */
-void store_delete_operation(char *node_text, gchar *path_str) {
+void store_delete_operation(GtkWidget *window, char *node_text, gchar *path_str) {
     // Create and store the operation
     DeleteOperation operation = {node_text, path_str};
     push_delete_stack(&UNDO_STACK_DELETE, operation);
@@ -856,7 +866,7 @@ void store_delete_operation(char *node_text, gchar *path_str) {
     clear_redo_stack();
 
     // Add the operation to the operation stack
-    push_operation_stack(&UNDO_STACK_OPERATIONS, DELETE_OP, REASON_ACTION);
+    push_operation_stack(window, &UNDO_STACK_OPERATIONS, DELETE_OP, REASON_ACTION);
 }
 
 // #8# Remember to modify the header file to include the new function

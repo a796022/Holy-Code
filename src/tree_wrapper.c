@@ -57,10 +57,10 @@ void create_treeview_column(GtkWidget *tree_view, const char *title) {
  * 
  * @return void
  */
-void delete_node_recursive(GtkTreeStore *store, GtkTreeIter *iter) {
+void delete_node_recursive(GtkWidget *window, GtkTreeStore *store, GtkTreeIter *iter) {
     GtkTreeIter child;
     while (gtk_tree_model_iter_children(GTK_TREE_MODEL(store), &child, iter)) {
-        delete_node_recursive(store, &child);
+        delete_node_recursive(window, store, &child);
     }
     
     // Get the text of the node
@@ -71,7 +71,7 @@ void delete_node_recursive(GtkTreeStore *store, GtkTreeIter *iter) {
     GtkTreePath *path = gtk_tree_model_get_path(GTK_TREE_MODEL(store), iter);
     gchar *path_str = gtk_tree_path_to_string(path);
     gtk_tree_path_free(path);
-    store_delete_operation(node_text, path_str);
+    store_delete_operation(window, node_text, path_str);
 
     // Delete the node
     gtk_tree_store_remove(store, iter);
@@ -250,11 +250,14 @@ GtkTreeIter add_node(GtkTreeStore *model, GtkTreeIter *parent_node, const char *
 /**
  * @brief Add the input text to the selected node.
  * 
- * @param text Text to add
+ * @param window Window with the tree to which the text will be added.
+ * @param data Text to add
  * 
  * @return void
  */
-void add_node_to_selected_node(char *text) {
+void add_text_to_selected_node(GtkWidget *window, void *data) {
+    // Get the text to add
+    char *text = (char *)data;
 
     // Get the selected node
     GtkTreeSelection *selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(MAIN_TREE_VIEW));
@@ -271,7 +274,7 @@ void add_node_to_selected_node(char *text) {
         GtkTreePath *path = gtk_tree_model_get_path(model, &added_node_iter);
         gchar *path_str = gtk_tree_path_to_string(path);
         gtk_tree_path_free(path);
-        store_aggregate_operation(text, path_str);
+        store_aggregate_operation(window, text, path_str);
 
     } else {
         perror("Error: did not find any selected node\n");
@@ -305,9 +308,12 @@ GtkTreeIter insert_node_at_position(GtkTreeIter *parent_iter, gint position, con
  * - Checks if the selected node is a root node.
  * - If it is a root node, it is deleted.
  * 
+ * @param menuitem Menu item that triggered the signal.
+ * @param user_data Data passed to the signal. In this case, the window with the tree to which the node belongs.
+ * 
  * @return void
  */
-void delete_selected_node() {
+void delete_selected_node(GtkMenuItem *menuitem, gpointer user_data) {
 
     // Get the selected node
     GtkTreeSelection *selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(MAIN_TREE_VIEW));
@@ -318,11 +324,12 @@ void delete_selected_node() {
         // Check if the selected node is a root node
         GtkTreeStore *store = GTK_TREE_STORE(model);
         GtkTreeIter parent;
+        GtkWidget *window = GTK_WIDGET(user_data);
         if (gtk_tree_model_iter_parent(model, &parent, &iter)) {
 
             // Call the recursive delete function
             init_operations_set();
-            delete_node_recursive(store, &iter);
+            delete_node_recursive(window, store, &iter);
             end_operations_set();
 
         }
