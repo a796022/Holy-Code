@@ -4,9 +4,6 @@
 #include <gtk/gtk.h>
 #include "window_manager.h"
 
-// Main window tree data model
-extern GtkTreeStore* MAIN_TREE_MODEL;
-
 /**
  * @brief Initializes the main window tree.
  * 
@@ -31,7 +28,7 @@ GtkWidget* init_main_tree(struct WindowStructure* window_structure);
  * 
  * @return void
  */
-void save_tree();
+void save_tree(GtkMenuItem *menuitem, gpointer user_data);
 
 /**
  * @brief Load a tree from a file.

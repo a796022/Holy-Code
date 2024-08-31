@@ -8,7 +8,7 @@
  * 
  * @return void
  */
-void set_changes_as_saved();
+void set_changes_as_saved(GtkWidget *window);
 
 /**
  * @brief Returns 0 if there are unsaved changes, 1 otherwise.

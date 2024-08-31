@@ -26,7 +26,7 @@ char *TREE_PATH_FILE = NULL;
 */
 int load_tree(struct WindowStructure* window_structure, const char *filename) {
     // "Get the model"
-    window_structure->tree_model = MAIN_TREE_MODEL;
+    window_structure->tree_model = window_structure->tree_model;
     GtkTreeStore *model = window_structure->tree_model;
 
     // Clear the model
@@ -112,9 +112,6 @@ int count_nodes(GtkTreeModel *model, GtkTreeIter *iter)
 // PUBLIC //////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 
-// Main window tree data model
-GtkTreeStore *MAIN_TREE_MODEL;
-
 /**
  * @brief Initializes the main window tree.
  * 
@@ -129,10 +126,10 @@ GtkTreeStore *MAIN_TREE_MODEL;
 */
 GtkWidget* init_main_tree(struct WindowStructure* window_structure) {
     // Create a data model for the tree (with one column of type string)
-    MAIN_TREE_MODEL = gtk_tree_store_new(1, G_TYPE_STRING);
+    window_structure->tree_model = gtk_tree_store_new(1, G_TYPE_STRING);
 
     // Create the TreeView
-    window_structure->tree_view = gtk_tree_view_new_with_model(GTK_TREE_MODEL(MAIN_TREE_MODEL));
+    window_structure->tree_view = gtk_tree_view_new_with_model(GTK_TREE_MODEL(window_structure->tree_model));
 
     // Get the last opened file
     TREE_PATH_FILE = read_last_opened_file();
@@ -158,7 +155,12 @@ GtkWidget* init_main_tree(struct WindowStructure* window_structure) {
  * 
  * @return void
  */
-void save_tree() {
+void save_tree(GtkMenuItem *menuitem, gpointer user_data) {
+    // Get the data
+    struct WindowStructure* window_structure = (struct WindowStructure*)user_data;
+    GtkWidget* window = window_structure->window;
+    GtkTreeStore *tree_model = window_structure->tree_model;
+
     // If this is a new file, ask for the file name
     if (TREE_PATH_FILE == NULL) {
         // TODO: Ask for the file name
@@ -172,14 +174,14 @@ void save_tree() {
     // Get the number of nodes
     GtkTreeIter iter;
     int num_nodes = 0;
-    if (gtk_tree_model_get_iter_first(GTK_TREE_MODEL(MAIN_TREE_MODEL), &iter)) {
-        num_nodes = count_nodes(GTK_TREE_MODEL(MAIN_TREE_MODEL), &iter);
+    if (gtk_tree_model_get_iter_first(GTK_TREE_MODEL(tree_model), &iter)) {
+        num_nodes = count_nodes(GTK_TREE_MODEL(tree_model), &iter);
     } else {
         return;
     }
 
     // Save the file
-    int status = write_tree_file(MAIN_TREE_MODEL, TREE_PATH_FILE, num_nodes);
+    int status = write_tree_file(tree_model, TREE_PATH_FILE, num_nodes);
     if (status == -1) {
         return;
     }
@@ -188,7 +190,7 @@ void save_tree() {
     write_last_opened_file(TREE_PATH_FILE);
 
     // Reset the last saved distance
-    set_changes_as_saved();
+    set_changes_as_saved(window);
 }
 
 /**
@@ -304,16 +306,17 @@ void add_text_to_selected_node(struct WindowStructure* window_structure, void *d
 GtkTreeIter insert_node_at_position(struct WindowStructure* window_structure, GtkTreeIter *parent_iter, gint position, const gchar *text) {
     // Get the data
     GtkWidget* tree_view = window_structure->tree_view;
+    GtkTreeStore* tree_model = window_structure->tree_model;
 
     // Insert a new node in the tree "store" (main tree model), under the parent node "parent_iter", at position "position"
     GtkTreeIter new_iter;
-    gtk_tree_store_insert(MAIN_TREE_MODEL, &new_iter, parent_iter, position);
+    gtk_tree_store_insert(tree_model, &new_iter, parent_iter, position);
 
     // Set the values of the new node
-    gtk_tree_store_set(MAIN_TREE_MODEL, &new_iter, 0, text, -1);
+    gtk_tree_store_set(tree_model, &new_iter, 0, text, -1);
 
     // Expand the parent node
-    gtk_tree_view_expand_row(GTK_TREE_VIEW(tree_view), gtk_tree_model_get_path(GTK_TREE_MODEL(MAIN_TREE_MODEL), parent_iter), FALSE);
+    gtk_tree_view_expand_row(GTK_TREE_VIEW(tree_view), gtk_tree_model_get_path(GTK_TREE_MODEL(tree_model), parent_iter), FALSE);
 
     return new_iter;
 }

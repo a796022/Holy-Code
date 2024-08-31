@@ -93,7 +93,7 @@ void set_title_unsaved();
  * 
  * @return void
  */
-void set_title_saved();
+void set_title_saved(GtkWidget *window);
 
 /**
  * @brief Creates a new window with an empty tree proyect (no file is associated).

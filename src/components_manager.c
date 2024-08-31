@@ -37,6 +37,9 @@ void inicializar_componentes_ventana_principal() {
     // Create and configure the window
     main_vbox = init_window(&window_structure);
 
+    // Create the tree
+    tree_view = init_main_tree(window_structure);
+
     // Create the menu_bar
     menu_bar = init_menu_bar(window_structure);
     agregar_widget_box(main_vbox, menu_bar, FALSE, FALSE, 0);
@@ -53,8 +56,7 @@ void inicializar_componentes_ventana_principal() {
     scrolled_window = init_scrolled_window();
     agregar_widget_paned_izquierda(paned, scrolled_window, TRUE, FALSE);
 
-    // Create the treeview
-    tree_view = init_main_tree(window_structure);
+    // Add the tree to the scrolled window
     add_widget_to_scrolled_window(scrolled_window, tree_view);
 
     // Create content for the right area of the divider

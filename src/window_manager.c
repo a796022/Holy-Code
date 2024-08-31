@@ -109,6 +109,9 @@ void establecer_tamano_minimo_ventana(GtkWidget *window, int ancho, int alto) {
  * @return gboolean TRUE if the window should not be closed, FALSE if the window should be closed.
  */
 gboolean on_delete_event(GtkWidget *widget, GdkEvent *event, gpointer data) {
+    // Get the data
+    struct WindowStructure* window_structure = (struct WindowStructure*)data;
+
     // If there are unsaved changes, ask the user if they want to save the changes
     if (there_are_unsaved_changes()) {
 
@@ -133,7 +136,7 @@ gboolean on_delete_event(GtkWidget *widget, GdkEvent *event, gpointer data) {
         // Process the response
         switch (response) {
             case GTK_RESPONSE_ACCEPT:
-                save_tree();
+                save_tree(NULL, window_structure);
                 return FALSE;
             case GTK_RESPONSE_REJECT:
                 return FALSE;
@@ -156,8 +159,12 @@ gboolean on_delete_event(GtkWidget *widget, GdkEvent *event, gpointer data) {
  * 
  * @return void
  */
-void configure_delete_event_signal(GtkWidget *window) {
-    g_signal_connect(window, "delete-event", G_CALLBACK(on_delete_event), NULL);
+void configure_delete_event_signal(struct WindowStructure* window_structure) {
+    // Get the data
+    GtkWidget* window = window_structure->window;
+
+    // Connect the "delete-event" signal to the on_delete_event() function
+    g_signal_connect(window, "delete-event", G_CALLBACK(on_delete_event), window_structure);
 }
 
 /**
@@ -272,7 +279,7 @@ GtkWidget* init_window(struct WindowStructure** window_structure) {
     establecer_redimensionable_ventana(new_window, TRUE);
     establecer_tamano_minimo_ventana(new_window, 300, 200);
     configure_destroy_signal(new_window);
-    configure_delete_event_signal(new_window);
+    configure_delete_event_signal(new_window_structure);
 
     // Crear un contenedor de caja vertical para el menu_bar y lo demás
     main_vbox = crear_box(GTK_ORIENTATION_VERTICAL, 0);
@@ -332,9 +339,14 @@ void show_window(GtkWidget *window) {
  * @return void
 */
 void close_window(GtkMenuItem *menuitem, gpointer user_data) {
-    GtkWidget *window = GTK_WIDGET(user_data);
-    gboolean abort_closing = on_delete_event(window, NULL, NULL);
+    // Get the data
+    struct WindowStructure* window_structure = (struct WindowStructure*)user_data;
+    GtkWidget *window = window_structure->window;
 
+    // Ask the user if they want to save the changes
+    gboolean abort_closing = on_delete_event(window, NULL, window_structure);
+
+    // Close the window if the user chooses to save the changes or discard the changes
     if (!abort_closing) {
         gtk_widget_destroy(window);
     }

@@ -495,10 +495,10 @@ void undo_aggregate_operation(struct WindowStructure* window_structure) {
 
     // Undo the operation
     GtkTreeIter child_iter;
-    gtk_tree_model_get_iter_from_string(GTK_TREE_MODEL(MAIN_TREE_MODEL), 
+    gtk_tree_model_get_iter_from_string(GTK_TREE_MODEL(window_structure->tree_model), 
                                         &child_iter, 
                                         operation.node_path);
-    gtk_tree_store_remove(MAIN_TREE_MODEL, &child_iter);
+    gtk_tree_store_remove(window_structure->tree_model, &child_iter);
 }
 
 /**
@@ -526,12 +526,12 @@ void redo_aggregate_operation(struct WindowStructure* window_structure) {
 
     // 2- Get the parent node
     GtkTreeIter parent_iter;
-    gtk_tree_model_get_iter_from_string(GTK_TREE_MODEL(MAIN_TREE_MODEL), 
+    gtk_tree_model_get_iter_from_string(GTK_TREE_MODEL(window_structure->tree_model), 
                                         &parent_iter, 
                                         parent_path_str);
 
     // 3- Add the node to the parent node
-    add_node(window_structure, MAIN_TREE_MODEL, &parent_iter, operation.node_text);
+    add_node(window_structure, window_structure->tree_model, &parent_iter, operation.node_text);
 }
 
 /**
@@ -564,7 +564,7 @@ void undo_delete_operation(struct WindowStructure* window_structure) {
 
     // 3- Get the parent node
     GtkTreeIter parent_iter;
-    gtk_tree_model_get_iter_from_string(GTK_TREE_MODEL(MAIN_TREE_MODEL), 
+    gtk_tree_model_get_iter_from_string(GTK_TREE_MODEL(window_structure->tree_model), 
                                         &parent_iter, 
                                         parent_path_str);
 
@@ -591,12 +591,12 @@ void redo_delete_operation(struct WindowStructure* window_structure) {
     // Redo the operation
     // 1- Get the iter of the node
     GtkTreeIter child_iter;
-    gtk_tree_model_get_iter_from_string(GTK_TREE_MODEL(MAIN_TREE_MODEL), 
+    gtk_tree_model_get_iter_from_string(GTK_TREE_MODEL(window_structure->tree_model), 
                                         &child_iter, 
                                         operation.node_path);
     
     // 2- Remove the node
-    gtk_tree_store_remove(MAIN_TREE_MODEL, &child_iter);
+    gtk_tree_store_remove(window_structure->tree_model, &child_iter);
 }
 
 // #4# Modify the clear_redo_stack to clear the new operation
@@ -623,9 +623,9 @@ void clear_redo_stack() {
  * 
  * @return void
  */
-void set_changes_as_saved() {
+void set_changes_as_saved(GtkWidget *window) {
     last_saved_distance = 0;
-    set_title_saved();
+    set_title_saved(window);
 }
 
 /**
