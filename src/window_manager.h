@@ -3,21 +3,18 @@
 
 #include <gtk/gtk.h>
 
-// Data structure for a window.
-struct WindowStructure {
-    GtkWidget* window;
-    GtkWidget* tree_view;
-    GtkTreeStore* tree_model;
-};
+#include "window_structure.h"
+
+extern GList *WINDOWS_LIST;
 
 /**
  * @brief Initializes the main window.
  * 
  * @param window_structure Reference to a pointer to the WindowStructure. The pointer to the created window structure will be returned by reference in this variable.
  * 
- * @return GtkWidget* Main box that will contain the rest of the widgets.
+ * @return void
 */
-GtkWidget* init_window(struct WindowStructure** window_structure);
+void init_window(struct WindowStructure* window_structure);
 
 /**
  * @brief Runs a function for all windows.
@@ -101,5 +98,15 @@ void set_title_saved(GtkWidget *window);
  * @return void
  */
 void create_new_window();
+
+/**
+ * Agrega un widget a la ventana.
+ * 
+ * @param window Ventana a la que se le agregará el widget.
+ * @param widget Widget a agregar.
+ * 
+ * @return void
+*/
+void agregar_widget_ventana(GtkWidget *window, GtkWidget *widget);
 
 #endif /* WINDOW_MANAGER_H */

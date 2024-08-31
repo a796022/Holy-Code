@@ -2,7 +2,8 @@
 #define TREE_MANAGER
 
 #include <gtk/gtk.h>
-#include "window_manager.h"
+
+#include "window_structure.h"
 
 /**
  * @brief Initializes the main window tree.
@@ -16,7 +17,7 @@
  * 
  * @return GtkWidget* The TreeView widget
 */
-GtkWidget* init_main_tree(struct WindowStructure* window_structure);
+void init_main_tree(struct WindowStructure* window_structure);
 
 /**
  * @brief Saves the tree of the main window in a file.

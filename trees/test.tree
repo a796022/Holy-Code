@@ -5,7 +5,6 @@ Seguimiento
 	También sale un mensaje de error del tipo Gtk-CRITICAL
 	Mi plan: ver si tras modificar add_node(, que es la función que alberga la instancia de gtk_tree_view_expand_row(, se soluciona el problema
 	Después faltaría:
-		- Finiquitar con las variables globales MAIN_TREE_MODEL
 		- Programar la multiventana
 		- Revisar la limpieza del código. Entre otras cosas, lo de los structs en el .h me huele a culo
 		- Dar la opción de elegir árboles cuando se usa Ctrl+C+C en multiventana
@@ -17,3 +16,5 @@ Seguimiento
 		- Mejorar el código del historial con punteros genéricos
 		- Agrandar el tamaño de la ventana para que coincida con el del notepad
 		- Hacer que cuando se haga Ctrl+Z de un eliminar se ponga el foco en el nodo que se ha recuperado (insertado)
+		- Selección múltiple con Ctrl+clic y clic+shift+clic
+		- Hacer que en la cabecera aparezca el nombre correcto del fichero abierto

@@ -124,7 +124,7 @@ int count_nodes(GtkTreeModel *model, GtkTreeIter *iter)
  * 
  * @return GtkWidget* The TreeView widget
 */
-GtkWidget* init_main_tree(struct WindowStructure* window_structure) {
+void init_main_tree(struct WindowStructure* window_structure) {
     // Create a data model for the tree (with one column of type string)
     window_structure->tree_model = gtk_tree_store_new(1, G_TYPE_STRING);
 
@@ -141,8 +141,6 @@ GtkWidget* init_main_tree(struct WindowStructure* window_structure) {
 
     // Create a column for the TreeView
     create_treeview_column(window_structure->tree_view, "Árbol sin nombre");
-
-    return window_structure->tree_view;
 }
 
 /**

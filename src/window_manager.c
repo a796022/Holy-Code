@@ -23,28 +23,6 @@ const int ALTO_MINIMO_VENTANA = 200;
 GList *WINDOWS_LIST = NULL;
 
 /**
- * @brief Adds a WindowStructure to the list of windows.
- * 
- * - Creates a new WindowStructure and adds it to the list of windows.
- * 
- * @return struct WindowStructure* Pointer to the WindowStructure added to the list
- */
-struct WindowStructure* create_window() {
-    // Reserve memory for the new window structure
-    struct WindowStructure* new_window = g_malloc(sizeof(struct WindowStructure));
-
-    // Initialize the window structure
-    new_window->window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-    new_window->tree_view = NULL;
-    new_window->tree_model = NULL;
-
-    // Append the window to the list of windows
-    WINDOWS_LIST = g_list_append(WINDOWS_LIST, new_window);
-
-    return new_window;
-}
-
-/**
  * Establece el nombre de la ventana, que se mostrará en la barra de título.
  * 
  * @param window Ventana a la que se le establecerá el nombre.
@@ -151,23 +129,6 @@ gboolean on_delete_event(GtkWidget *widget, GdkEvent *event, gpointer data) {
 }
 
 /**
- * @brief Connects the window's “delete-event” signal to the on_delete_event() function.
- * 
- * - Connects the window's “delete-event” signal to the on_delete_event() function so that, when the window is closed, the user is asked if they want to save the changes if there are unsaved changes.
- * 
- * @param window Window to which the "delete-event" signal will be set.
- * 
- * @return void
- */
-void configure_delete_event_signal(struct WindowStructure* window_structure) {
-    // Get the data
-    GtkWidget* window = window_structure->window;
-
-    // Connect the "delete-event" signal to the on_delete_event() function
-    g_signal_connect(window, "delete-event", G_CALLBACK(on_delete_event), window_structure);
-}
-
-/**
  * @brief Connects the window's “destroy” signal to the gtk_main_quit() function.
  * 
  * - Connects the window's “destroy” signal to the gtk_main_quit() function so that, when the window is closed, the GTK main event loop is also terminated (and thus terminates the program).
@@ -265,32 +226,23 @@ char *obtener_fichero_seleccionado(GtkWidget *dialog) {
  * 
  * @param window_structure Reference to a pointer to the WindowStructure. The pointer to the created window structure will be returned by reference in this variable.
  * 
- * @return GtkWidget* Main box that will contain the rest of the widgets.
+ * @return void
 */
-GtkWidget* init_window(struct WindowStructure** window_structure) {
-    // Caja que contendrá todos los widgets
-    GtkWidget *main_vbox;
+void init_window(struct WindowStructure* window_structure) {
+    // Create the window
+    GtkWidget* window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 
-    // Create and configure the main window
-    struct WindowStructure* new_window_structure = create_window();
-    GtkWidget *new_window = new_window_structure->window;
-    establecer_nombre_ventana(new_window, "Sin Título - Wizard");
-    establecer_tamano_por_defecto_ventana(new_window, 900, 500);
-    establecer_redimensionable_ventana(new_window, TRUE);
-    establecer_tamano_minimo_ventana(new_window, 300, 200);
-    configure_destroy_signal(new_window);
-    configure_delete_event_signal(new_window_structure);
+    // Set the window properties
+    establecer_nombre_ventana(window, "Sin Título - Wizard");
+    establecer_tamano_por_defecto_ventana(window, 900, 500);
+    establecer_redimensionable_ventana(window, TRUE);
+    establecer_tamano_minimo_ventana(window, 300, 200);
+    configure_destroy_signal(window);
 
-    // Crear un contenedor de caja vertical para el menu_bar y lo demás
-    main_vbox = crear_box(GTK_ORIENTATION_VERTICAL, 0);
+    // Connect the "delete-event" signal to the on_delete_event() function
+    g_signal_connect(window, "delete-event", G_CALLBACK(on_delete_event), window_structure);
 
-    // Agregar el contenedor principal a la ventana
-    agregar_widget_ventana(new_window, main_vbox);
-
-    // Returns by reference the main window
-    *window_structure = new_window_structure;
-
-    return main_vbox;
+    window_structure->window = window;
 }
 
 /**
