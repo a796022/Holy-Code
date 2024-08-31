@@ -2,19 +2,24 @@
 #define TREE_MANAGER
 
 #include <gtk/gtk.h>
-
-// Widget of the main window tree
-extern GtkWidget *MAIN_TREE_VIEW;
+#include "window_manager.h"
 
 // Main window tree data model
-extern GtkTreeStore *MAIN_TREE_MODEL;
+extern GtkTreeStore* MAIN_TREE_MODEL;
 
 /**
- * Inicializa el árbol de la ventana principal.
+ * @brief Initializes the main window tree.
  * 
- * @return void
+ * - Creates a tree model for the TreeView.
+ * - Creates the TreeView.
+ * - Gets the last opened file.
+ * - If there is a file in session, it is loaded.
+ * 
+ * @param window_structure Window structure with the TreeView widget
+ * 
+ * @return GtkWidget* The TreeView widget
 */
-GtkWidget *init_main_tree();
+GtkWidget* init_main_tree(struct WindowStructure* window_structure);
 
 /**
  * @brief Saves the tree of the main window in a file.
@@ -53,7 +58,7 @@ void open_tree_file(GtkMenuItem *menuitem, gpointer user_data);
  * 
  * return GtkTreeIter Iterator of the new node
 */
-GtkTreeIter add_node(GtkTreeStore *model, GtkTreeIter *parent_node, const char *text);
+GtkTreeIter add_node(struct WindowStructure* window_structure, GtkTreeStore *model, GtkTreeIter *parent_node, const char *text);
 
 /**
  * @brief Add the input text to the selected node.
@@ -63,7 +68,7 @@ GtkTreeIter add_node(GtkTreeStore *model, GtkTreeIter *parent_node, const char *
  * 
  * @return void
  */
-void add_text_to_selected_node(GtkWidget *window, void *data);
+void add_text_to_selected_node(struct WindowStructure* window_structure, void *data);
 
 /**
  * @brief Inserts a new node in the tree.
@@ -74,7 +79,7 @@ void add_text_to_selected_node(GtkWidget *window, void *data);
  * 
  * @return GtkTreeIter Iterator of the new node
  */
-GtkTreeIter insert_node_at_position(GtkTreeIter *parent_iter, gint position, const gchar *text);
+GtkTreeIter insert_node_at_position(struct WindowStructure* window_structure, GtkTreeIter *parent_iter, gint position, const gchar *text);
 
 /**
  * @brief Deletes the selected node.

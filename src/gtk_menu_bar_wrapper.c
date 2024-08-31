@@ -82,7 +82,10 @@ GtkWidget *MENUBAR_SHOW_WINDOW_INFORMATION;
  * 
  * @return GtkWidget* Menu bar
 */
-GtkWidget *init_menu_bar(GtkWidget *window) {
+GtkWidget *init_menu_bar(struct WindowStructure* window_structure) {
+    // Get the window
+    GtkWidget* window = window_structure->window;
+
     // Create the menu
     GtkWidget *menu_bar = gtk_menu_bar_new();
 
@@ -108,14 +111,14 @@ GtkWidget *init_menu_bar(GtkWidget *window) {
 
     // Connect the signals
     g_signal_connect(MENUBAR_NEW_FILE, "activate", G_CALLBACK(create_new_window), NULL);
-    g_signal_connect(MENUBAR_OPEN_FILE, "activate", G_CALLBACK(open_tree_file), window);
+    g_signal_connect(MENUBAR_OPEN_FILE, "activate", G_CALLBACK(open_tree_file), window_structure);
     g_signal_connect(MENUBAR_SAVE, "activate", G_CALLBACK(save_tree), NULL);
     g_signal_connect(MENUBAR_CLOSE_WINDOW, "activate", G_CALLBACK(close_window), window);
     g_signal_connect(MENUBAR_EXIT, "activate", G_CALLBACK(close_window), window);
 
-    g_signal_connect(MENUBAR_UNDO, "activate", G_CALLBACK(undo), window);
-    g_signal_connect(MENUBAR_REDO, "activate", G_CALLBACK(redo), window);
-    g_signal_connect(MENUBAR_DELETE, "activate", G_CALLBACK(delete_selected_node), NULL);
+    g_signal_connect(MENUBAR_UNDO, "activate", G_CALLBACK(undo), window_structure);
+    g_signal_connect(MENUBAR_REDO, "activate", G_CALLBACK(redo), window_structure);
+    g_signal_connect(MENUBAR_DELETE, "activate", G_CALLBACK(delete_selected_node), window_structure);
 
     g_signal_connect(MENUBAR_SHOW_WINDOW_INFORMATION, "activate", G_CALLBACK(show_window_info), window);
 

@@ -27,6 +27,6 @@ extern GtkWidget *MENUBAR_SHOW_WINDOW_INFORMATION;
  * 
  * @return GtkWidget* Menu bar
 */
-GtkWidget *init_menu_bar(GtkWidget *window);
+GtkWidget *init_menu_bar(struct WindowStructure* window_structure);
 
 #endif /* MENU_BAR_MANAGER */

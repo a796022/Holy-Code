@@ -1,6 +1,8 @@
 #ifndef TREE_FILES_H
 #define TREE_FILES_H
 
+#include "window_manager.h"
+
 /**
  * Carga un árbol de un fichero
  * 
@@ -15,7 +17,7 @@
  * 2: error en la jerarquía de nodos, ausencia de nodos padre
  * -1: error al abrir el fichero
  */
-int read_tree_file(GtkTreeStore *model, const char *filename);
+int read_tree_file(struct WindowStructure* window_structure, const char *filename);
 
 /**
  * @brief Write a tree to a file.

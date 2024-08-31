@@ -17,28 +17,28 @@
 */
 void inicializar_componentes_ventana_principal() {
     // Box that will contain the menu bar and the rest of the widgets
-    GtkWidget *main_vbox;
+    GtkWidget* main_vbox;
 
     // Top menu
-    GtkWidget *menu_bar;
+    GtkWidget* menu_bar;
 
     // Vertical divider
-    GtkWidget *paned;
+    GtkWidget* paned;
 
     // Tree
-    GtkWidget *tree_view;
+    GtkWidget* tree_view;
 
     // Scrolleable container for the treeview
-    GtkWidget *scrolled_window;
+    GtkWidget* scrolled_window;
 
-    // Window
-    GtkWidget *window;
+    // Window structure
+    struct WindowStructure* window_structure;
 
     // Create and configure the window
-    main_vbox = init_window(&window);
+    main_vbox = init_window(&window_structure);
 
     // Create the menu_bar
-    menu_bar = init_menu_bar(window);
+    menu_bar = init_menu_bar(window_structure);
     agregar_widget_box(main_vbox, menu_bar, FALSE, FALSE, 0);
 
     // Create the GtkPaned (divider)
@@ -54,7 +54,7 @@ void inicializar_componentes_ventana_principal() {
     agregar_widget_paned_izquierda(paned, scrolled_window, TRUE, FALSE);
 
     // Create the treeview
-    tree_view = init_main_tree();
+    tree_view = init_main_tree(window_structure);
     add_widget_to_scrolled_window(scrolled_window, tree_view);
 
     // Create content for the right area of the divider
@@ -62,8 +62,8 @@ void inicializar_componentes_ventana_principal() {
     agregar_widget_paned_derecha(paned, right_label_panel, TRUE, FALSE);
 
     // Initialize the keyboard shortcuts
-    init_keyboard_shortcuts(window);
+    init_keyboard_shortcuts(window_structure->window);
 
     // Show the window
-    show_window(window);
+    show_window(window_structure->window);
 }

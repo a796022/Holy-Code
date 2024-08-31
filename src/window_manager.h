@@ -3,8 +3,21 @@
 
 #include <gtk/gtk.h>
 
-// List of windows
-extern GList *WINDOWS_LIST;
+// Data structure for a window.
+struct WindowStructure {
+    GtkWidget* window;
+    GtkWidget* tree_view;
+    GtkTreeStore* tree_model;
+};
+
+/**
+ * @brief Initializes the main window.
+ * 
+ * @param window_structure Reference to a pointer to the WindowStructure. The pointer to the created window structure will be returned by reference in this variable.
+ * 
+ * @return GtkWidget* Main box that will contain the rest of the widgets.
+*/
+GtkWidget* init_window(struct WindowStructure** window_structure);
 
 /**
  * @brief Runs a function for all windows.
@@ -17,16 +30,7 @@ extern GList *WINDOWS_LIST;
  * 
  * @return void
  */
-void run_for_all_windows(void (*funcion)(GtkWidget*, void*), void *datos);
-
-/**
- * @brief Initializes the main window.
- * 
- * @param window Reference to a pointer to GtkWidget. The pointer to the created window will be returned by reference in this variable.
- * 
- * @return GtkWidget* Main box that will contain the rest of the widgets.
-*/
-GtkWidget *init_window(GtkWidget **window);
+void run_for_all_windows(void (*funcion)(struct WindowStructure*, void*), void *datos);
 
 /**
  * Muestra la ventana.

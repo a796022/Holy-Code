@@ -2,7 +2,6 @@
 #include <sys/stat.h>
 
 #include "session_manager.h"
-#include "files_manager.h"
 
 const char *SESSION_FILE_PATH_FROM_HOME = "/.config/wizard/session.txt";
 const int MAX_PATH_LENGTH = 256;

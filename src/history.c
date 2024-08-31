@@ -486,7 +486,7 @@ void free_delete_stack(DeleteStack *stack) {
  * 
  * @return void
  */
-void undo_aggregate_operation() {
+void undo_aggregate_operation(struct WindowStructure* window_structure) {
     // Get the last operation
     AggregateOperation operation = pop_aggregate_stack(&UNDO_STACK_AGGREGATE);
 
@@ -510,7 +510,7 @@ void undo_aggregate_operation() {
  * 
  * @return void
  */
-void redo_aggregate_operation() {
+void redo_aggregate_operation(struct WindowStructure* window_structure) {
     // Get the last operation
     AggregateOperation operation = pop_aggregate_stack(&REDO_STACK_AGGREGATE);
 
@@ -531,7 +531,7 @@ void redo_aggregate_operation() {
                                         parent_path_str);
 
     // 3- Add the node to the parent node
-    add_node(MAIN_TREE_MODEL, &parent_iter, operation.node_text);
+    add_node(window_structure, MAIN_TREE_MODEL, &parent_iter, operation.node_text);
 }
 
 /**
@@ -543,7 +543,7 @@ void redo_aggregate_operation() {
  * 
  * @return void
  */
-void undo_delete_operation() {
+void undo_delete_operation(struct WindowStructure* window_structure) {
     // Get the last operation
     DeleteOperation operation = pop_delete_stack(&UNDO_STACK_DELETE);
 
@@ -569,7 +569,7 @@ void undo_delete_operation() {
                                         parent_path_str);
 
     // 4- Add the node to the parent node
-    insert_node_at_position(&parent_iter, position, operation.node_text);
+    insert_node_at_position(window_structure, &parent_iter, position, operation.node_text);
 }
 
 /**
@@ -581,7 +581,7 @@ void undo_delete_operation() {
  * 
  * @return void
  */
-void redo_delete_operation() {
+void redo_delete_operation(struct WindowStructure* window_structure) {
     // Get the last operation
     DeleteOperation operation = pop_delete_stack(&REDO_STACK_DELETE);
 
@@ -691,6 +691,10 @@ void end_operations_set() {
  * @return void
  */
 void undo(GtkMenuItem *menuitem, gpointer user_data) {
+    // Get the data
+    struct WindowStructure* window_structure = (struct WindowStructure*)user_data;
+    GtkWidget* window = window_structure->window;
+    
     // If the operation stack is empty, do nothing
     if (UNDO_STACK_OPERATIONS.index == 0 && UNDO_STACK_OPERATIONS.top->next == NULL) {
         return;
@@ -701,10 +705,10 @@ void undo(GtkMenuItem *menuitem, gpointer user_data) {
     uint8_t last_operation = pop_operation_stack(&UNDO_STACK_OPERATIONS, &set);
     switch (last_operation) {
         case AGGREGATE_OP:
-            undo_aggregate_operation();
+            undo_aggregate_operation(window_structure);
             break;
         case DELETE_OP:
-            undo_delete_operation();
+            undo_delete_operation(window_structure);
             break;
         default:
             perror("Error: Unknown operation\n");
@@ -712,7 +716,6 @@ void undo(GtkMenuItem *menuitem, gpointer user_data) {
     }
 
     // Add the operation to the operation stack
-    GtkWidget *window = GTK_WIDGET(user_data);
     push_operation_stack_with_set(window, &REDO_STACK_OPERATIONS, last_operation, set, REASON_UNDO);
 
     // If there is a set of operations, undo all of them
@@ -740,6 +743,10 @@ void undo(GtkMenuItem *menuitem, gpointer user_data) {
  * @return void
  */
 void redo(GtkMenuItem *menuitem, gpointer user_data) {
+    // Get the data
+    struct WindowStructure* window_structure = (struct WindowStructure*)user_data;
+    GtkWidget* window = window_structure->window;
+
     // If the operation stack is empty, do nothing
     if (REDO_STACK_OPERATIONS.index == 0 && REDO_STACK_OPERATIONS.top->next == NULL) {
         return;
@@ -750,10 +757,10 @@ void redo(GtkMenuItem *menuitem, gpointer user_data) {
     uint8_t last_operation = pop_operation_stack(&REDO_STACK_OPERATIONS, &set);
     switch (last_operation) {
         case AGGREGATE_OP:
-            redo_aggregate_operation();
+            redo_aggregate_operation(window_structure);
             break;
         case DELETE_OP:
-            redo_delete_operation();
+            redo_delete_operation(window_structure);
             break;
         default:
             perror("Error: Unknown operation\n");
@@ -761,7 +768,6 @@ void redo(GtkMenuItem *menuitem, gpointer user_data) {
     }
 
     // Add the operation to the operation stack
-    GtkWidget *window = GTK_WIDGET(user_data);
     push_operation_stack_with_set(window, &UNDO_STACK_OPERATIONS, last_operation, set, REASON_REDO);
 
     // If there is a set of operations, redo all of them
@@ -833,7 +839,10 @@ uint8_t close_history() {
  * 
  * @return void
  */
-void store_aggregate_operation(GtkWidget *window, char *node_text, gchar *path_str) {
+void store_aggregate_operation(struct WindowStructure* window_structure, char *node_text, gchar *path_str) {
+    // Get the window
+    GtkWidget* window = window_structure->window;
+
     // Create and store the operation
     AggregateOperation operation = {node_text, path_str};
     push_aggregate_stack(&UNDO_STACK_AGGREGATE, operation);

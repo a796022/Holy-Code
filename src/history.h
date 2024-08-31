@@ -89,7 +89,7 @@ uint8_t close_history();
  * 
  * @return void
  */
-void store_aggregate_operation(GtkWidget *window, char *node_text, gchar *path_str);
+void store_aggregate_operation(struct WindowStructure* window_structure, char *node_text, gchar *path_str);
 
 /**
  * @brief Stores a delete operation.

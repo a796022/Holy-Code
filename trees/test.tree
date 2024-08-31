@@ -1,5 +1,19 @@
-Código
-	set_title_unsaved
-		modify_last_saved_distance
-	set_title_saved
-		modify_last_saved_distance
+Seguimiento
+	Estoy recorriendo todas las instancias de main_tree_view para que no dependan de una variable global
+	He modificado init_main_tree para que el tree_view se inicialice con el contenido de la lista de ventanas
+	La modificación del init_main_tree ha provocado que los nodos ya no se expandan al agregarse
+	También sale un mensaje de error del tipo Gtk-CRITICAL
+	Mi plan: ver si tras modificar add_node(, que es la función que alberga la instancia de gtk_tree_view_expand_row(, se soluciona el problema
+	Después faltaría:
+		- Finiquitar con las variables globales MAIN_TREE_MODEL
+		- Programar la multiventana
+		- Revisar la limpieza del código. Entre otras cosas, lo de los structs en el .h me huele a culo
+		- Dar la opción de elegir árboles cuando se usa Ctrl+C+C en multiventana
+		- Revisar lo de que los nodos no se expanden cuando se agregan con un Ctrl+Z
+		- Hacer que la línea del paned aparezca en medio
+		- Poner a la derecha un desplegable para operaciones de agregado y otro para renombrar
+		- Poner una opción para cerrar el archivo sin cerrar la ventana
+		- Hacer que la ventana de confirmación de cerrar sin guardar se pueda cerrar con Ctrl+D (descartar)
+		- Mejorar el código del historial con punteros genéricos
+		- Agrandar el tamaño de la ventana para que coincida con el del notepad
+		- Hacer que cuando se haga Ctrl+Z de un eliminar se ponga el foco en el nodo que se ha recuperado (insertado)

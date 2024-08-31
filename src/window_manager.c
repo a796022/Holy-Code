@@ -6,11 +6,13 @@
 #include "gtk_progress_bar.h"
 #include "tree_wrapper.h"
 #include "history.h"
+#include "window_manager.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 // PRIVATE /////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 
+// Default window properties
 const int ANCHO_VENTANA = 900;
 const int ALTO_VENTANA = 500;
 const gboolean REDIMENSIONABLE = TRUE;
@@ -21,34 +23,25 @@ const int ALTO_MINIMO_VENTANA = 200;
 GList *WINDOWS_LIST = NULL;
 
 /**
- * @brief Adds a window to the list of windows.
+ * @brief Adds a WindowStructure to the list of windows.
  * 
- * - Adds a window to the list of windows.
+ * - Creates a new WindowStructure and adds it to the list of windows.
  * 
- * @return GtkWidget* Window added to the list
+ * @return struct WindowStructure* Pointer to the WindowStructure added to the list
  */
-GtkWidget *create_window() {
-    GtkWidget *window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-    WINDOWS_LIST = g_list_append(WINDOWS_LIST, window);
-    return window;
-}
-/**
- * @brief Runs a function for all windows.
- * 
- * - The function is executed for all windows.
- * - The function receives the window and the data as arguments.
- * 
- * @param funcion Function to run for all windows.
- * @param datos Data to pass to the function.
- * 
- * @return void
- */
-void run_for_all_windows(void (*funcion)(GtkWidget*, void*), void *datos) {
-    GList *iterator;
-    for (iterator = WINDOWS_LIST; iterator != NULL; iterator = iterator->next) {
-        GtkWidget *ventana = (GtkWidget*)iterator->data;
-        funcion(ventana, datos);
-    }
+struct WindowStructure* create_window() {
+    // Reserve memory for the new window structure
+    struct WindowStructure* new_window = g_malloc(sizeof(struct WindowStructure));
+
+    // Initialize the window structure
+    new_window->window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+    new_window->tree_view = NULL;
+    new_window->tree_model = NULL;
+
+    // Append the window to the list of windows
+    WINDOWS_LIST = g_list_append(WINDOWS_LIST, new_window);
+
+    return new_window;
 }
 
 /**
@@ -263,16 +256,17 @@ char *obtener_fichero_seleccionado(GtkWidget *dialog) {
 /**
  * @brief Initializes the main window.
  * 
- * @param window Reference to a pointer to GtkWidget. The pointer to the created window will be returned by reference in this variable.
+ * @param window_structure Reference to a pointer to the WindowStructure. The pointer to the created window structure will be returned by reference in this variable.
  * 
  * @return GtkWidget* Main box that will contain the rest of the widgets.
 */
-GtkWidget *init_window(GtkWidget **window) {
+GtkWidget* init_window(struct WindowStructure** window_structure) {
     // Caja que contendrá todos los widgets
     GtkWidget *main_vbox;
 
     // Create and configure the main window
-    GtkWidget *new_window = create_window();
+    struct WindowStructure* new_window_structure = create_window();
+    GtkWidget *new_window = new_window_structure->window;
     establecer_nombre_ventana(new_window, "Sin Título - Wizard");
     establecer_tamano_por_defecto_ventana(new_window, 900, 500);
     establecer_redimensionable_ventana(new_window, TRUE);
@@ -287,9 +281,28 @@ GtkWidget *init_window(GtkWidget **window) {
     agregar_widget_ventana(new_window, main_vbox);
 
     // Returns by reference the main window
-    *window = new_window;
+    *window_structure = new_window_structure;
 
     return main_vbox;
+}
+
+/**
+ * @brief Runs a function for all windows.
+ * 
+ * - The function is executed for all windows.
+ * - The function receives the window and the data as arguments.
+ * 
+ * @param funcion Function to run for all windows.
+ * @param datos Data to pass to the function.
+ * 
+ * @return void
+ */
+void run_for_all_windows(void (*funcion)(struct WindowStructure*, void*), void *datos) {
+    GList *iterator;
+    for (iterator = WINDOWS_LIST; iterator != NULL; iterator = iterator->next) {
+        struct WindowStructure *window_struct = (struct WindowStructure*)iterator->data;
+        funcion(window_struct, datos);
+    }
 }
 
 /**
