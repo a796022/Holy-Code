@@ -1,3 +1,5 @@
+#pragma once
+
 #include <gtk/gtk.h>
 
 extern GtkWidget *MAIN_PROGRESS_BAR;

@@ -1,6 +1,7 @@
+#pragma once
+
 #include <gtk/gtk.h>
 
-#include "box.h"
 #include "window_manager.h"
 
 /**
@@ -11,10 +12,7 @@
  * 
  * @return GtkWidget*
 */
-GtkWidget *crear_box(GtkOrientation orientation, int spacing) {
-    GtkWidget *box = gtk_box_new(orientation, spacing);
-    return box;
-}
+GtkWidget *crear_box(GtkOrientation orientation, int spacing);
 
 /**
  * Agrega un widget a un contenedor de caja.
@@ -27,9 +25,7 @@ GtkWidget *crear_box(GtkOrientation orientation, int spacing) {
  * 
  * @return void
 */
-void agregar_widget_box(GtkWidget *box, GtkWidget *widget, gboolean expand, gboolean fill, guint padding) {
-    gtk_box_pack_start(GTK_BOX(box), widget, expand, fill, padding);
-}
+void agregar_widget_box(GtkWidget *box, GtkWidget *widget, gboolean expand, gboolean fill, guint padding);
 
 /**
  * Initializes the main box.
@@ -38,10 +34,4 @@ void agregar_widget_box(GtkWidget *box, GtkWidget *widget, gboolean expand, gboo
  * 
  * @return void
 */
-void init_box(struct WindowStructure* window_structure) {
-    // Create the main box
-    window_structure->main_box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
-
-    // Add the main box to the window
-    agregar_widget_ventana(window_structure->window, window_structure->main_box);
-}
+void init_box(struct WindowStructure* window_structure);

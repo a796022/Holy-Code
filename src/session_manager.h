@@ -1,5 +1,4 @@
-#ifndef SESSION_MANAGER_H
-#define SESSION_MANAGER_H
+#pragma once
 
 /**
  * Obtiene el último archivo abierto.
@@ -18,5 +17,3 @@ char *read_last_opened_file();
  * @return void
  */
 void write_last_opened_file(const char *filename);
-
-#endif /* SESSION_MANAGER_H */

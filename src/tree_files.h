@@ -1,5 +1,4 @@
-#ifndef TREE_FILES_H
-#define TREE_FILES_H
+#pragma once
 
 #include "window_manager.h"
 
@@ -29,5 +28,3 @@ int read_tree_file(struct WindowStructure* window_structure, const char *filenam
  * @return int status
  */
 int write_tree_file(GtkTreeStore *model, const char *filename, int num_nodes);
-
-#endif /* TREE_FILES_H */

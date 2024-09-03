@@ -1,5 +1,4 @@
-#ifndef HISTORY
-#define HISTORY
+#pragma once
 
 /**
  * @brief Resets the last saved distance to 0 and modifies the title of the window to indicate that there are no unsaved changes.
@@ -104,5 +103,3 @@ void store_aggregate_operation(struct WindowStructure* window_structure, char *n
  * @return void
  */
 void store_delete_operation(GtkWidget *window, char *node_text, gchar *path_str);
-
-#endif /* HISTORY */

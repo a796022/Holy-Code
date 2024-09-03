@@ -1,5 +1,4 @@
-#ifndef TREE_STRING_H
-#define TREE_STRING_H
+#pragma once
 
 /**
  * Obtiene el máximo de caracteres y tabulaciones (considerando tabulaciones a
@@ -30,5 +29,3 @@ int obtener_numero_tabulaciones(const char *str);
  * @return void
  */
 void clean_string(char *line);
-
-#endif /* TREE_STRING_H */

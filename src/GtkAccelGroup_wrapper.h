@@ -1,5 +1,4 @@
-#ifndef GTKACCELGROUP_WRAPPER_H
-#define GTKACCELGROUP_WRAPPER_H
+#pragma once
 
 /**
  * @brief Initializes the application's keyboard shortcuts
@@ -12,5 +11,3 @@
  * @return void
 */
 void init_keyboard_shortcuts(GtkWidget *window);
-
-#endif /* GTKACCELGROUP_WRAPPER_H */

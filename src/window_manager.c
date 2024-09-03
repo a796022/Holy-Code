@@ -2,7 +2,7 @@
 
 #include "../external/sds/sds.h"
 
-#include "box.h"
+#include "gtk_box_manager.h"
 #include "gtk_progress_bar.h"
 #include "tree_wrapper.h"
 #include "history.h"
@@ -243,25 +243,6 @@ void init_window(struct WindowStructure* window_structure) {
     g_signal_connect(window, "delete-event", G_CALLBACK(on_delete_event), window_structure);
 
     window_structure->window = window;
-}
-
-/**
- * @brief Runs a function for all windows.
- * 
- * - The function is executed for all windows.
- * - The function receives the window and the data as arguments.
- * 
- * @param funcion Function to run for all windows.
- * @param datos Data to pass to the function.
- * 
- * @return void
- */
-void run_for_all_windows(void (*funcion)(struct WindowStructure*, void*), void *datos) {
-    GList *iterator;
-    for (iterator = WINDOWS_LIST; iterator != NULL; iterator = iterator->next) {
-        struct WindowStructure *window_struct = (struct WindowStructure*)iterator->data;
-        funcion(window_struct, datos);
-    }
 }
 
 /**

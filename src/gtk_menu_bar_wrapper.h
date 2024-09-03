@@ -1,5 +1,8 @@
-#ifndef MENU_BAR_MANAGER
-#define MENU_BAR_MANAGER
+#pragma once
+
+#include <gtk/gtk.h>
+
+#include "window_structure.h"
 
 // "Archivo" Menu
 extern GtkWidget *MENUBAR_NEW_FILE;
@@ -28,5 +31,3 @@ extern GtkWidget *MENUBAR_SHOW_WINDOW_INFORMATION;
  * @return GtkWidget* Menu bar
 */
 GtkWidget *init_menu_bar(struct WindowStructure* window_structure);
-
-#endif /* MENU_BAR_MANAGER */

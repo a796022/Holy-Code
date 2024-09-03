@@ -1,5 +1,4 @@
-#ifndef PANED_MANAGER_H
-#define PANED_MANAGER_H
+#pragma once
 
 /**
  * Crea un paned dividido horizontalmente y lo devuelve.
@@ -38,5 +37,3 @@ void agregar_widget_paned_izquierda(GtkWidget *paned, GtkWidget *widget, gboolea
  * @return void
 */
 void agregar_widget_paned_derecha(GtkWidget *paned, GtkWidget *widget, gboolean resize, gboolean shrink);
-
-#endif /* PANED_MANAGER_H */

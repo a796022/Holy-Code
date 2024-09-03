@@ -1,10 +1,6 @@
 Seguimiento
-	Estoy recorriendo todas las instancias de main_tree_view para que no dependan de una variable global
-	He modificado init_main_tree para que el tree_view se inicialice con el contenido de la lista de ventanas
-	La modificación del init_main_tree ha provocado que los nodos ya no se expandan al agregarse
-	También sale un mensaje de error del tipo Gtk-CRITICAL
-	Mi plan: ver si tras modificar add_node(, que es la función que alberga la instancia de gtk_tree_view_expand_row(, se soluciona el problema
-	Después faltaría:
+	Ahora toca eliminar la otra variable del manager de background_keyboard_input
+	TODO:
 		- Programar la multiventana
 		- Revisar la limpieza del código. Entre otras cosas, lo de los structs en el .h me huele a culo
 		- Dar la opción de elegir árboles cuando se usa Ctrl+C+C en multiventana

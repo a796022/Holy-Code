@@ -32,8 +32,9 @@ uint8_t close_background_keyboard_imput();
  * 
  * @param[in] code Keyboard event code
  * @param[in] function Function to be called when the keyboard event is detected
+ * @param[in] parameter Parameter to be passed to the function
  */
-void register_keyboard_press_event(uint16_t code, void (*function)());
+void register_keyboard_press_event(uint16_t code, void (*function)(void*), void* parameter);
 
 /**
  * @brief Registers a function to be called when a keyboard release event is detected
@@ -43,7 +44,8 @@ void register_keyboard_press_event(uint16_t code, void (*function)());
  * 
  * @param[in] code Keyboard event code
  * @param[in] function Function to be called when the keyboard event is detected
+ * @param[in] parameter Parameter to be passed to the function
  */
-void register_keyboard_release_event(uint16_t code, void (*function)());
+void register_keyboard_release_event(uint16_t code, void (*function)(void*), void* parameter);
 
 #endif // BACKGROUND_KEYBOARD_INPUT_H

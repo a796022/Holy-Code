@@ -1,5 +1,4 @@
-#ifndef TREE_MANAGER
-#define TREE_MANAGER
+#pragma once
 
 #include <gtk/gtk.h>
 
@@ -91,5 +90,3 @@ GtkTreeIter insert_node_at_position(struct WindowStructure* window_structure, Gt
  * @return void
  */
 void delete_selected_node(GtkMenuItem *menuitem, gpointer user_data);
-
-#endif /* TREE_MANAGER */

@@ -1,5 +1,4 @@
-#ifndef WINDOW_MANAGER_H
-#define WINDOW_MANAGER_H
+#pragma once
 
 #include <gtk/gtk.h>
 
@@ -15,19 +14,6 @@ extern GList *WINDOWS_LIST;
  * @return void
 */
 void init_window(struct WindowStructure* window_structure);
-
-/**
- * @brief Runs a function for all windows.
- * 
- * - The function is executed for all windows.
- * - The function receives the window and the data as arguments.
- * 
- * @param funcion Function to run for all windows.
- * @param datos Data to pass to the function.
- * 
- * @return void
- */
-void run_for_all_windows(void (*funcion)(struct WindowStructure*, void*), void *datos);
 
 /**
  * Muestra la ventana.
@@ -108,5 +94,3 @@ void create_new_window();
  * @return void
 */
 void agregar_widget_ventana(GtkWidget *window, GtkWidget *widget);
-
-#endif /* WINDOW_MANAGER_H */

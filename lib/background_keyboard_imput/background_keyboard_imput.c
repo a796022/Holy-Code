@@ -21,10 +21,12 @@ pthread_t thread_id;
 
 // NOTE: for more information on event types, codes and values, refer to the file linux/input-event-codes.h
 // Array of functions, one for each possible keyboard press event value. All of them start with NULL.
-void (*keyboard_press_event_functions[KEY_MAX])() = {NULL};
+void (*keyboard_press_event_functions[KEY_MAX])(void*) = {NULL};
+void* keyboard_press_event_functions_parameters[KEY_MAX] = {NULL};
 
 // Array of functions, one for each possible keyboard release event value. All of them start with NULL.
-void (*keyboard_release_event_functions[KEY_MAX])() = {NULL};
+void (*keyboard_release_event_functions[KEY_MAX])(void*) = {NULL};
+void* keyboard_release_event_functions_parameters[KEY_MAX] = {NULL};
 
 /**
  * @brief Signal handler
@@ -59,11 +61,13 @@ void* keyboard_thread(void* arg) {
         if (event.type == EV_KEY) {
             if (event.value == 1) {
                 if (keyboard_press_event_functions[event.code] != NULL) {
-                    keyboard_press_event_functions[event.code]();
+                    void* parameter = keyboard_press_event_functions_parameters[event.code];
+                    keyboard_press_event_functions[event.code](parameter);
                 }
             } else if (event.value == 0) {
                 if (keyboard_release_event_functions[event.code] != NULL) {
-                    keyboard_release_event_functions[event.code]();
+                    void* parameter = keyboard_release_event_functions_parameters[event.code];
+                    keyboard_release_event_functions[event.code](parameter);
                 }
             }
         }
@@ -129,9 +133,11 @@ uint8_t close_background_keyboard_imput() {
  * 
  * @param[in] code Keyboard event code
  * @param[in] function Function to be called when the keyboard event is detected
+ * @param[in] parameter Parameter to be passed to the function
  */
-void register_keyboard_press_event(uint16_t code, void (*function)()) {
+void register_keyboard_press_event(uint16_t code, void (*function)(void*), void* parameter) {
     keyboard_press_event_functions[code] = function;
+    keyboard_press_event_functions_parameters[code] = parameter;
 }
 
 /**
@@ -142,7 +148,9 @@ void register_keyboard_press_event(uint16_t code, void (*function)()) {
  * 
  * @param[in] code Keyboard event code
  * @param[in] function Function to be called when the keyboard event is detected
+ * @param[in] parameter Parameter to be passed to the function
  */
-void register_keyboard_release_event(uint16_t code, void (*function)()) {
+void register_keyboard_release_event(uint16_t code, void (*function)(void*), void* parameter) {
     keyboard_release_event_functions[code] = function;
+    keyboard_release_event_functions_parameters[code] = parameter;
 }
