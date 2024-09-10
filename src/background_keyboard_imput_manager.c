@@ -58,7 +58,6 @@ void right_ctrl_release_detection(void* ctrl_pressed) {
 }
 
 void detect_double_ctrl_c(void* global_structure) {
-    printf("Ctrl+C pressed\n");
     // Get the data
     struct BgKeyInput* bg_key_input = ((struct GlobalStructure*)global_structure)->bg_key_input;
     GList* window_structures = ((struct GlobalStructure*)global_structure)->window_structures;

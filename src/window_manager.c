@@ -4,9 +4,10 @@
 
 #include "gtk_box_manager.h"
 #include "gtk_progress_bar.h"
-#include "tree_wrapper.h"
 #include "history.h"
+#include "tree_wrapper.h"
 #include "window_manager.h"
+#include "window_structure.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 // PRIVATE /////////////////////////////////////////////////////////////////////
@@ -89,9 +90,10 @@ void establecer_tamano_minimo_ventana(GtkWidget *window, int ancho, int alto) {
 gboolean on_delete_event(GtkWidget *widget, GdkEvent *event, gpointer data) {
     // Get the data
     struct WindowStructure* window_structure = (struct WindowStructure*)data;
+    struct History *history = window_structure->history;
 
     // If there are unsaved changes, ask the user if they want to save the changes
-    if (there_are_unsaved_changes()) {
+    if (there_are_unsaved_changes(history)) {
 
         // Show a dialog asking the user if they want to save the changes
         GtkWidget *dialog = gtk_message_dialog_new(GTK_WINDOW(widget),
@@ -303,7 +305,7 @@ void show_window_info(GtkMenuItem *menuitem, gpointer user_data) {
     int size = snprintf(NULL, 0, "Anchura: %dpx\nAltura: %dpx", width, height);
 
     // Allocate memory for the message
-    char *message = (char *)malloc(size + 1);
+    char* message = g_new(char, size + 1);
     if (message == NULL) {
         perror("Error allocating memory for the window information message");
         return;
@@ -316,7 +318,7 @@ void show_window_info(GtkMenuItem *menuitem, gpointer user_data) {
     mostrar_dialogo_mensaje(window, message, title);
 
     // Free the memory
-    free(message);
+    g_free(message);
 }
 
 /**
@@ -383,7 +385,7 @@ void set_title_unsaved(GtkWidget *window) {
  * 
  * @return void
  */
-void set_title_saved(GtkWidget *window) {
+void set_title_as_saved(GtkWidget *window) {
     // Get the title of the window
     const char *title = gtk_window_get_title(GTK_WINDOW(window));
 

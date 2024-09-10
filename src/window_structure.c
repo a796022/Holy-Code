@@ -5,25 +5,35 @@
 #include "gtk_progress_bar.h"
 #include "gtk_scrolled_window_wrapper.h"
 #include "GtkAccelGroup_wrapper.h"
+#include "operations.h"
 #include "paned_manager.h"
 #include "tree_wrapper.h"
 #include "window_manager.h"
 #include "window_structure.h"
 
 /**
- * @brief Creates a new empty window structure.
+ * @brief Creates a new empty window structure
  * 
  * @return struct WindowStructure The new empty window structure
  */
 struct WindowStructure* new_window_structure() {
     // Reserve memory for the new window structure
-    struct WindowStructure* window_structure = g_malloc(sizeof(struct WindowStructure));
+    struct WindowStructure* window_structure = g_new(struct WindowStructure, 1);
 
-    // Initialize the window structure
+    // window
     window_structure->window = NULL;
+
+    // tree_view
     window_structure->tree_view = NULL;
+
+    // tree_model
     window_structure->tree_model = NULL;
+
+    // main_box
     window_structure->main_box = NULL;
+
+    // history
+    window_structure->history = new_history();
 
     return window_structure;
 }
@@ -92,12 +102,64 @@ void init_window_structure(struct WindowStructure* window_structure) {
  * @return void
  */
 void close_window_structure(struct WindowStructure* window_structure) {
-    // Destroy the widgets (so the memory they use is freed)
-    gtk_widget_destroy(window_structure->window);
-
-    // Unreference the tree model (so the memory it uses is freed)
-    g_object_unref(window_structure->tree_model);
-
-    // Free the memory allocated for the window structure
     g_free(window_structure);
 }
+
+/**
+ * @brief Tells the history that the changes have been saved and modifies the window title to reflect this.
+ * 
+ * @param window_structure Window structure where the changes have been saved
+ * 
+ * @return void
+ */
+void set_changes_as_saved(struct WindowStructure* window_structure) {
+    set_history_as_saved(window_structure->history);
+    set_title_as_saved(window_structure->window);
+}
+
+// /**
+//  * @brief Execute the operation, register the changes in the history and modifies the window title to reflect the new changes (if necessary).
+//  * 
+//  * @param id id of the operation to know how to manage it (not the operation itself because the id anyway is also needed and is more natural to switch with an id rather with a function pointer)
+//  * @param data parameters to the function
+//  * @param is_set indicates if the operation is part of a set of operations
+//  * @param window_structure Window structure where the operation is executed
+//  * 
+//  * @return void
+//  */
+// void resolve_operation(struct WindowStructure* window_structure, uint8_t id, gboolean is_set, void *data) {
+//     // Get the history
+//     struct History* history = window_structure->history;
+
+//     // Change the title of the window if all changes was saved
+//     if(!there_are_unsaved_changes(history)) {
+//         set_title_unsaved(window_structure->window);
+//     }
+
+//     // Get the pointer to the function that will execute the operation
+//     gboolean (*operation)(struct WindowStructure*, void*);
+//     switch (id) {
+//         case AGGREGATE_OP:
+//             operation = aggregate_operation;
+//             break;
+//         case DELETE_OP:
+//             operation = delete_operation;
+//             break;
+//         default:
+//             perror("Error: Unknown operation\n");
+//             return;
+//     }
+
+//     if (is_set) {
+//         init_operations_set(history);
+//     }
+
+//     // Execute the operation
+//     do {
+//         store_operation(history, id, data);
+//     } while (operation(window_structure, data));
+
+//     if (is_set) {
+//         end_operations_set(history);
+//     }
+// }

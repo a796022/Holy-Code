@@ -1,10 +1,11 @@
 #include <gtk/gtk.h>
 
-#include "tree_wrapper.h"
-#include "window_manager.h"
+#include "history.h"
 #include "session_manager.h"
 #include "tree_files.h"
-#include "history.h"
+#include "tree_wrapper.h"
+#include "window_manager.h"
+#include "window_structure.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 // PRIVATE /////////////////////////////////////////////////////////////////////
@@ -61,10 +62,11 @@ void create_treeview_column(GtkWidget *tree_view, const char *title) {
  * 
  * @return void
  */
-void delete_node_recursive(GtkWidget *window, GtkTreeStore *store, GtkTreeIter *iter) {
+void delete_node_recursive(struct WindowStructure* window_structure, GtkTreeStore *store, GtkTreeIter *iter) {
+    // Recursive call to go through all the children
     GtkTreeIter child;
     while (gtk_tree_model_iter_children(GTK_TREE_MODEL(store), &child, iter)) {
-        delete_node_recursive(window, store, &child);
+        delete_node_recursive(window_structure, store, &child);
     }
     
     // Get the text of the node
@@ -75,7 +77,14 @@ void delete_node_recursive(GtkWidget *window, GtkTreeStore *store, GtkTreeIter *
     GtkTreePath *path = gtk_tree_model_get_path(GTK_TREE_MODEL(store), iter);
     gchar *path_str = gtk_tree_path_to_string(path);
     gtk_tree_path_free(path);
-    store_delete_operation(window, node_text, path_str);
+    
+    // Create the operation
+    struct DeleteOperation *operation = g_new(struct DeleteOperation, 1);
+    operation->node_text = node_text;
+    operation->node_path = path_str;
+
+    // Add the operation to the history
+    store_operation(window_structure, DELETE_OP, operation);
 
     // Delete the node
     gtk_tree_store_remove(store, iter);
@@ -156,7 +165,6 @@ void init_main_tree(struct WindowStructure* window_structure) {
 void save_tree(GtkMenuItem *menuitem, gpointer user_data) {
     // Get the data
     struct WindowStructure* window_structure = (struct WindowStructure*)user_data;
-    GtkWidget* window = window_structure->window;
     GtkTreeStore *tree_model = window_structure->tree_model;
 
     // If this is a new file, ask for the file name
@@ -188,7 +196,7 @@ void save_tree(GtkMenuItem *menuitem, gpointer user_data) {
     write_last_opened_file(TREE_PATH_FILE);
 
     // Reset the last saved distance
-    set_changes_as_saved(window);
+    set_changes_as_saved(window_structure);
 }
 
 /**
@@ -268,7 +276,7 @@ void add_text_to_selected_node(struct WindowStructure* window_structure, void *d
     GtkWidget* tree_view = window_structure->tree_view;
 
     // Get the text to add
-    char *text = (char *)data;
+    char *node_text = (char *)data;
 
     // Get the selected node
     GtkTreeSelection *selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(tree_view));
@@ -279,13 +287,20 @@ void add_text_to_selected_node(struct WindowStructure* window_structure, void *d
 
         // Add the text to the selected node
         GtkTreeStore *store = GTK_TREE_STORE(model);
-        added_node_iter = add_node(window_structure, store, &selected_node_iter, text);
+        added_node_iter = add_node(window_structure, store, &selected_node_iter, node_text);
 
         // Add the action to the history
         GtkTreePath *path = gtk_tree_model_get_path(model, &added_node_iter);
         gchar *path_str = gtk_tree_path_to_string(path);
         gtk_tree_path_free(path);
-        store_aggregate_operation(window_structure, text, path_str);
+
+        // Create the operation
+        struct AggregateOperation *operation = g_new(struct AggregateOperation, 1);
+        operation->node_text = node_text;
+        operation->node_path = path_str;
+
+        // Add the operation to the history
+        store_operation(window_structure, AGGREGATE_OP, operation);
 
     } else {
         perror("Error: did not find any selected node\n");
@@ -333,8 +348,8 @@ GtkTreeIter insert_node_at_position(struct WindowStructure* window_structure, Gt
 void delete_selected_node(GtkMenuItem *menuitem, gpointer user_data) {
     // Get the window data
     struct WindowStructure* window_structure = (struct WindowStructure*)user_data;
-    GtkWidget* window = window_structure->window;
     GtkWidget* tree_view = window_structure->tree_view;
+    struct History *history = window_structure->history;
 
     // Get the selected node
     GtkTreeSelection *selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(tree_view));
@@ -348,9 +363,9 @@ void delete_selected_node(GtkMenuItem *menuitem, gpointer user_data) {
         if (gtk_tree_model_iter_parent(model, &parent, &iter)) {
 
             // Call the recursive delete function
-            init_operations_set();
-            delete_node_recursive(window, store, &iter);
-            end_operations_set();
+            init_operations_set(history);
+            delete_node_recursive(window_structure, store, &iter);
+            end_operations_set(history);
 
         }
 

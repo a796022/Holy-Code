@@ -27,21 +27,14 @@ void GList_add_new_window_structure(GList** window_structures) {
 }
 
 /**
- * @brief Closes the window structures in the list of window structures.
+ * @brief Closes the window structures in the list of window structures and the list itself
  * 
  * @param window_structures The list of window structures
  * 
  * @return void
  */
 void GList_close_window_structures(GList* window_structures) {
-    // Close each window structure in the list of window structures
-    for (GList* iterator = window_structures; iterator != NULL; iterator = iterator->next) {
-        struct WindowStructure* window_structure = (struct WindowStructure*) iterator->data;
-        close_window_structure(window_structure);
-    }
-
-    // Free the memory allocated for the list of window structures
-    g_list_free(window_structures);
+    g_list_free_full(window_structures, (GDestroyNotify)close_window_structure);
 }
 
 /**

@@ -19,15 +19,6 @@ struct BgKeyInput {
 struct BgKeyInput* new_bg_key_input();
 
 /**
- * @brief Initializes the background keyboard imput structure.
- * 
- * @param bg_key_input The background keyboard imput structure to initialize
- * 
- * @return void
- */
-void init_bg_key_input(struct BgKeyInput* bg_key_input);
-
-/**
  * @brief Closes the background keyboard imput structure.
  * 
  * @param bg_key_input The background keyboard imput structure to close

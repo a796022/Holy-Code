@@ -4,16 +4,6 @@
 #include "history.h"
 
 int main(int argc, char *argv[]) {
-    // Initialization of personal libraries
-    u_int8_t (*init_functions[])() = {
-        init_history
-    };
-    for (u_int8_t i = 0; i < sizeof(init_functions) / sizeof(init_functions[0]); i++) {
-        if (init_functions[i]()) {
-            return 1;
-        }
-    }
-
     // Initialize GTK
     gtk_init(&argc, &argv);
 
@@ -24,13 +14,8 @@ int main(int argc, char *argv[]) {
     // Start the main GTK event loop
     gtk_main();
 
-    // Close the personal libraries
-    u_int8_t (*close_functions[])() = {
-        close_history
-    };
-    for (u_int8_t i = 0; i < sizeof(close_functions) / sizeof(close_functions[0]); i++) {
-        close_functions[i]();
-    }
+    // Close the global structure
+    close_global_structure(global_structure);
 
     return 0;
 }

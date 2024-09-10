@@ -28,3 +28,12 @@ struct GlobalStructure* new_global_structure();
  * @return void
  */
 void init_global_structure(struct GlobalStructure* global_structure);
+
+/**
+ * @brief Closes a global structure.
+ * 
+ * @param global_structure The global structure to close
+ * 
+ * @return void
+ */
+void close_global_structure(struct GlobalStructure* global_structure);

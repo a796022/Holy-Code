@@ -1,5 +1,7 @@
 Seguimiento
-	Ahora toca eliminar la otra variable del manager de background_keyboard_input
+	Tengo algunos quebraderos de cabeza:
+		- Operación de borrado, que se llame al store_operation moderno, para ello hay que cambiar varias cosas
+		- Corrige los errores de código
 	TODO:
 		- Programar la multiventana
 		- Revisar la limpieza del código. Entre otras cosas, lo de los structs en el .h me huele a culo
@@ -14,3 +16,6 @@ Seguimiento
 		- Hacer que cuando se haga Ctrl+Z de un eliminar se ponga el foco en el nodo que se ha recuperado (insertado)
 		- Selección múltiple con Ctrl+clic y clic+shift+clic
 		- Hacer que en la cabecera aparezca el nombre correcto del fichero abierto
+		- Eliminar las funciones init_, con las new_ es suficiente
+		- Cambiar el modo en que registro conjuntos de operaciones. En vez de movidas con sets, una operación-token para marcar el inicio y el final de los sets.
+		- Cambiar la forma en que se registran operaciones a la moderna

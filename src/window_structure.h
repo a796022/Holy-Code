@@ -2,6 +2,8 @@
 
 #include <gtk/gtk.h>
 
+#include "history.h"
+
 struct WindowStructure {
     // Window widget
     GtkWidget* window;
@@ -12,6 +14,9 @@ struct WindowStructure {
 
     // Main box widget that contains the rest of the widgets
     GtkWidget *main_box;
+
+    // History of operations
+    struct History *history;
 };
 
 /**
@@ -38,3 +43,12 @@ void init_window_structure(struct WindowStructure* window_structure);
  * @return void
  */
 void close_window_structure(struct WindowStructure* window_structure);
+
+/**
+ * @brief Tells the history that the changes have been saved and modifies the window title to reflect this.
+ * 
+ * @param window_structure Window structure where the changes have been saved
+ * 
+ * @return void
+ */
+void set_changes_as_saved(struct WindowStructure* window_structure);
