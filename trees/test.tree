@@ -15,14 +15,10 @@ Seguimiento
 			- Include de otros ficheros
 			- Structs privados
 			- #DEFINE y constantes
-			- Pre-declaraciones de funciones
 			- Funciones
 		- Las declaraciones que no sean de funciones también deben seguir el orden jerárquico-alfabético de estas, pero sin la separación por especializaciones
-		- Las funciones deben recibir sólo las estructuras que necesitan, no más grandes.
 	Seguimiento
-		- He decidido que al final lo mejor es mantener una función de inicialización pero estática y dentro de cada sitio. Ahora estoy con init_window_structure. La idea es que no aparezca
-		ningún "window_structure" en las llamadas dentro del new de window_structure. He tratado de pasar init_window_components, init_keyboard_shortcuts y show_window pero me ha salido algún error.
-		- Ok me acabo de dar cuenta de que antes hay que hacer algo para que la barra de progreso no sea global. Ánimo <3
+		- 
 	TODO:
 		- Programar la multiventana
 		- Revisar la limpieza del código. Entre otras cosas, lo de los structs en el .h me huele a culo
@@ -41,4 +37,3 @@ Seguimiento
 		- Cambiar la forma en que se registran operaciones a la moderna
 		- Cambiar la notación del árbol para que el nivelado no dependa de espacios ni tabulaciones
 		- Hacer que en árbol se vean las líneas que conectan los nodos
-		- Hacer que cuando a una ventana le llegue la señal destroy, no se termine el programa a no ser que sea la última ventana que quedaba abierta
