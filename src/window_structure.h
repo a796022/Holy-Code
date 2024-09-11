@@ -10,11 +10,11 @@ struct WindowStructure {
     GtkWidget* tree_view;
     GtkTreeStore* tree_model;
 
-    // Main box widget that contains the rest of the widgets
-    GtkWidget *main_box;
-
     // History of operations
     struct History *history;
+
+    // Path of the opened file (NULL if no file is opened)
+    gchar *file_path;
 };
 
 /**
@@ -23,15 +23,6 @@ struct WindowStructure {
  * @return struct WindowStructure The new empty window structure
  */
 struct WindowStructure* new_window_structure();
-
-/**
- * @brief Initializes the window structure.
- * 
- * @param window_structure The window structure to initialize
- * 
- * @return void
- */
-void init_window_structure(struct WindowStructure* window_structure);
 
 /**
  * @brief Closes the window structure.

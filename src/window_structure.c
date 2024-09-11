@@ -1,27 +1,22 @@
 #include <gtk/gtk.h>
 
-#include "gtk_box_manager.h"
-#include "gtk_menu_bar_wrapper.h"
-#include "gtk_progress_bar.h"
-#include "gtk_scrolled_window_wrapper.h"
-#include "GtkAccelGroup_wrapper.h"
 #include "history.h"
 #include "operations.h"
-#include "paned_manager.h"
 #include "tree_wrapper.h"
 #include "window_manager.h"
 #include "window_structure.h"
 
+static void init_window_structure(struct WindowStructure* window_structure);
+
 /**
- * @brief Creates a new empty window structure
+ * @brief Creates a new window structure
  * 
- * @return struct WindowStructure The new empty window structure
+ * - The window, with all its components, is created and shown
+ * 
+ * @return struct WindowStructure The new window structure
  */
 struct WindowStructure* new_window_structure() {
     struct WindowStructure* window_structure = g_new(struct WindowStructure, 1);
-
-    // window
-    window_structure->window = new_window(window_structure);
 
     // tree_model
     window_structure->tree_model = gtk_tree_store_new(1, G_TYPE_STRING);
@@ -29,13 +24,14 @@ struct WindowStructure* new_window_structure() {
     // tree_view
     window_structure->tree_view = new_tree_view(window_structure);
 
-    // main_box
-    window_structure->main_box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
-    gtk_container_add(GTK_CONTAINER(window_structure->window),
-                      window_structure->main_box);
+    // window
+    window_structure->window = new_window(window_structure);
 
     // history
     window_structure->history = new_history();
+
+    // Initialize the window structure
+    init_window_structure(window_structure);
 
     return window_structure;
 }
@@ -47,44 +43,8 @@ struct WindowStructure* new_window_structure() {
  * 
  * @return void
  */
-void init_window_structure(struct WindowStructure* window_structure) {
-    // Top menu
-    GtkWidget* menu_bar;
-
-    // Vertical divider
-    GtkWidget* paned;
-
-    // Scrolleable container for the treeview
-    GtkWidget* scrolled_window;
-
-    // Create the menu_bar
-    menu_bar = init_menu_bar(window_structure);
-    agregar_widget_box(window_structure->main_box, menu_bar, FALSE, FALSE, 0);
-
-    // Create the GtkPaned (divider)
-    paned = crear_paned_horizontal();
-    agregar_widget_box(window_structure->main_box, paned, TRUE, TRUE, 0);
-
-    // Include the progress bar
-    init_progress_bar();
-    agregar_widget_box(window_structure->main_box, MAIN_PROGRESS_BAR, FALSE, FALSE, 0);
-
-    // Create the content for the left side of the divider (the scrolled window)
-    scrolled_window = init_scrolled_window();
-    agregar_widget_paned_izquierda(paned, scrolled_window, TRUE, FALSE);
-
-    // Add the tree to the scrolled window
-    add_widget_to_scrolled_window(scrolled_window, window_structure->tree_view);
-
-    // Create content for the right area of the divider
-    GtkWidget *right_label_panel = gtk_label_new("Contenido derecho");
-    agregar_widget_paned_derecha(paned, right_label_panel, TRUE, FALSE);
-
-    // Initialize the keyboard shortcuts
-    init_keyboard_shortcuts(window_structure->window);
-
-    // Show the window
-    show_window(window_structure->window);
+static void init_window_structure(struct WindowStructure* window_structure) {
+    
 }
 
 /**

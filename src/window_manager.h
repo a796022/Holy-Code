@@ -14,6 +14,17 @@
 GtkWidget* new_window(struct WindowStructure* window_structure);
 
 /**
+ * @brief Initializes the components of a main window.
+ * 
+ * @param window_structure Window structure with the components of the window.
+ * @param window Main window.
+ * 
+ * @return void
+*/
+void init_window_components(struct WindowStructure* window_structure,
+                                   GtkWidget* window);
+
+/**
  * Muestra la ventana.
  * 
  * @param window Ventana a mostrar.

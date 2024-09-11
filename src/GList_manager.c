@@ -14,7 +14,6 @@
  */
 void GList_add_new_window_structure(GList** window_structures) {
     struct WindowStructure* window_structure = new_window_structure();
-    init_window_structure(window_structure);
     *window_structures = g_list_append(*window_structures, window_structure);
 }
 

@@ -3,8 +3,12 @@
 #include "../external/sds/sds.h"
 
 #include "gtk_box_manager.h"
+#include "gtk_menu_bar_wrapper.h"
 #include "gtk_progress_bar.h"
+#include "gtk_scrolled_window_wrapper.h"
+#include "GtkAccelGroup_wrapper.h"
 #include "history.h"
+#include "paned_manager.h"
 #include "tree_wrapper.h"
 #include "window_manager.h"
 #include "window_structure.h"
@@ -15,6 +19,79 @@
 #define WINDOW_RESIZABILITY TRUE
 #define WINDOW_TITLE "Sin Título - Wizard"
 #define WINDOW_WIDTH 900
+
+void init_window_components(struct WindowStructure* window_structure,
+                                   GtkWidget* window);
+gboolean on_delete_event(GtkWidget *widget, GdkEvent *event, gpointer data);
+
+/**
+ * @brief Initializes the main window.
+ * 
+ * @param window_structure Reference to a pointer to the WindowStructure. The
+ * pointer to the created window structure will be returned by reference in this
+ * variable.
+ * 
+ * @return void
+*/
+GtkWidget* new_window(struct WindowStructure* window_structure) {
+    // Create the window
+    GtkWidget* window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+
+    // Set the window properties
+    gtk_window_set_title(GTK_WINDOW(window), WINDOW_TITLE);
+    gtk_window_set_default_size(GTK_WINDOW(window), WINDOW_WIDTH,
+                                WINDOW_HEIGHT);
+    gtk_window_set_resizable(GTK_WINDOW(window), WINDOW_RESIZABILITY);
+    gtk_widget_set_size_request(window, WINDOW_MIN_WIDTH, WINDOW_MIN_HEIGHT);
+
+    /* Configures the behavior when the user tries to close the window by
+    pressing 'X' or with a keyboard shortcut. */
+    g_signal_connect(window, "delete-event", G_CALLBACK(on_delete_event),
+                     window_structure);
+    g_signal_connect(window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
+
+    // Initialize the components of the window
+    init_window_components(window_structure, window);
+
+    // Initialize the keyboard shortcuts
+    init_keyboard_shortcuts(window);
+
+    // Show the window
+    show_window(window);
+
+    return window;
+}
+
+/**
+ * @brief Initializes the components of a main window.
+ * 
+ * @param window_structure Window structure with the components of the window.
+ * @param window Main window.
+ * 
+ * @return void
+*/
+void init_window_components(struct WindowStructure* window_structure,
+                                   GtkWidget* window) {
+    GtkWidget* main_box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+    gtk_container_add(GTK_CONTAINER(window), main_box);
+
+    GtkWidget* menu_bar = init_menu_bar(window_structure);
+    agregar_widget_box(main_box, menu_bar, FALSE, FALSE, 0);
+
+    init_progress_bar();
+    agregar_widget_box(main_box, MAIN_PROGRESS_BAR, FALSE, FALSE, 0);
+
+    GtkWidget* paned = crear_paned_horizontal();
+    agregar_widget_box(main_box, paned, TRUE, TRUE, 0);
+
+    GtkWidget* scrolled_window = init_scrolled_window();
+    agregar_widget_paned_izquierda(paned, scrolled_window, TRUE, FALSE);
+
+    add_widget_to_scrolled_window(scrolled_window, window_structure->tree_view);
+
+    GtkWidget *right_label_panel = gtk_label_new("Contenido derecho");
+    agregar_widget_paned_derecha(paned, right_label_panel, TRUE, FALSE);
+}
 
 /**
  * @brief Shows a dialog asking the user if they want to save the changes in
@@ -132,33 +209,6 @@ GtkWidget *crear_dialogo_selector_archivos(GtkWidget *parent) {
 */
 char *obtener_fichero_seleccionado(GtkWidget *dialog) {
     return gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
-}
-
-/**
- * @brief Initializes the main window.
- * 
- * @param window_structure Reference to a pointer to the WindowStructure. The
- * pointer to the created window structure will be returned by reference in this
- * variable.
- * 
- * @return void
-*/
-GtkWidget* new_window(struct WindowStructure* window_structure) {
-    // Create the window
-    GtkWidget* window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-
-    // Set the window properties
-    gtk_window_set_title(GTK_WINDOW(window), WINDOW_TITLE);
-    gtk_window_set_default_size(GTK_WINDOW(window), WINDOW_WIDTH, WINDOW_HEIGHT);
-    gtk_window_set_resizable(GTK_WINDOW(window), WINDOW_RESIZABILITY);
-    gtk_widget_set_size_request(window, WINDOW_MIN_WIDTH, WINDOW_MIN_HEIGHT);
-
-    /* Configures the behavior when the user tries to close the window by
-    pressing 'X' or with a keyboard shortcut. */
-    g_signal_connect(window, "delete-event", G_CALLBACK(on_delete_event), window_structure);
-    g_signal_connect(window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
-
-    return window;
 }
 
 /**

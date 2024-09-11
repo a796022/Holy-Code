@@ -7,9 +7,6 @@
 #include "window_manager.h"
 #include "window_structure.h"
 
-// Path of the file in session
-char *TREE_PATH_FILE = NULL;
-
 /**
  * @brief Load a tree from a file.
  * 
@@ -129,11 +126,11 @@ GtkWidget* new_tree_view(struct WindowStructure* window_structure) {
     GtkWidget* tree_view = gtk_tree_view_new_with_model(GTK_TREE_MODEL(window_structure->tree_model));
 
     // Get the last opened file
-    TREE_PATH_FILE = read_last_opened_file();
+    window_structure->file_path = read_last_opened_file();
     
     // If there is a file in session, it is loaded
-    if (TREE_PATH_FILE != NULL) {
-        load_tree(window_structure, TREE_PATH_FILE, tree_view);
+    if (window_structure->file_path != NULL) {
+        load_tree(window_structure, window_structure->file_path, tree_view);
     }
 
     // Create a column for the TreeView
@@ -158,12 +155,12 @@ void save_tree(GtkMenuItem *menuitem, gpointer user_data) {
     GtkTreeStore *tree_model = window_structure->tree_model;
 
     // If this is a new file, ask for the file name
-    if (TREE_PATH_FILE == NULL) {
+    if (window_structure->file_path == NULL) {
         // TODO: Ask for the file name
     }
 
     // If the user has not selected a file, do nothing
-    if (TREE_PATH_FILE == NULL) {
+    if (window_structure->file_path == NULL) {
         return;
     }
 
@@ -177,13 +174,13 @@ void save_tree(GtkMenuItem *menuitem, gpointer user_data) {
     }
 
     // Save the file
-    int status = write_tree_file(tree_model, TREE_PATH_FILE, num_nodes);
+    int status = write_tree_file(tree_model, window_structure->file_path, num_nodes);
     if (status == -1) {
         return;
     }
 
     // Save the last opened file, it is done again in case it is a new file.
-    write_last_opened_file(TREE_PATH_FILE);
+    write_last_opened_file(window_structure->file_path);
 
     // Reset the last saved distance
     set_changes_as_saved(window_structure);
@@ -221,7 +218,7 @@ void open_tree_file(GtkMenuItem *menuitem, gpointer user_data) {
 
     // Save the last opened file
     write_last_opened_file(filename);
-    TREE_PATH_FILE = filename;
+    window_structure->file_path = filename;
 }
 
 /**
