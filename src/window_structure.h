@@ -2,8 +2,6 @@
 
 #include <gtk/gtk.h>
 
-#include "history.h"
-
 struct WindowStructure {
     // Window widget
     GtkWidget* window;

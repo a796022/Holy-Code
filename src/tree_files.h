@@ -16,7 +16,7 @@
  * 2: error en la jerarquía de nodos, ausencia de nodos padre
  * -1: error al abrir el fichero
  */
-int read_tree_file(struct WindowStructure* window_structure, const char *filename);
+int read_tree_file(struct WindowStructure* window_structure, const char *filename, GtkWidget* tree_view);
 
 /**
  * @brief Write a tree to a file.

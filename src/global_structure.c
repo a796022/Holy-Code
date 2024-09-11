@@ -2,12 +2,10 @@
 #include "GList_manager.h"
 #include "global_structure.h"
 
-////////////////////////////////////////////////////////////////////////////////
-// PUBLIC //////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-
 /**
  * @brief Creates a global structure.
+ * 
+ * - The list of window structures is initialized with the first main window.
  * 
  * @return struct new empty global structure
  */
@@ -16,30 +14,15 @@ struct GlobalStructure* new_global_structure() {
 
     // window_structures: add the first main window to the list of windows
     global_structure->window_structures = NULL;
-    // GList_add_new_window_structure(&global_structure->window_structures);
+    GList_add_new_window_structure(&global_structure->window_structures);
 
     // bg_key_input
     global_structure->bg_key_input = new_bg_key_input();
 
     // External libraries
-    // init_background_keyboard_imput_manager(global_structure);
+    init_background_keyboard_imput_manager(global_structure);
 
     return global_structure;
-}
-
-/**
- * @brief Initializes a global structure.
- * 
- * @param global_structure The global structure to initialize
- * 
- * @return void
- */
-void init_global_structure(struct GlobalStructure* global_structure) {
-    // Add the first main window to the list of windows
-    GList_add_new_window_structure(&global_structure->window_structures);
-
-    // Initializes the corresponding libraries
-    init_background_keyboard_imput_manager(global_structure);
 }
 
 /**
@@ -62,9 +45,3 @@ void close_global_structure(struct GlobalStructure* global_structure) {
     // Free the memory allocated for the global structure
     g_free(global_structure);
 }
-
-////////////////////////////////////////////////////////////////////////////////
-// PRIVATE /////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-
-// None

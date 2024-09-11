@@ -26,12 +26,3 @@ GtkWidget *crear_box(GtkOrientation orientation, int spacing);
  * @return void
 */
 void agregar_widget_box(GtkWidget *box, GtkWidget *widget, gboolean expand, gboolean fill, guint padding);
-
-/**
- * Initializes the main box.
- * 
- * @param window_structure Window structure.
- * 
- * @return void
-*/
-void init_box(struct WindowStructure* window_structure);

@@ -9,77 +9,17 @@
 #include "window_manager.h"
 #include "window_structure.h"
 
-////////////////////////////////////////////////////////////////////////////////
-// PRIVATE /////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-
-// Default window properties
-const int ANCHO_VENTANA = 900;
-const int ALTO_VENTANA = 500;
-const gboolean REDIMENSIONABLE = TRUE;
-const int ANCHO_MINIMO_VENTANA = 300;
-const int ALTO_MINIMO_VENTANA = 200;
-
-// List of windows
-GList *WINDOWS_LIST = NULL;
+#define WINDOW_HEIGHT 500
+#define WINDOW_MIN_HEIGHT 200
+#define WINDOW_MIN_WIDTH 300
+#define WINDOW_RESIZABILITY TRUE
+#define WINDOW_TITLE "Sin Título - Wizard"
+#define WINDOW_WIDTH 900
 
 /**
- * Establece el nombre de la ventana, que se mostrará en la barra de título.
- * 
- * @param window Ventana a la que se le establecerá el nombre.
- * @param nombre Nombre de la ventana.
- * 
- * @return void
-*/
-void establecer_nombre_ventana(GtkWidget *window, const char *nombre) {
-    gtk_window_set_title(GTK_WINDOW(window), nombre);
-}
-
-/**
- * Establece el tamaño por defecto de la ventana.
- * 
- * @param window Ventana a la que se le establecerá el tamaño por defecto.
- * @param ancho Ancho de la ventana.
- * @param alto Alto de la ventana.
- * 
- * @return void
-*/
-void establecer_tamano_por_defecto_ventana(GtkWidget *window, int ancho, int alto) {
-    gtk_window_set_default_size(GTK_WINDOW(window), ancho, alto);
-}
-
-/**
- * Establece si la ventana es redimensionable.
- * 
- * @param window Ventana a la que se le establecerá si es redimensionable.
- * @param redimensionable TRUE si la ventana es redimensionable, FALSE en caso contrario.
- * 
- * @return void
-*/
-void establecer_redimensionable_ventana(GtkWidget *window, gboolean redimensionable) {
-    gtk_window_set_resizable(GTK_WINDOW(window), redimensionable);
-}
-
-/**
- * Establece el tamaño mínimo de la ventana.
- * 
- * @param window Ventana a la que se le establecerá el tamaño mínimo.
- * @param ancho Ancho mínimo de la ventana.
- * @param alto Alto mínimo de la ventana.
- * 
- * @return void
-*/
-void establecer_tamano_minimo_ventana(GtkWidget *window, int ancho, int alto) {
-    gtk_widget_set_size_request(window, ancho, alto);
-}
-
-/**
- * @brief Shows a dialog asking the user if they want to save the changes in case there are unsaved changes.
- * 
- * - Shows a dialog asking the user if they want to save the changes.
- * - If the user chooses to save the changes, the tree is saved and the window is closed.
- * - If the user chooses to discard the changes, the window is closed without saving.
- * - If the user chooses to cancel, the window is not closed.
+ * @brief Shows a dialog asking the user if they want to save the changes in
+ * case there are unsaved changes. The dialog shows the options save (save and
+ * quit), discard (discard changes and quit) and cancel (do not quit).
  * 
  * @param widget Window to which the "delete-event" signal will be set.
  * @param event Event that triggered the signal.
@@ -128,31 +68,6 @@ gboolean on_delete_event(GtkWidget *widget, GdkEvent *event, gpointer data) {
 
     // If there are no unsaved changes, close the window
     return FALSE;
-}
-
-/**
- * @brief Connects the window's “destroy” signal to the gtk_main_quit() function.
- * 
- * - Connects the window's “destroy” signal to the gtk_main_quit() function so that, when the window is closed, the GTK main event loop is also terminated (and thus terminates the program).
- * 
- * @param window Ventana a la que se le establecerá la señal "destroy".
- * 
- * @return void
-*/
-void configure_destroy_signal(GtkWidget *window) {
-    g_signal_connect(window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
-}
-
-/**
- * Agrega un widget a la ventana.
- * 
- * @param window Ventana a la que se le agregará el widget.
- * @param widget Widget a agregar.
- * 
- * @return void
-*/
-void agregar_widget_ventana(GtkWidget *window, GtkWidget *widget) {
-    gtk_container_add(GTK_CONTAINER(window), widget);
 }
 
 /**
@@ -219,32 +134,31 @@ char *obtener_fichero_seleccionado(GtkWidget *dialog) {
     return gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
 }
 
-////////////////////////////////////////////////////////////////////////////////
-// PUBLIC //////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-
 /**
  * @brief Initializes the main window.
  * 
- * @param window_structure Reference to a pointer to the WindowStructure. The pointer to the created window structure will be returned by reference in this variable.
+ * @param window_structure Reference to a pointer to the WindowStructure. The
+ * pointer to the created window structure will be returned by reference in this
+ * variable.
  * 
  * @return void
 */
-void init_window(struct WindowStructure* window_structure) {
+GtkWidget* new_window(struct WindowStructure* window_structure) {
     // Create the window
     GtkWidget* window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 
     // Set the window properties
-    establecer_nombre_ventana(window, "Sin Título - Wizard");
-    establecer_tamano_por_defecto_ventana(window, 900, 500);
-    establecer_redimensionable_ventana(window, TRUE);
-    establecer_tamano_minimo_ventana(window, 300, 200);
-    configure_destroy_signal(window);
+    gtk_window_set_title(GTK_WINDOW(window), WINDOW_TITLE);
+    gtk_window_set_default_size(GTK_WINDOW(window), WINDOW_WIDTH, WINDOW_HEIGHT);
+    gtk_window_set_resizable(GTK_WINDOW(window), WINDOW_RESIZABILITY);
+    gtk_widget_set_size_request(window, WINDOW_MIN_WIDTH, WINDOW_MIN_HEIGHT);
 
-    // Connect the "delete-event" signal to the on_delete_event() function
+    /* Configures the behavior when the user tries to close the window by
+    pressing 'X' or with a keyboard shortcut. */
     g_signal_connect(window, "delete-event", G_CALLBACK(on_delete_event), window_structure);
+    g_signal_connect(window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
 
-    window_structure->window = window;
+    return window;
 }
 
 /**

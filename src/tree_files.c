@@ -5,10 +5,6 @@
 #include "tree_wrapper.h"
 #include "gtk_progress_bar.h"
 
-////////////////////////////////////////////////////////////////////////////////
-// PRIVATE /////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-
 /**
  * @brief write the current node, then call the child, then call the next sibling
  * 
@@ -49,10 +45,6 @@ void write_tree_file_recursive(GtkTreeStore *model, GtkTreeIter *iter, FILE *fil
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////
-// PUBLIC //////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-
 /**
  * @brief Load a tree from a file.
  * 
@@ -67,14 +59,14 @@ void write_tree_file_recursive(GtkTreeStore *model, GtkTreeIter *iter, FILE *fil
  * 2: error in the node hierarchy, no parent node found
  * -1: error opening the file
  */
-int read_tree_file(struct WindowStructure* window_structure, const char *filename) {
+int read_tree_file(struct WindowStructure* window_structure, const char *filename, GtkWidget* tree_view) {
     FILE *file = fopen(filename, "r");
     if (file == NULL) {
         return -1;
     }
 
     // Get the model
-    GtkTreeStore *model = window_structure->tree_model;
+    GtkTreeStore* tree_model = window_structure->tree_model;
 
     // Hago una primera lectura del árbol para obtener el tamaño máximo de línea
     // y el número máximo de tabulaciones.
@@ -99,7 +91,7 @@ int read_tree_file(struct WindowStructure* window_structure, const char *filenam
         // Agrego el nodo al árbol
         if (current_node_level == 0) {
             if (last_node_level == -1) {
-                padres[0] = add_node(window_structure, model, NULL, line);
+                padres[0] = add_node(tree_view, tree_model, NULL, line);
                 last_node_level = 0;
             } else {
                 return 1;
@@ -108,16 +100,16 @@ int read_tree_file(struct WindowStructure* window_structure, const char *filenam
             if (current_node_level > last_node_level + 1) {
                 for (int i = last_node_level + 1; i < current_node_level; i++) {
                     if (i == 0) {
-                        padres[i] = add_node(window_structure, model, NULL, "[NULL]");
+                        padres[i] = add_node(tree_view, tree_model, NULL, "[NULL]");
                     } else {
-                        padres[i] = add_node(window_structure, model, &padres[i - 1], "[NULL]");
+                        padres[i] = add_node(tree_view, tree_model, &padres[i - 1], "[NULL]");
                     }
                 }
 
                 status = 2;
             }
 
-            padres[current_node_level] = add_node(window_structure, model, &padres[current_node_level - 1], line);
+            padres[current_node_level] = add_node(tree_view, tree_model, &padres[current_node_level - 1], line);
             last_node_level = current_node_level;
         }
     }

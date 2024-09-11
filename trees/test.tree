@@ -1,7 +1,24 @@
 Seguimiento
-	Tengo algunos quebraderos de cabeza:
-		- Operación de borrado, que se llame al store_operation moderno, para ello hay que cambiar varias cosas
-		- Corrige los errores de código
+	Reglas del código limpio:
+		- Las funciones privadas están declaradas con "static"
+		- El orden de las funciones es jerárquico y luego alfabético
+		- El orden de las declaraciones en el .h es el mismo que en el .c
+		- Dentro de un .c y .h donde algunas funciones sirven para propósitos específicos, están separadas mediante separadores pequeños
+		- Todas las funciones están correctamente comentadas y los comentarios de cabecera son los mismos en el .h
+		- Si hay funciones de new y/o close, estas van al inicio del todo
+		- Las funciones de new siguen la estructura estandar
+		- Se respeta el límite de los 80 caracteres
+		- Todo debe estar escrito en inglés
+		- El orden del código en los .c debe ser:
+			- Include de librerías estándar
+			- Include de librerías propias
+			- Include de otros ficheros
+			- Structs privados
+			- #DEFINE y constantes
+			- Funciones
+		- Las declaraciones que no sean de funciones también deben seguir el orden jerárquico-alfabético de estas, pero sin la separación por especializaciones
+	Seguimiento
+		- 
 	TODO:
 		- Programar la multiventana
 		- Revisar la limpieza del código. Entre otras cosas, lo de los structs en el .h me huele a culo
@@ -11,7 +28,6 @@ Seguimiento
 		- Poner a la derecha un desplegable para operaciones de agregado y otro para renombrar
 		- Poner una opción para cerrar el archivo sin cerrar la ventana
 		- Hacer que la ventana de confirmación de cerrar sin guardar se pueda cerrar con Ctrl+D (descartar)
-		- Mejorar el código del historial con punteros genéricos
 		- Agrandar el tamaño de la ventana para que coincida con el del notepad
 		- Hacer que cuando se haga Ctrl+Z de un eliminar se ponga el foco en el nodo que se ha recuperado (insertado)
 		- Selección múltiple con Ctrl+clic y clic+shift+clic
@@ -19,3 +35,5 @@ Seguimiento
 		- Eliminar las funciones init_, con las new_ es suficiente
 		- Cambiar el modo en que registro conjuntos de operaciones. En vez de movidas con sets, una operación-token para marcar el inicio y el final de los sets.
 		- Cambiar la forma en que se registran operaciones a la moderna
+		- Cambiar la notación del árbol para que el nivelado no dependa de espacios ni tabulaciones
+		- Hacer que en árbol se vean las líneas que conectan los nodos

@@ -200,7 +200,7 @@ static void redo_aggregate_operation(struct WindowStructure* window_structure, v
                                         parent_path_str);
 
     // 3- Add the node to the parent node
-    add_node(window_structure, window_structure->tree_model, &parent_iter, operation->node_text);
+    add_node(window_structure->tree_view, window_structure->tree_model, &parent_iter, operation->node_text);
 }
 
 /**

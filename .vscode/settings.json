@@ -35,6 +35,8 @@
         "background_keyboard_imput_structure.h": "c",
         "background_keyboard_imput_manager.h": "c",
         "bg_key_input.h": "c",
-        "history_dos.h": "c"
+        "history_dos.h": "c",
+        "gtk_box_manager.h": "c",
+        "paned_manager.h": "c"
     }
 }

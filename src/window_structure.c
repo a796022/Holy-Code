@@ -5,6 +5,7 @@
 #include "gtk_progress_bar.h"
 #include "gtk_scrolled_window_wrapper.h"
 #include "GtkAccelGroup_wrapper.h"
+#include "history.h"
 #include "operations.h"
 #include "paned_manager.h"
 #include "tree_wrapper.h"
@@ -17,20 +18,21 @@
  * @return struct WindowStructure The new empty window structure
  */
 struct WindowStructure* new_window_structure() {
-    // Reserve memory for the new window structure
     struct WindowStructure* window_structure = g_new(struct WindowStructure, 1);
 
     // window
-    window_structure->window = NULL;
-
-    // tree_view
-    window_structure->tree_view = NULL;
+    window_structure->window = new_window(window_structure);
 
     // tree_model
-    window_structure->tree_model = NULL;
+    window_structure->tree_model = gtk_tree_store_new(1, G_TYPE_STRING);
+
+    // tree_view
+    window_structure->tree_view = new_tree_view(window_structure);
 
     // main_box
-    window_structure->main_box = NULL;
+    window_structure->main_box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+    gtk_container_add(GTK_CONTAINER(window_structure->window),
+                      window_structure->main_box);
 
     // history
     window_structure->history = new_history();
@@ -54,15 +56,6 @@ void init_window_structure(struct WindowStructure* window_structure) {
 
     // Scrolleable container for the treeview
     GtkWidget* scrolled_window;
-
-    // Create and configure the window
-    init_window(window_structure);
-
-    // Create the main box
-    init_box(window_structure);
-
-    // Create the tree
-    init_main_tree(window_structure);
 
     // Create the menu_bar
     menu_bar = init_menu_bar(window_structure);

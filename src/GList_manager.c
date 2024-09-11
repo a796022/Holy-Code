@@ -3,31 +3,24 @@
 #include "GList_manager.h"
 #include "window_structure.h"
 
-////////////////////////////////////////////////////////////////////////////////
-// PUBLIC //////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-
 // WINDOW_STRUCTURES ///////////////////////////////////////////////////////////
 
 /**
  * @brief Adds a window structure to the list of window structures.
  * 
  * @param window_structures The list of window structures
- * @param window_structure The window structure to add
  * 
  * @return void
  */
 void GList_add_new_window_structure(GList** window_structures) {
-    // Create and initialize a new window structure
     struct WindowStructure* window_structure = new_window_structure();
     init_window_structure(window_structure);
-
-    // Add the window structure to the list of window structures
     *window_structures = g_list_append(*window_structures, window_structure);
 }
 
 /**
- * @brief Closes the window structures in the list of window structures and the list itself
+ * @brief Closes the window structures in the list of window structures and the
+ * list itself
  * 
  * @param window_structures The list of window structures
  * 

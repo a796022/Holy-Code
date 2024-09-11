@@ -16,7 +16,7 @@
  * 
  * @return GtkWidget* The TreeView widget
 */
-void init_main_tree(struct WindowStructure* window_structure);
+GtkWidget* new_tree_view(struct WindowStructure* window_structure);
 
 /**
  * @brief Saves the tree of the main window in a file.
@@ -55,7 +55,7 @@ void open_tree_file(GtkMenuItem *menuitem, gpointer user_data);
  * 
  * return GtkTreeIter Iterator of the new node
 */
-GtkTreeIter add_node(struct WindowStructure* window_structure, GtkTreeStore *model, GtkTreeIter *parent_node, const char *text);
+GtkTreeIter add_node(GtkWidget* tree_view, GtkTreeStore *model, GtkTreeIter *parent_node, const char *text);
 
 /**
  * @brief Add the input text to the selected node.

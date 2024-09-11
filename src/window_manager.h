@@ -4,8 +4,6 @@
 
 #include "window_structure.h"
 
-extern GList *WINDOWS_LIST;
-
 /**
  * @brief Initializes the main window.
  * 
@@ -13,7 +11,7 @@ extern GList *WINDOWS_LIST;
  * 
  * @return void
 */
-void init_window(struct WindowStructure* window_structure);
+GtkWidget* new_window(struct WindowStructure* window_structure);
 
 /**
  * Muestra la ventana.
@@ -84,13 +82,3 @@ void set_title_as_saved(GtkWidget *window);
  * @return void
  */
 void create_new_window();
-
-/**
- * Agrega un widget a la ventana.
- * 
- * @param window Ventana a la que se le agregará el widget.
- * @param widget Widget a agregar.
- * 
- * @return void
-*/
-void agregar_widget_ventana(GtkWidget *window, GtkWidget *widget);
