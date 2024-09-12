@@ -4,6 +4,7 @@
 #include "tree_string.h"
 #include "tree_wrapper.h"
 #include "gtk_progress_bar.h"
+#include "window_structure.h"
 
 /**
  * @brief write the current node, then call the child, then call the next sibling
@@ -17,7 +18,7 @@
  * 
  * @return void
  */
-void write_tree_file_recursive(GtkTreeStore *model, GtkTreeIter *iter, FILE *file, int level, int num_nodes, int *added_nodes) {
+void write_tree_file_recursive(GtkTreeStore *model, GtkTreeIter *iter, FILE *file, int level, int num_nodes, int *added_nodes, GtkWidget* progress_bar) {
     // Write the node to the file
     gchar *text;
     gtk_tree_model_get(GTK_TREE_MODEL(model), iter, 0, &text, -1);
@@ -30,18 +31,18 @@ void write_tree_file_recursive(GtkTreeStore *model, GtkTreeIter *iter, FILE *fil
     // Mark progress
     (*added_nodes)++;
     gdouble progress = (gdouble)(*added_nodes) / (gdouble)num_nodes;
-    set_progress_bar_value(progress);
+    set_progress_bar_value(progress_bar, progress);
 
     // Call the child
     GtkTreeIter child;
     if (gtk_tree_model_iter_children(GTK_TREE_MODEL(model), &child, iter)) {
-        write_tree_file_recursive(model, &child, file, level + 1, num_nodes, added_nodes);
+        write_tree_file_recursive(model, &child, file, level + 1, num_nodes, added_nodes, progress_bar);
     }
 
     // Call the next sibling
     GtkTreeIter sibling = *iter;
     if (gtk_tree_model_iter_next(GTK_TREE_MODEL(model), &sibling)) {
-        write_tree_file_recursive(model, &sibling, file, level, num_nodes, added_nodes);
+        write_tree_file_recursive(model, &sibling, file, level, num_nodes, added_nodes, progress_bar);
     }
 }
 
@@ -129,7 +130,10 @@ int read_tree_file(struct WindowStructure* window_structure, const char *filenam
  * 
  * @return int status
  */
-int write_tree_file(GtkTreeStore *model, const char *filename, int num_nodes) {
+int write_tree_file(struct WindowStructure* window_structure, const char *filename, int num_nodes) {
+    GtkTreeStore* model = window_structure->tree_model;
+    GtkWidget* progress_bar = window_structure->progress_bar;
+
     // Open the file
     FILE *file = fopen(filename, "w");
     if (file == NULL) {
@@ -137,17 +141,17 @@ int write_tree_file(GtkTreeStore *model, const char *filename, int num_nodes) {
     }
 
     // Show the progress bar
-    show_progress_bar();
+    show_progress_bar(progress_bar);
 
     // Write the tree to the file
     GtkTreeIter iter;
     int added_nodes = 0;
     if (gtk_tree_model_get_iter_first(GTK_TREE_MODEL(model), &iter)) {
-        write_tree_file_recursive(model, &iter, file, 0, num_nodes, &added_nodes);
+        write_tree_file_recursive(model, &iter, file, 0, num_nodes, &added_nodes, progress_bar);
     }
 
     // Hide the progress bar
-    hide_progress_bar();
+    hide_progress_bar(progress_bar);
 
     // Close the file
     fclose(file);

@@ -20,7 +20,7 @@ GtkWidget* new_window(struct WindowStructure* window_structure);
  * 
  * @return void
 */
-void show_window(GtkWidget *window);
+void show_window(struct WindowStructure* window_structure);
 
 /**
  * @brief Closes the main window

@@ -37,6 +37,12 @@ struct WindowStructure* new_window_structure() {
     // history
     window_structure->history = new_history();
 
+    // menu_bar
+    window_structure->menu_bar = NULL;
+
+    // progress_bar
+    window_structure->progress_bar = NULL;
+
     return window_structure;
 }
 
@@ -63,8 +69,8 @@ void init_window_structure(struct WindowStructure* window_structure) {
     agregar_widget_box(window_structure->main_box, paned, TRUE, TRUE, 0);
 
     // Include the progress bar
-    init_progress_bar();
-    agregar_widget_box(window_structure->main_box, MAIN_PROGRESS_BAR, FALSE, FALSE, 0);
+    window_structure->progress_bar = gtk_progress_bar_new();
+    agregar_widget_box(window_structure->main_box, window_structure->progress_bar, FALSE, FALSE, 0);
 
     // Create the content for the left side of the divider (the scrolled window)
     scrolled_window = init_scrolled_window();
@@ -81,7 +87,7 @@ void init_window_structure(struct WindowStructure* window_structure) {
     init_keyboard_shortcuts(window_structure);
 
     // Show the window
-    show_window(window_structure->window);
+    show_window(window_structure);
 }
 
 /**

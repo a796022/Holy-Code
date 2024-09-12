@@ -27,4 +27,4 @@ int read_tree_file(struct WindowStructure* window_structure, const char *filenam
  * 
  * @return int status
  */
-int write_tree_file(GtkTreeStore *model, const char *filename, int num_nodes);
+int write_tree_file(struct WindowStructure* window_structure, const char *filename, int num_nodes);

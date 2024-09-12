@@ -22,7 +22,7 @@ Seguimiento
 		- No debe haber variables globales, si hace falta se hace un nuevo struct
 		- Las funciones deben ser útiles, tener mínimo más de una línea
 	Seguimiento
-		- Cambia el window_struct para que contenga un struct the menu_bar y lo inicialice
+		- Ahora toca quitar la variable global MAIN_PROGRESS_BAR
 	TODO:
 		- Programar la multiventana
 		- Revisar la limpieza del código. Entre otras cosas, lo de los structs en el .h me huele a culo

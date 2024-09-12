@@ -1,16 +1,5 @@
 #include <gtk/gtk.h>
 
-GtkWidget *MAIN_PROGRESS_BAR;
-
-/**
- * Initializes the progress bar.
- * 
- * @return void
-*/
-void init_progress_bar() {
-    MAIN_PROGRESS_BAR = gtk_progress_bar_new();
-}
-
 /**
  * Sets the progress bar value.
  * 
@@ -18,9 +7,9 @@ void init_progress_bar() {
  * 
  * @return void
 */
-void set_progress_bar_value(gdouble value) {
+void set_progress_bar_value(GtkWidget* progress_bar, gdouble value) {
     // Update the progress bar
-    gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(MAIN_PROGRESS_BAR), value);
+    gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(progress_bar), value);
 
     // Process the events
     while (gtk_events_pending()) {
@@ -33,8 +22,8 @@ void set_progress_bar_value(gdouble value) {
  * 
  * @return void
  */
-void hide_progress_bar() {
-    gtk_widget_hide(MAIN_PROGRESS_BAR);
+void hide_progress_bar(GtkWidget* progress_bar) {
+    gtk_widget_hide(progress_bar);
 }
 
 /**
@@ -42,6 +31,6 @@ void hide_progress_bar() {
  * 
  * @return void
  */
-void show_progress_bar() {
-    gtk_widget_show(MAIN_PROGRESS_BAR);
+void show_progress_bar(GtkWidget* progress_bar) {
+    gtk_widget_show(progress_bar);
 }

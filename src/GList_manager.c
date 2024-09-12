@@ -2,6 +2,7 @@
 
 #include "GList_manager.h"
 #include "window_structure.h"
+#include "history.h"
 
 // WINDOW_STRUCTURES ///////////////////////////////////////////////////////////
 

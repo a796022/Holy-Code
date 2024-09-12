@@ -168,12 +168,16 @@ GtkWidget* new_window(struct WindowStructure* window_structure) {
  * 
  * @return void
 */
-void show_window(GtkWidget *window) {
+void show_window(struct WindowStructure* window_structure) {
+    // Get the data
+    GtkWidget* window = window_structure->window;
+    GtkWidget* progress_bar = window_structure->progress_bar;
+
     // Muestro todos los widgets de la ventana
     gtk_widget_show_all(window);
 
     // Oculto los windgets que deben estar ocultos al inicio
-    hide_progress_bar();
+    hide_progress_bar(progress_bar);
 }
 
 /**
@@ -191,6 +195,7 @@ void close_window(GtkMenuItem *menuitem, gpointer user_data) {
     // Get the data
     struct WindowStructure* window_structure = (struct WindowStructure*)user_data;
     GtkWidget *window = window_structure->window;
+    // there_are_unsaved_changes(window_structure->history);
 
     // Ask the user if they want to save the changes
     gboolean abort_closing = on_delete_event(window, NULL, window_structure);

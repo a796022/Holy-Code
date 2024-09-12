@@ -177,7 +177,7 @@ void save_tree(GtkMenuItem *menuitem, gpointer user_data) {
     }
 
     // Save the file
-    int status = write_tree_file(tree_model, TREE_PATH_FILE, num_nodes);
+    int status = write_tree_file(window_structure, TREE_PATH_FILE, num_nodes);
     if (status == -1) {
         return;
     }

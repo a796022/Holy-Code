@@ -3,21 +3,13 @@
 #include <gtk/gtk.h>
 
 struct WindowStructure {
-    // Window widget
-    GtkWidget* window;
-
-    // Visualization and data model of the tree
-    GtkWidget* tree_view;
-    GtkTreeStore* tree_model;
-
-    // Menu bar
-    struct MenuBar *menu_bar;
-
-    // Main box widget that contains the rest of the widgets
-    GtkWidget *main_box;
-
-    // History of operations
-    struct History *history;
+    struct History* history;
+    GtkWidget*  main_box;
+    struct MenuBar* menu_bar;
+    GtkWidget*  progress_bar;
+    GtkTreeStore*   tree_model;
+    GtkWidget*  tree_view;
+    GtkWidget*  window;
 };
 
 /**
