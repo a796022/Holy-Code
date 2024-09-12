@@ -3,11 +3,13 @@
 
 #include "../lib/background_keyboard_imput/background_keyboard_imput.h"
 #include "../lib/clipboard/clipboard.h"
-#include "tree_wrapper.h"
-#include "tree_string.h"
-#include "window_manager.h"
-#include "global_structure.h"
+
 #include "bg_key_input.h"
+#include "GList_manager.h"
+#include "global_structure.h"
+#include "tree_string.h"
+#include "tree_wrapper.h"
+#include "window_manager.h"
 
 /**
  * @brief Registers the press of the left Ctrl key

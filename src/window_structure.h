@@ -10,6 +10,9 @@ struct WindowStructure {
     GtkWidget* tree_view;
     GtkTreeStore* tree_model;
 
+    // Menu bar
+    struct MenuBar *menu_bar;
+
     // Main box widget that contains the rest of the widgets
     GtkWidget *main_box;
 

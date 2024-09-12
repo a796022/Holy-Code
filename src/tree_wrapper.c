@@ -357,5 +357,4 @@ void delete_selected_node(GtkMenuItem *menuitem, gpointer user_data) {
         }
 
     }
-    
 }

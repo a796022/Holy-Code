@@ -48,9 +48,6 @@ struct WindowStructure* new_window_structure() {
  * @return void
  */
 void init_window_structure(struct WindowStructure* window_structure) {
-    // Top menu
-    GtkWidget* menu_bar;
-
     // Vertical divider
     GtkWidget* paned;
 
@@ -58,8 +55,8 @@ void init_window_structure(struct WindowStructure* window_structure) {
     GtkWidget* scrolled_window;
 
     // Create the menu_bar
-    menu_bar = init_menu_bar(window_structure);
-    agregar_widget_box(window_structure->main_box, menu_bar, FALSE, FALSE, 0);
+    window_structure->menu_bar = new_menu_bar(window_structure);
+    agregar_widget_box(window_structure->main_box, window_structure->menu_bar->main_widget, FALSE, FALSE, 0);
 
     // Create the GtkPaned (divider)
     paned = crear_paned_horizontal();
@@ -81,7 +78,7 @@ void init_window_structure(struct WindowStructure* window_structure) {
     agregar_widget_paned_derecha(paned, right_label_panel, TRUE, FALSE);
 
     // Initialize the keyboard shortcuts
-    init_keyboard_shortcuts(window_structure->window);
+    init_keyboard_shortcuts(window_structure);
 
     // Show the window
     show_window(window_structure->window);

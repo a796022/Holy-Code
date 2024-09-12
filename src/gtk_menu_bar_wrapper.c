@@ -1,8 +1,9 @@
 #include <gtk/gtk.h>
 
-#include "window_manager.h"
-#include "tree_wrapper.h"
+#include "gtk_menu_bar_wrapper.h"
 #include "history.h"
+#include "tree_wrapper.h"
+#include "window_manager.h"
 
 /**
  * @brief Adds a tab to the menu bar.
@@ -48,21 +49,6 @@ void add_menu_bar_separator(GtkWidget *tab) {
     gtk_menu_shell_append(GTK_MENU_SHELL(tab), separator);
 }
 
-// "Archivo" Menu
-GtkWidget *MENUBAR_NEW_FILE;
-GtkWidget *MENUBAR_OPEN_FILE;
-GtkWidget *MENUBAR_SAVE;
-GtkWidget *MENUBAR_CLOSE_WINDOW;
-GtkWidget *MENUBAR_EXIT;
-
-// "Editar" Menu
-GtkWidget *MENUBAR_UNDO;
-GtkWidget *MENUBAR_REDO;
-GtkWidget *MENUBAR_DELETE;
-
-// "Ayuda" Menu
-GtkWidget *MENUBAR_SHOW_WINDOW_INFORMATION;
-
 /**
  * @brief Initializes the main window menu.
  * 
@@ -74,45 +60,50 @@ GtkWidget *MENUBAR_SHOW_WINDOW_INFORMATION;
  * 
  * @return GtkWidget* Menu bar
 */
-GtkWidget *init_menu_bar(struct WindowStructure* window_structure) {
+struct MenuBar* new_menu_bar(struct WindowStructure* window_structure) {
     // Get the window
     GtkWidget* window = window_structure->window;
 
     // Create the menu
-    GtkWidget *menu_bar = gtk_menu_bar_new();
+    struct MenuBar* menu_bar = g_new(struct MenuBar, 1);
+
+    // Create the menu
+    GtkWidget *menu_bar_widget = gtk_menu_bar_new();
 
     // Create the tabs and add the elements and separators
-    GtkWidget *menu_file = add_menu_bar_tab(menu_bar, "Archivo");
-    MENUBAR_NEW_FILE = add_menu_bar_item(menu_file, "Nuevo");
-    MENUBAR_OPEN_FILE = add_menu_bar_item(menu_file, "Abrir");
-    MENUBAR_SAVE = add_menu_bar_item(menu_file, "Guardar");
+    GtkWidget *menu_file = add_menu_bar_tab(menu_bar_widget, "Archivo");
+    menu_bar->new_file = add_menu_bar_item(menu_file, "Nuevo");
+    menu_bar->open_file = add_menu_bar_item(menu_file, "Abrir");
+    menu_bar->save = add_menu_bar_item(menu_file, "Guardar");
     add_menu_bar_separator(menu_file);
-    MENUBAR_CLOSE_WINDOW = add_menu_bar_item(menu_file, "Cerrar Ventana");
+    menu_bar->close_window = add_menu_bar_item(menu_file, "Cerrar Ventana");
 
     add_menu_bar_separator(menu_file);
-    MENUBAR_EXIT = add_menu_bar_item(menu_file, "Salir");
+    menu_bar->exit = add_menu_bar_item(menu_file, "Salir");
 
-    GtkWidget *menu_edit = add_menu_bar_tab(menu_bar, "Editar");
-    MENUBAR_UNDO = add_menu_bar_item(menu_edit, "Deshacer");
-    MENUBAR_REDO = add_menu_bar_item(menu_edit, "Rehacer");
+    GtkWidget *menu_edit = add_menu_bar_tab(menu_bar_widget, "Editar");
+    menu_bar->undo = add_menu_bar_item(menu_edit, "Deshacer");
+    menu_bar->redo = add_menu_bar_item(menu_edit, "Rehacer");
     add_menu_bar_separator(menu_edit);
-    MENUBAR_DELETE = add_menu_bar_item(menu_edit, "Eliminar");
+    menu_bar->delete = add_menu_bar_item(menu_edit, "Eliminar");
 
-    GtkWidget *menu_tools = add_menu_bar_tab(menu_bar, "Ayuda");
-    MENUBAR_SHOW_WINDOW_INFORMATION = add_menu_bar_item(menu_tools, "Mostrar información de la ventana");
+    GtkWidget *menu_tools = add_menu_bar_tab(menu_bar_widget, "Ayuda");
+    menu_bar->show_window_information = add_menu_bar_item(menu_tools, "Mostrar información de la ventana");
 
     // Connect the signals
-    g_signal_connect(MENUBAR_NEW_FILE, "activate", G_CALLBACK(create_new_window), NULL);
-    g_signal_connect(MENUBAR_OPEN_FILE, "activate", G_CALLBACK(open_tree_file), window_structure);
-    g_signal_connect(MENUBAR_SAVE, "activate", G_CALLBACK(save_tree), window_structure);
-    g_signal_connect(MENUBAR_CLOSE_WINDOW, "activate", G_CALLBACK(close_window), window_structure);
-    g_signal_connect(MENUBAR_EXIT, "activate", G_CALLBACK(close_window), window_structure);
+    g_signal_connect(menu_bar->new_file, "activate", G_CALLBACK(create_new_window), NULL);
+    g_signal_connect(menu_bar->open_file, "activate", G_CALLBACK(open_tree_file), window_structure);
+    g_signal_connect(menu_bar->save, "activate", G_CALLBACK(save_tree), window_structure);
+    g_signal_connect(menu_bar->close_window, "activate", G_CALLBACK(close_window), window_structure);
+    g_signal_connect(menu_bar->exit, "activate", G_CALLBACK(close_window), window_structure);
 
-    g_signal_connect(MENUBAR_UNDO, "activate", G_CALLBACK(undo), window_structure);
-    g_signal_connect(MENUBAR_REDO, "activate", G_CALLBACK(redo), window_structure);
-    g_signal_connect(MENUBAR_DELETE, "activate", G_CALLBACK(delete_selected_node), window_structure);
+    g_signal_connect(menu_bar->undo, "activate", G_CALLBACK(undo), window_structure);
+    g_signal_connect(menu_bar->redo, "activate", G_CALLBACK(redo), window_structure);
+    g_signal_connect(menu_bar->delete, "activate", G_CALLBACK(delete_selected_node), window_structure);
 
-    g_signal_connect(MENUBAR_SHOW_WINDOW_INFORMATION, "activate", G_CALLBACK(show_window_info), window);
+    g_signal_connect(menu_bar->show_window_information, "activate", G_CALLBACK(show_window_info), window);
+
+    menu_bar->main_widget = menu_bar_widget;
 
     return menu_bar;
 }

@@ -15,10 +15,14 @@ Seguimiento
 			- Include de otros ficheros
 			- Structs privados
 			- #DEFINE y constantes
+			- Pre-declaraciones de funciones
 			- Funciones
 		- Las declaraciones que no sean de funciones también deben seguir el orden jerárquico-alfabético de estas, pero sin la separación por especializaciones
+		- Las funciones deben recibir sólo las estructuras que necesitan, no más grandes.
+		- No debe haber variables globales, si hace falta se hace un nuevo struct
+		- Las funciones deben ser útiles, tener mínimo más de una línea
 	Seguimiento
-		- 
+		- Cambia el window_struct para que contenga un struct the menu_bar y lo inicialice
 	TODO:
 		- Programar la multiventana
 		- Revisar la limpieza del código. Entre otras cosas, lo de los structs en el .h me huele a culo
@@ -37,3 +41,6 @@ Seguimiento
 		- Cambiar la forma en que se registran operaciones a la moderna
 		- Cambiar la notación del árbol para que el nivelado no dependa de espacios ni tabulaciones
 		- Hacer que en árbol se vean las líneas que conectan los nodos
+		- Hacer que cuando a una ventana le llegue la señal destroy, no se termine el programa a no ser que sea la última ventana que quedaba abierta
+		- Eliminar el nombre de la columna "árbol sin nombre" de encima del treeview
+		- Corregir todos los nombres de ficheros

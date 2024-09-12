@@ -13,7 +13,11 @@
  * 
  * @return void
 */
-void init_keyboard_shortcuts(GtkWidget *window) {
+void init_keyboard_shortcuts(struct WindowStructure* window_structure) {
+    // Get the data
+    GtkWidget *window = window_structure->window;
+    struct MenuBar *menu_bar = window_structure->menu_bar;
+
     // Create the acceleration groups
     GtkAccelGroup *accel_group = gtk_accel_group_new();
 
@@ -21,13 +25,13 @@ void init_keyboard_shortcuts(GtkWidget *window) {
     gtk_window_add_accel_group(GTK_WINDOW(window), accel_group);
 
     // Main window keyboard shortcuts
-    gtk_widget_add_accelerator(MENUBAR_NEW_FILE, "activate", accel_group, GDK_KEY_N, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
-    gtk_widget_add_accelerator(MENUBAR_OPEN_FILE, "activate", accel_group, GDK_KEY_O, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
-    gtk_widget_add_accelerator(MENUBAR_SAVE, "activate", accel_group, GDK_KEY_S, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
-    gtk_widget_add_accelerator(MENUBAR_CLOSE_WINDOW, "activate", accel_group, GDK_KEY_F4, GDK_MOD1_MASK, GTK_ACCEL_VISIBLE);
-    gtk_widget_add_accelerator(MENUBAR_EXIT, "activate", accel_group, GDK_KEY_Q, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
+    gtk_widget_add_accelerator(menu_bar->new_file, "activate", accel_group, GDK_KEY_N, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
+    gtk_widget_add_accelerator(menu_bar->open_file, "activate", accel_group, GDK_KEY_O, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
+    gtk_widget_add_accelerator(menu_bar->save, "activate", accel_group, GDK_KEY_S, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
+    gtk_widget_add_accelerator(menu_bar->close_window, "activate", accel_group, GDK_KEY_F4, GDK_MOD1_MASK, GTK_ACCEL_VISIBLE);
+    gtk_widget_add_accelerator(menu_bar->exit, "activate", accel_group, GDK_KEY_Q, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
 
-    gtk_widget_add_accelerator(MENUBAR_UNDO, "activate", accel_group, GDK_KEY_Z, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
-    gtk_widget_add_accelerator(MENUBAR_REDO, "activate", accel_group, GDK_KEY_Y, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
-    gtk_widget_add_accelerator(MENUBAR_DELETE, "activate", accel_group, GDK_KEY_Delete, 0, GTK_ACCEL_VISIBLE);
+    gtk_widget_add_accelerator(menu_bar->undo, "activate", accel_group, GDK_KEY_Z, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
+    gtk_widget_add_accelerator(menu_bar->redo, "activate", accel_group, GDK_KEY_Y, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
+    gtk_widget_add_accelerator(menu_bar->delete, "activate", accel_group, GDK_KEY_Delete, 0, GTK_ACCEL_VISIBLE);
 }

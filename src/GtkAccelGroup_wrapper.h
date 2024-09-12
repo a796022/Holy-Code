@@ -10,4 +10,4 @@
  * 
  * @return void
 */
-void init_keyboard_shortcuts(GtkWidget *window);
+void init_keyboard_shortcuts(struct WindowStructure* window_structure);

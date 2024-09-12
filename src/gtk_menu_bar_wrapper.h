@@ -4,20 +4,25 @@
 
 #include "window_structure.h"
 
-// "Archivo" Menu
-extern GtkWidget *MENUBAR_NEW_FILE;
-extern GtkWidget *MENUBAR_SAVE;
-extern GtkWidget *MENUBAR_OPEN_FILE;
-extern GtkWidget *MENUBAR_CLOSE_WINDOW;
-extern GtkWidget *MENUBAR_EXIT;
+struct MenuBar {
+    // Widget
+    GtkWidget *main_widget;
 
-// "Editar" Menu
-extern GtkWidget *MENUBAR_UNDO;
-extern GtkWidget *MENUBAR_REDO;
-extern GtkWidget *MENUBAR_DELETE;
+    // "Archivo" Menu
+    GtkWidget *new_file;
+    GtkWidget *save;
+    GtkWidget *open_file;
+    GtkWidget *close_window;
+    GtkWidget *exit;
 
-// "Ayuda" Menu
-extern GtkWidget *MENUBAR_SHOW_WINDOW_INFORMATION;
+    // "Editar" Menu
+    GtkWidget *undo;
+    GtkWidget *redo;
+    GtkWidget *delete;
+
+    // "Ayuda" Menu
+    GtkWidget *show_window_information;
+};
 
 /**
  * @brief Initializes the main window menu.
@@ -30,4 +35,4 @@ extern GtkWidget *MENUBAR_SHOW_WINDOW_INFORMATION;
  * 
  * @return GtkWidget* Menu bar
 */
-GtkWidget *init_menu_bar(struct WindowStructure* window_structure);
+struct MenuBar *new_menu_bar(struct WindowStructure* window_structure);
