@@ -234,17 +234,15 @@ void open_tree_file(GtkMenuItem *menuitem, gpointer user_data) {
  * return GtkTreeIter Iterator of the new node
 */
 GtkTreeIter add_node(GtkWidget* tree_view, GtkTreeStore *model, GtkTreeIter *parent_node, const char *text) {
-    // Adds a new node to the tree "model" (main tree model), under the parent node "parent_node".
-    // The iterator "iter" is updated to point to the new node.
     GtkTreeIter iter;
     gtk_tree_store_append(model, &iter, parent_node);
-
-    // Sets the text of the node.
     gtk_tree_store_set(model, &iter, 0, text, -1);
 
     // Expands the parent node
     if (parent_node != NULL) {
-        gtk_tree_view_expand_row(GTK_TREE_VIEW(tree_view), gtk_tree_model_get_path(GTK_TREE_MODEL(model), parent_node), FALSE);
+        GtkTreePath *path = gtk_tree_model_get_path(GTK_TREE_MODEL(model), parent_node);
+        gtk_tree_view_expand_row(GTK_TREE_VIEW(tree_view), path, FALSE);
+        gtk_tree_path_free(path);
     }
 
     return iter;
@@ -316,7 +314,9 @@ GtkTreeIter insert_node_at_position(struct WindowStructure* window_structure, Gt
     gtk_tree_store_set(tree_model, &new_iter, 0, text, -1);
 
     // Expand the parent node
-    gtk_tree_view_expand_row(GTK_TREE_VIEW(tree_view), gtk_tree_model_get_path(GTK_TREE_MODEL(tree_model), parent_iter), FALSE);
+    GtkTreePath *path = gtk_tree_model_get_path(GTK_TREE_MODEL(tree_model), parent_iter);
+    gtk_tree_view_expand_row(GTK_TREE_VIEW(tree_view), path, FALSE);
+    gtk_tree_path_free(path);
 
     return new_iter;
 }

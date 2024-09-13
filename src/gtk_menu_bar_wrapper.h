@@ -36,3 +36,12 @@ struct MenuBar {
  * @return GtkWidget* Menu bar
 */
 struct MenuBar *new_menu_bar(struct WindowStructure* window_structure);
+
+/**
+ * @brief Closes the menu bar.
+ * 
+ * @param menu_bar Menu bar to close
+ * 
+ * @return void
+ */
+void close_menu_bar(struct MenuBar* menu_bar);

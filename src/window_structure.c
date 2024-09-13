@@ -98,6 +98,13 @@ void init_window_structure(struct WindowStructure* window_structure) {
  * @return void
  */
 void close_window_structure(struct WindowStructure* window_structure) {
+    // Free the structures
+    close_history(window_structure->history);
+    close_menu_bar(window_structure->menu_bar);
+
+    // Free the non-widgets
+    g_object_unref(window_structure->tree_model);
+
     g_free(window_structure);
 }
 

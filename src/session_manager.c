@@ -75,7 +75,7 @@ char *read_last_opened_file() {
     }
 
     // Obtengo el valor de la línea "LastOpenedFile=path"
-    char *line = NULL;
+    char* line = NULL;
     size_t len = 0;
     ssize_t read;
     while ((read = getline(&line, &len, file)) != -1) {

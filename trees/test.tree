@@ -22,7 +22,7 @@ Seguimiento
 		- No debe haber variables globales, si hace falta se hace un nuevo struct
 		- Las funciones deben ser útiles, tener mínimo más de una línea
 	Seguimiento
-		- Ahora toca quitar la variable global MAIN_PROGRESS_BAR
+		debug
 	TODO:
 		- Programar la multiventana
 		- Revisar la limpieza del código. Entre otras cosas, lo de los structs en el .h me huele a culo
@@ -44,3 +44,4 @@ Seguimiento
 		- Hacer que cuando a una ventana le llegue la señal destroy, no se termine el programa a no ser que sea la última ventana que quedaba abierta
 		- Eliminar el nombre de la columna "árbol sin nombre" de encima del treeview
 		- Corregir todos los nombres de ficheros
+		- Hacer en el dale las opciones de debug, clena y valgrind
