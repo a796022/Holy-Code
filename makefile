@@ -55,4 +55,8 @@ clean:
 
 # Regla para ejecutar con Valgrind
 valgrind: debug
-	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --gen-suppressions=all --suppressions=debug/valgrind/valgrind-suppressions.supp --log-file=debug/valgrind/valgrind_output.txt -s ./$(TARGET)-debug
+	sudo -E valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --gen-suppressions=all --suppressions=debug/valgrind/valgrind-suppressions.supp --log-file=debug/valgrind/valgrind_output.txt -s ./$(TARGET)-debug
+
+# Regla para ejecutar si la compilación fue exitosa
+run: all
+	sudo -E ./$(TARGET)

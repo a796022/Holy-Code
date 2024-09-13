@@ -84,7 +84,7 @@ uint8_t init_background_keyboard_imput() {
     // Open keyboard event file
     input_fd = open("/dev/input/event0", O_RDWR);
     if (input_fd == -1) {
-        perror("Error: could not open keyboard event file\n");
+        perror("Could not open keyboard event file");
         return 1;
     }
 

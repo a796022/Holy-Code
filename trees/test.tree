@@ -45,3 +45,4 @@ Seguimiento
 		- Eliminar el nombre de la columna "árbol sin nombre" de encima del treeview
 		- Corregir todos los nombres de ficheros
 		- Hacer en el dale las opciones de debug, clena y valgrind
+		- Configuración en ficheros: en vez de que sean varias líneas en un fichero, que sea un JSON o varios ficheros (especialmente el árbol en sesión)

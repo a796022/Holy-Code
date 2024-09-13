@@ -54,7 +54,7 @@ void check_session_file() {
  * 
  * @return char*
  */
-char *read_last_opened_file() {
+char* read_last_opened_file() {
     // Compruebo el archivo de sesión
     check_session_file();
     
@@ -78,32 +78,40 @@ char *read_last_opened_file() {
     char* line = NULL;
     size_t len = 0;
     ssize_t read;
+    char* result = NULL;
     while ((read = getline(&line, &len, file)) != -1) {
         if (strncmp(line, "LastOpenedFile=", 15) == 0) {
             char *path = line + 15;
             path[strlen(path) - 1] = '\0';
-            fclose(file);
             
-            // Si la línea está vacía, devuelvo NULL
+            // Si la línea está vacía, devolvemos NULL
             if (strlen(path) == 0) {
+                free(line);
+                fclose(file);
                 return NULL;
             }
 
-            return path;
+            // Hacemos una copia de path
+            result = strdup(path);
+            break;
         }
     }
+    
+    free(line);  // Liberamos la memoria de line
     fclose(file);
 
-    // Si no se ha encontrado la línea, la escribo y devuelvo NULL
-    file = fopen(session_file, "a");
-    if (file == NULL) {
-        g_printerr("Error opening session file: %s\n", strerror(errno));
-        return NULL;
+    if (result == NULL) {
+        // Si no se ha encontrado la línea, la escribimos y devolvemos NULL
+        file = fopen(session_file, "a");
+        if (file == NULL) {
+            g_printerr("Error opening session file: %s\n", strerror(errno));
+            return NULL;
+        }
+        fprintf(file, "LastOpenedFile=\n");
+        fclose(file);
     }
-    fprintf(file, "LastOpenedFile=\n");
-    fclose(file);
 
-    return NULL;
+    return result;
 }
 
 /**

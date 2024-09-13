@@ -13,7 +13,7 @@
  * 
  * @return GtkWidget*
 */
-GtkWidget *add_menu_bar_tab(GtkWidget *menu_bar, const char *name) {
+GtkWidget* add_menu_bar_tab(GtkWidget *menu_bar, const char *name) {
     GtkWidget *menu = gtk_menu_new();
     GtkWidget *menu_item = gtk_menu_item_new_with_label(name);
     gtk_menu_item_set_submenu(GTK_MENU_ITEM(menu_item), menu);
