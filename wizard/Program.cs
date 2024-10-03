@@ -1,5 +1,5 @@
 ﻿using Gtk;
-using System;
+using GUI;
 
 class Program
 {
@@ -7,15 +7,10 @@ class Program
     {
         Application.Init();
         
-        // Crear la ventana principal
-        Window ventana = new Window("Mi ventana GTK");
-        ventana.SetDefaultSize(400, 300);
-        ventana.DeleteEvent += (sender, e) => Application.Quit();
+        // Show the main window
+        GUI.GUI gui = new GUI.GUI();
 
-        // Mostrar la ventana
-        ventana.ShowAll();
-
-        // Iniciar el bucle principal de GTK
+        // Init the GTK main loop
         Application.Run();
     }
 }
