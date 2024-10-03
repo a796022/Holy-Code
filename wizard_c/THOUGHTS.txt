@@ -1,0 +1,36 @@
+Ha sido una buena experiencia tratar de hacer un programa con interfaz gráfica
+con C, sin embargo, había subestimado el tiempo que me llevaría corregir errores
+de memoria. Cuando ya tenía el proyecto ciertamente avanzado, empezaron a surgir
+errores que señalaban a que estaba ocurriendo algún problema con la memoria:
+variables se cambiaban aleatoriamente, sucedían segmentation faults sin que
+cambiara nada, etc.
+
+Pensé que podría manejarme con etos errores empleando Valgrind pero no fue
+tan sencillo. No sabía que el propio uso de GTK y otras librerías estandar ya
+genera decenas de miles de errores y es complicado encontrar la información que
+te interesa en los logs de cientos de miles de líneas.
+
+Estos errores no son imposibles de manejar, pero requieren tiempo, y más
+requerirán cuanto más grande se haga la aplicación. Después de balancear los
+pros y los contras, he decidido empezar de nuevo con C#. C# es similar a C en
+muchos aspectos, automatiza la recolección de basura (lo que me va a ahorrar
+mucho tiempo) y además emplea programación orientada a objetos, algo muy
+aprovechable en el tipo de aplicación que estoy creando.
+
+Me gusta mucho programar en C pero aborrezco arreglar errores tan difíciles de
+debuggear. Uno de mis mayores puntos fuertes como programador es solucionar bugs
+sin despeinarme (conozco a varias personas que pueden corroborar eto), sin
+embargo, estos fallos de memoria son -según he descubierto- mi talón de aquiles.
+
+Afortunadamente, etoy redescubriendo que me encanta programar en C#, tanto o
+incluso más que en C (quizás ahora esté demasiado quemado de C como para
+compararlos justamente, tendría que revisar esta afirmación en frío). Creo que
+este cambio de lenguaje, a la larga, me va a garantizar tiempo, salud mental, y
+diversión.
+
+He intentado, por cierto, calcar el código en C a C# pero al final he desechado
+esa idea. Personalmente trabajo mejor con los lienzos en blanco.
+
+De esto sacamos la conclusión de que generalmente va a ser mejor elegir un
+lenguaje de programación que se adecúe a lo que quieres hacer en vez de usar
+siempre tu lenguaje favorito.
