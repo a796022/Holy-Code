@@ -5,7 +5,8 @@ Seguimiento
 		- El orden de las declaraciones en el .h es el mismo que en el .c
 		- Dentro de un .c y .h donde algunas funciones sirven para propósitos específicos, están separadas mediante separadores pequeños
 		- Todas las funciones están correctamente comentadas y los comentarios de cabecera son los mismos en el .h
-		- Si hay funciones de new y/o close, estas van al inicio del todo
+		- Si hay funciones de new, init y/o close, estas van al inicio del todo
+		- Si hay funciones de init, siempre son static y se les llama desde el new
 		- Las funciones de new siguen la estructura estandar
 		- Se respeta el límite de los 80 caracteres
 		- Todo debe estar escrito en inglés
@@ -21,8 +22,11 @@ Seguimiento
 		- Las funciones deben recibir sólo las estructuras que necesitan, no más grandes.
 		- No debe haber variables globales, si hace falta se hace un nuevo struct
 		- Las funciones deben ser útiles, tener mínimo más de una línea
+		- Todo puntero tiene su respectivo borrado y se borra a la misma altura de donde se inicializa
 	Seguimiento
-		debug
+		- Parece que esto ha pillado buen ritmo
+		- Hoy me ha salido de nuevo el famoso segmentation fault
+		- Si mañana se ha ido, ni te rayes; si sigue ahí, lo mejor será ponerse a hacer la librería de debug
 	TODO:
 		- Programar la multiventana
 		- Revisar la limpieza del código. Entre otras cosas, lo de los structs en el .h me huele a culo

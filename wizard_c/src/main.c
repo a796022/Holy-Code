@@ -7,7 +7,8 @@ int main(int argc, char *argv[]) {
     gtk_init(&argc, &argv);
 
     // Create the global structure
-    struct GlobalStructure* global_structure = new_global_structure();
+    struct GlobalStructure* global_structure = NULL;
+    new_global_structure(&global_structure);
 
     // Start the main GTK event loop
     gtk_main();

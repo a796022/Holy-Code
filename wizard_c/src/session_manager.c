@@ -7,19 +7,19 @@ const char *SESSION_FILE_PATH_FROM_HOME = "/.config/wizard/session.txt";
 const int MAX_PATH_LENGTH = 256;
 
 /**
- * Comprueba si existe el archivo de sesión y lo crea si no existe.
+ * @brief Checks if the session file exists, if not, creates it.
  * 
  * @return void
  */
-void check_session_file() {
-    // Obtengo el directori HOME del usuario
+static void check_session_file() {
+    // Get the HOME directory of the user
     const char *home_dir = getenv("HOME");
     if (home_dir == NULL) {
         g_printerr("Error: HOME environment variable not set.\n");
         return;
     }
 
-    // Si no existe el directorio ~/.config, lo creo
+    // If the ~/.config directory does not exist, create it
     char config_dir[MAX_PATH_LENGTH];
     snprintf(config_dir, sizeof(config_dir), "%s/.config", home_dir);
     if (mkdir(config_dir, 0755) == -1 && errno != EEXIST) {
@@ -27,7 +27,7 @@ void check_session_file() {
         return;
     }
 
-    // Si no existe el directorio ~/.config/wizard, lo creo
+    // If the wizard directory does not exist, create it
     char wizard_dir[MAX_PATH_LENGTH];
     snprintf(wizard_dir, sizeof(wizard_dir), "%s/wizard", config_dir);
     if (mkdir(wizard_dir, 0755) == -1 && errno != EEXIST) {
@@ -35,7 +35,7 @@ void check_session_file() {
         return;
     }
 
-    // Si no existe el archivo de configuración, lo creo
+    // If the session file does not exist, create it
     char session_file[MAX_PATH_LENGTH];
     snprintf(session_file, sizeof(session_file), "%s/session.txt", wizard_dir);
     if (access(session_file, F_OK) == -1) {
@@ -49,69 +49,51 @@ void check_session_file() {
 }
 
 /**
- * Obtiene el último archivo abierto.
- * En el fichero de sesión se guarda como LastOpenedFile=nombre_fichero.
+ * @brief Reads the last opened file from the session file.
  * 
- * @return char*
+ * @param tree_path_file Pointer to the char* where the path of the last opened
+ * file will be stored.
+ * 
+ * @return void
  */
-char* read_last_opened_file() {
-    // Compruebo el archivo de sesión
+void read_last_opened_file(char** tree_path_file) {
+    // By default, the file is NULL
+    *tree_path_file = NULL;
+
+    // Check the session file exists, if not, create it
     check_session_file();
     
-    // Obtengo el directorio HOME del usuario
+    // Get the HOME directory of the user
     const char *home_dir = getenv("HOME");
     if (home_dir == NULL) {
         g_printerr("Error: HOME environment variable not set.\n");
-        return NULL;
+        return;
     }
     
-    // Obtengo el archivo de sesión
+    // Get the session file
     char session_file[MAX_PATH_LENGTH];
     snprintf(session_file, sizeof(session_file), "%s%s", home_dir, SESSION_FILE_PATH_FROM_HOME);
     FILE *file = fopen(session_file, "r");
     if (file == NULL) {
         g_printerr("Error opening session file: %s\n", strerror(errno));
-        return NULL;
+        return;
     }
 
-    // Obtengo el valor de la línea "LastOpenedFile=path"
-    char* line = NULL;
-    size_t len = 0;
-    ssize_t read;
-    char* result = NULL;
-    while ((read = getline(&line, &len, file)) != -1) {
-        if (strncmp(line, "LastOpenedFile=", 15) == 0) {
-            char *path = line + 15;
-            path[strlen(path) - 1] = '\0';
-            
-            // Si la línea está vacía, devolvemos NULL
-            if (strlen(path) == 0) {
-                free(line);
-                fclose(file);
-                return NULL;
-            }
+    // Get the size of the session file
+    fseek(file, 0, SEEK_END);
+    long file_size = ftell(file);
+    fseek(file, 0, SEEK_SET);
 
-            // Hacemos una copia de path
-            result = strdup(path);
-            break;
-        }
-    }
-    
-    free(line);  // Liberamos la memoria de line
-    fclose(file);
-
-    if (result == NULL) {
-        // Si no se ha encontrado la línea, la escribimos y devolvemos NULL
-        file = fopen(session_file, "a");
-        if (file == NULL) {
-            g_printerr("Error opening session file: %s\n", strerror(errno));
-            return NULL;
-        }
-        fprintf(file, "LastOpenedFile=\n");
+    // Reserve memory for file content
+    *tree_path_file = malloc(file_size + 1);
+    if (*tree_path_file == NULL) {
         fclose(file);
+        return;
     }
 
-    return result;
+    // Read the content of the file
+    fread(*tree_path_file, 1, file_size, file);
+    (*tree_path_file)[file_size] = '\0';
 }
 
 /**

@@ -49,7 +49,7 @@ void handle_signal(int sig) {
  * 
  * @return void* NULL
  */
-void* keyboard_thread(void* arg) {
+void* keyboard_thread() {
     struct input_event event;
 
     while (running) {
