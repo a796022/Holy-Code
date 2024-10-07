@@ -25,11 +25,6 @@ namespace GUI
 
         public GUI() {}
 
-        public void SayWelcome(string userName)
-        {
-            WriteBigDialog("Welcome to MTG Console, " + userName + "!");
-        }
-
         public void WriteMessage(string messager, string message)
         {
             Console.WriteLine("[" + messager + "]: " + message);
@@ -74,48 +69,29 @@ namespace GUI
             return answer;
         }
 
-        public void ShowFriends(List<Friend> friends)
+        public void ShowNotImplemented()
         {
-            if (friends.Count == 0)
-            {
-                WriteBigDialog("You don't have any friends yet.");
-                return;
-            }
-
-            StartBigDialog();
-
-            WriteBigDialogLine("Your friends are:");
-            foreach (Friend friend in friends)
-            {
-                WriteBigDialogLine("  - " + friend.GetName() + " (" + friend.GetIP() + ")");
-            }
-
-            EndBigDialog();
+            WriteBigDialog("This feature is not implemented yet.");
         }
 
-        public void ShowDialog(string content)
-        {
-            WriteBigDialog(content);
-        }
-
-        private void WriteBigDialog(string line)
+        public void WriteBigDialog(string line)
         {
             StartBigDialog();
             WriteBigDialogLine(line);
             EndBigDialog();
         }
 
-        private void StartBigDialog()
+        public void StartBigDialog()
         {
             Console.WriteLine(BIG_FRAME_INIT);
         }
 
-        private void EndBigDialog()
+        public void EndBigDialog()
         {
             Console.WriteLine(BIG_FRAME_END);
         }
 
-        private void WriteBigDialogLine(string line)
+        public void WriteBigDialogLine(string line)
         {
             // Divide the line in multiple lines of characters
             const int CHUNK_SIZE = CONSOLE_WIDTH - 4;
@@ -140,24 +116,24 @@ namespace GUI
             }
         }
 
-        private void WriteSmallDialog(string line)
+        public void WriteSmallDialog(string line)
         {
             StartSmallDialog();
             WriteSmallDialogLine(line);
             EndSmallDialog();
         }
 
-        private void StartSmallDialog()
+        public void StartSmallDialog()
         {
             Console.WriteLine(SMALL_FRAME_INIT);
         }
 
-        private void EndSmallDialog()
+        public void EndSmallDialog()
         {
             Console.WriteLine(SMALL_FRAME_END + "\n");
         }
 
-        private void WriteSmallDialogLine(string line)
+        public void WriteSmallDialogLine(string line)
         {
             // Divide the line in multiple lines of characters
             const int CHUNK_SIZE = CONSOLE_WIDTH - 6;
