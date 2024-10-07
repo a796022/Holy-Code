@@ -1,6 +1,8 @@
 using System;
 using System.Runtime.InteropServices;
 
+using MTG;
+
 namespace GUI
 {
     public class GUI
@@ -28,14 +30,14 @@ namespace GUI
             WriteBigDialog("Welcome to MTG Console, " + userName + "!");
         }
 
-        public string AskUsername()
+        public void WriteMessage(string messager, string message)
         {
-            return MakeQuestion("Hi! What's your name?", true, new string[] { });
+            Console.WriteLine("[" + messager + "]: " + message);
         }
 
-        public string MakeQuestion(string question, bool avoidEmpty, string[] options)
+        public string MakeQuestion(string questioner, string question, bool avoidEmpty, string[] options)
         {
-            Console.WriteLine("[Game]: " + question);
+            Console.WriteLine("[" + questioner + "]: " + question);
             for (int i = 0; i < options.Length; i++)
             {
                 string questionStr = "  " + (i + 1) + ". " + options[i];
@@ -70,6 +72,30 @@ namespace GUI
             }
 
             return answer;
+        }
+
+        public void ShowFriends(List<Friend> friends)
+        {
+            if (friends.Count == 0)
+            {
+                WriteBigDialog("You don't have any friends yet.");
+                return;
+            }
+
+            StartBigDialog();
+
+            WriteBigDialogLine("Your friends are:");
+            foreach (Friend friend in friends)
+            {
+                WriteBigDialogLine("  - " + friend.GetName() + " (" + friend.GetIP() + ")");
+            }
+
+            EndBigDialog();
+        }
+
+        public void ShowDialog(string content)
+        {
+            WriteBigDialog(content);
         }
 
         private void WriteBigDialog(string line)

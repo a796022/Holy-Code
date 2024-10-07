@@ -30,7 +30,7 @@ namespace MTG
             }
             else
             {
-                string username = gui.AskUsername();
+                string username = gui.MakeQuestion("MTG Console", "Hi! What's your name?", true, new string[] { });
 
                 Directory.CreateDirectory(Path.GetDirectoryName(nameFilePath) ?? "");
                 File.WriteAllText(nameFilePath, username);
