@@ -33,12 +33,12 @@ namespace GUI
             return MakeQuestion("Hi! What's your name?", true, new string[] { });
         }
 
-        private string MakeQuestion(string question, bool avoidEmpty, string[] options)
+        public string MakeQuestion(string question, bool avoidEmpty, string[] options)
         {
             Console.WriteLine("[Game]: " + question);
             for (int i = 0; i < options.Length; i++)
             {
-                string questionStr = "  " + (i + 1) + ". " + options[i] + "\n";
+                string questionStr = "  " + (i + 1) + ". " + options[i];
                 Console.WriteLine(questionStr);
             }
             

@@ -18,6 +18,24 @@ namespace MTG
         public void MainMenuLoop()
         {
             gui.SayWelcome(user.GetName());
+
+            while (true)
+            {
+                const string QUIT_OPTION = "Quit";
+
+                string[] options = {
+                    QUIT_OPTION
+                };
+
+                string answer = gui.MakeQuestion("Select an option", false, options);
+
+                switch (answer)
+                {
+                    case QUIT_OPTION:
+                    default:
+                        return;
+                }
+            }
         }
     }
 }
