@@ -27,16 +27,34 @@ namespace GUI
 
         public void WriteMessage(string messager, string message)
         {
-            Console.WriteLine("[" + messager + "]: " + message);
+            const int CHUNK_SIZE = CONSOLE_WIDTH;
+            string line = "[" + messager + "]: " + message;
+            List<string> lines = new List<string>();
+
+            for (int i = 0; i < line.Length; i += CHUNK_SIZE)
+            {
+                if (i + CHUNK_SIZE > line.Length)
+                {
+                    lines.Add(line.Substring(i));
+                }
+                else
+                {
+                    lines.Add(line.Substring(i, CHUNK_SIZE));
+                }
+            }
+
+            foreach (string chunk in lines)
+            {
+                Console.WriteLine(chunk);
+            }
         }
 
         public string MakeQuestion(string questioner, string question, bool avoidEmpty, string[] options)
         {
-            Console.WriteLine("[" + questioner + "]: " + question);
+            WriteMessage(questioner, question);
             for (int i = 0; i < options.Length; i++)
             {
-                string questionStr = "  " + (i + 1) + ". " + options[i];
-                Console.WriteLine(questionStr);
+                WriteOption(options[i], i + 1);
             }
             
             // Get the input and check if it's valid
@@ -67,6 +85,32 @@ namespace GUI
             }
 
             return answer;
+        }
+
+        private void WriteOption(string option, int number)
+        {
+            string firstPrefix = "  " + (number) + ". ";
+            string prefix = new string(' ', firstPrefix.Length);
+            int chunkSize = CONSOLE_WIDTH - prefix.Length;
+            List<string> lines = new List<string>();
+
+            for (int i = 0; i < option.Length; i += chunkSize)
+            {
+                if (i + chunkSize > option.Length)
+                {
+                    lines.Add(option.Substring(i));
+                }
+                else
+                {
+                    lines.Add(option.Substring(i, chunkSize));
+                }
+            }
+
+            Console.WriteLine(firstPrefix + lines[0]);
+            for (int i = 1; i < lines.Count; i++)
+            {
+                Console.WriteLine(prefix + lines[i]);
+            }
         }
 
         public void ShowNotImplemented()
