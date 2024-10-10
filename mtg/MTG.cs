@@ -45,23 +45,46 @@ namespace MTG
 
         private void GameMenuLoop()
         {
-            Game game = new Game();
+            // Get the number of players and check if it's valid (> 1)
+            string numPlayersString = gui.MakeQuestion("game menu", "How many players will play?", false, new string[]{});
 
-            string numPlayers = gui.MakeQuestion("game menu", "How many players will play?", false, new string[]{});
-
-            // Check if the input is a valid number (greater than 1)
-            int numPlayersInt;
-            while (!int.TryParse(numPlayers, out numPlayersInt) || numPlayersInt < 2)
+            int numPlayers;
+            while (!int.TryParse(numPlayersString, out numPlayers) || numPlayers < 2)
             {
                 gui.WriteMessage("game menu", "Invalid number of players. Please enter a number greater than 1.");
-                numPlayers = gui.MakeQuestion("game menu", "How many players will play?", false, new string[]{});
+                numPlayersString = gui.MakeQuestion("game menu", "How many players will play?", false, new string[]{});
             }
 
-            // Add the players to the game
-            for (int i = 0; i < numPlayersInt; i++)
+            // Get the game format
+            const string CONSTRUCTED_OPTION = "Constructed";
+            const string LIMITED_OPTION = "Limited";
+            const string COMMANDER_OPTION = "Commander";
+
+            string[] options = {
+                CONSTRUCTED_OPTION,
+                LIMITED_OPTION,
+                COMMANDER_OPTION
+            };
+
+            string formatString = gui.MakeQuestion("game menu", "Select the game format.", false, options);
+
+            Format format;
+            switch (formatString)
             {
-                game.AddPlayer();
+                case CONSTRUCTED_OPTION:
+                    format = Format.CONSTRUCTED;
+                    break;
+                case LIMITED_OPTION:
+                    format = Format.LIMITED;
+                    break;
+                case COMMANDER_OPTION:
+                default:
+                    format = Format.COMMANDER;
+                    break;
             }
+
+            // Create the game
+            Game game = new Game(numPlayers, format);
         }
     }
 }
