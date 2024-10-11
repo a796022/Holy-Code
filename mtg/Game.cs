@@ -6,8 +6,8 @@ namespace MTG
 {
     public class Game
     {
-        List<Player> players;
-        Format format;
+        private List<Player> players;
+        private Format format;
 
         public Game(int numPlayers, Format format)
         {
@@ -40,6 +40,28 @@ namespace MTG
             {
                 return null;
             }
+        }
+
+        /* 100.2. To play, each player needs their own deck of traditional Magic
+        cards, small items to represent any tokens and counters, and some way to
+        clearly track life totals. */
+        public void SetPlayerDeck(int playerId, string deckList)
+        {
+            // Divide the deckList into a list of strings, one for each line
+            List<string> deck = new List<string>(deckList.Split('\n'));
+
+            // Remove all the empty lines
+            deck.RemoveAll(item => item == "");
+
+            SetPlayerDeck(playerId, deck);
+        }
+
+        /* 100.2. To play, each player needs their own deck of traditional Magic
+        cards, small items to represent any tokens and counters, and some way to
+        clearly track life totals. */
+        public void SetPlayerDeck(int playerId, List<string> deck)
+        {
+            // TODO
         }
     }
 
