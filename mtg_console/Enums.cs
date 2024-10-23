@@ -39,4 +39,38 @@ namespace MTG
         details. */
         COMMANDER
     }
+
+    /* 205.2a The card types are artifact, battle, conspiracy, creature,
+    dungeon, enchantment, instant, kindred, land, phenomenon, plane,
+    planeswalker, scheme, sorcery, and vanguard. See section 3, “Card Types.” */
+    public enum Type
+    {
+        ARTIFACT,
+        BATTLE,
+        CONSPIRACY,
+        CREATURE,
+        DUNGEON,
+        ENCHANTMENT,
+        INSTANT,
+        KINDRED,
+        LAND,
+        PHENOMENON,
+        PLANE,
+        PLANESWALKER,
+        SCHEME,
+        SORCERY,
+        VANGUARD
+    }
+
+    /* 205.4a An object can have one or more supertypes. A card’s supertypes are
+    printed directly before its card types. The supertypes are basic, legendary,
+    ongoing, snow, and world. */
+    public enum Supertype
+    {
+        BASIC,
+        LEGENDARY,
+        ONGOING,
+        SNOW,
+        WORLD
+    }
 }

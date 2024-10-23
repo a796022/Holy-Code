@@ -69,11 +69,25 @@ namespace MTG
                 else
                 {
                     string deck = System.IO.File.ReadAllText(deckFile);
+                    List<string> notFoundCards = new List<string>();
 
                     // Set the deck for each player
                     for (int i = 0; i < numPlayers; i++)
                     {
-                        game.SetPlayerDeck(i, deck);
+                        notFoundCards = game.SetPlayerDeck(i, deck);
+                    }
+
+                    if (notFoundCards.Count > 0)
+                    {
+                        gui.StartBigDialog();
+
+                        gui.WriteBigDialogLine("The following cards were not found:");
+                        foreach (string card in notFoundCards)
+                        {
+                            gui.WriteBigDialogLine("  - " + card);
+                        }
+
+                        gui.EndBigDialog();
                     }
                 }
             }
