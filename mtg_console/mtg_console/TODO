@@ -1,4 +1,5 @@
 Current task:
+    - Hacer que se puedan correr tests
     - Si el juego es construido:
         - Chequear la restricción de >= 60 cartas
             - 100.2a In constructed play (a way of playing in which each player creates their own deck ahead of time), each deck has a minimum deck size of 60 cards. [...]
