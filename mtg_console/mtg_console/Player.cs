@@ -23,9 +23,19 @@ namespace MTG
             this.mainDeck = mainDeck;
         }
 
+        public List<Card> GetMainDeck()
+        {
+            return mainDeck;
+        }
+
         public void SetSideboard(List<Card> sideboard)
         {
             this.sideboard = sideboard;
+        }
+
+        public List<Card> GetSideboard()
+        {
+            return sideboard;
         }
     }
 }

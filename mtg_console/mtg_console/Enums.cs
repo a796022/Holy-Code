@@ -77,6 +77,11 @@ namespace MTG
     public enum StatusCode
     {
         OK,
-        CARD_NOT_FOUND
+        CARD_NOT_FOUND,
+
+        /* 100.2a In constructed play (a way of playing in which each player
+        creates their own deck ahead of time), each deck has a minimum deck size
+        of 60 cards. [...] */
+        LESS_THAN_60_CARDS
     }
 }

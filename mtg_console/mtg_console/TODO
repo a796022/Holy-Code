@@ -20,3 +20,9 @@ Current task:
         - Restricciones de mazo según el formato
 Pending tasks:
     -
+Notas:
+    - Al implementar una nueva regla:
+        - Comprobar casos en los que no se cumple
+        - Devolver Status
+        - Manejar el status en la interfaz
+        - Crear tests

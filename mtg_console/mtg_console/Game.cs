@@ -173,5 +173,26 @@ namespace MTG
                 }
             }
         }
+
+        public Status CheckDeckRestrictions(int playerId)
+        {
+            Player player = players[playerId];
+            List<Card> mainDeck = player.GetMainDeck();
+            List<Card> sideboard = player.GetSideboard();
+            Status status = new Status(StatusCode.OK, null);
+
+            /* 100.2a In constructed play (a way of playing in which each player
+            creates their own deck ahead of time), each deck has a minimum deck
+            size of 60 cards. [...] */
+            if (format == Format.CONSTRUCTED)
+            {
+                if (mainDeck.Count < 60)
+                {
+                    status = new Status(StatusCode.LESS_THAN_60_CARDS, null);
+                }
+            }
+
+            return status;
+        }
     }
 }

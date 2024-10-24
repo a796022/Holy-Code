@@ -86,7 +86,7 @@ namespace MTG
                             gui.StartBigDialog();
 
                             gui.WriteBigDialogLine("The following cards were not found:");
-                            
+
                             if (notFoundCards == null)
                             {
                                 gui.WriteBigDialogLine("  - (unknown)");
@@ -100,6 +100,19 @@ namespace MTG
                             }
 
                             gui.EndBigDialog();
+                        }
+                    }
+                    else
+                    {
+                        status = game.CheckDeckRestrictions(0);
+                        if (status.GetStatusCode() != StatusCode.OK)
+                        {
+                            if (status.GetStatusCode() == StatusCode.LESS_THAN_60_CARDS)
+                            {
+                                gui.StartBigDialog();
+                                gui.WriteBigDialogLine("The main deck must have at least 60 cards.");
+                                gui.EndBigDialog();
+                            }
                         }
                     }
                 }
