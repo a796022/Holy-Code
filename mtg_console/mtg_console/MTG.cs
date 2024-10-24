@@ -69,25 +69,38 @@ namespace MTG
                 else
                 {
                     string deck = System.IO.File.ReadAllText(deckFile);
-                    List<string> notFoundCards = new List<string>();
+                    Status status = new Status(StatusCode.OK, null);
 
                     // Set the deck for each player
                     for (int i = 0; i < numPlayers; i++)
                     {
-                        notFoundCards = game.SetPlayerDeck(i, deck);
+                        status = game.SetPlayerDeck(i, deck);
                     }
 
-                    if (notFoundCards.Count > 0)
+                    if (status.GetStatusCode() != StatusCode.OK)
                     {
-                        gui.StartBigDialog();
-
-                        gui.WriteBigDialogLine("The following cards were not found:");
-                        foreach (string card in notFoundCards)
+                        if (status.GetStatusCode() == StatusCode.CARD_NOT_FOUND)
                         {
-                            gui.WriteBigDialogLine("  - " + card);
-                        }
+                            List<string>? notFoundCards = status.GetInfo();
 
-                        gui.EndBigDialog();
+                            gui.StartBigDialog();
+
+                            gui.WriteBigDialogLine("The following cards were not found:");
+                            
+                            if (notFoundCards == null)
+                            {
+                                gui.WriteBigDialogLine("  - (unknown)");
+                            }
+                            else
+                            {
+                                foreach (string card in notFoundCards)
+                                {
+                                    gui.WriteBigDialogLine("  - " + card);
+                                }
+                            }
+
+                            gui.EndBigDialog();
+                        }
                     }
                 }
             }

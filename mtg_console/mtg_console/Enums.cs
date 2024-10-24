@@ -73,4 +73,10 @@ namespace MTG
         SNOW,
         WORLD
     }
+
+    public enum StatusCode
+    {
+        OK,
+        CARD_NOT_FOUND
+    }
 }

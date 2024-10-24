@@ -44,10 +44,13 @@ namespace MTG
         /* 100.2. To play, each player needs their own deck of traditional Magic
         cards, small items to represent any tokens and counters, and some way to
         clearly track life totals. */
-        public List<string> SetPlayerDeck(int playerId, string deckList)
+        public Status SetPlayerDeck(int playerId, string deckList)
         {
             // Divide the deckList into a list of strings, one for each line
             List<string> deck = new List<string>(deckList.Split('\n'));
+
+            // Trim all the strings
+            deck = deck.ConvertAll(d => d.Trim());
 
             // Remove all the empty lines
             deck.RemoveAll(item => item == "");
@@ -58,7 +61,7 @@ namespace MTG
         /* 100.2. To play, each player needs their own deck of traditional Magic
         cards, small items to represent any tokens and counters, and some way to
         clearly track life totals. */
-        public List<string> SetPlayerDeck(int playerId, List<string> deck)
+        public Status SetPlayerDeck(int playerId, List<string> deck)
         {
             List<Card> cards = new List<Card>();
             List<Card> sideboard = new List<Card>();
@@ -66,6 +69,7 @@ namespace MTG
             string linePattern = @"^(\d+)(x?)\s+(.*)";
             string tagPattern = @"^(#|//)(.*)";
             string cardAssignment = "main deck";
+            Status status = new Status(StatusCode.OK, null);
 
             foreach (string card in deck)
             {
@@ -135,7 +139,12 @@ namespace MTG
 
             SetPlayerMainDeck(playerId, cards);
 
-            return notFoundCards;
+            if (notFoundCards.Count > 0)
+            {
+                status = new Status(StatusCode.CARD_NOT_FOUND, notFoundCards);
+            }
+
+            return status;
         }
 
         /* 100.2. To play, each player needs their own deck of traditional Magic

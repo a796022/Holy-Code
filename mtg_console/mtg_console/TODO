@@ -1,5 +1,11 @@
 Current task:
     - Hacer que se puedan correr tests
+        - Crear un enum con los status (ok y todos los errores posibles)
+        - Crear clase de status con:
+            - Enum de status
+            - Lista de strings
+        - Hacer que los setDeck devuelvan un status
+            - Si carta no existe
     - Si el juego es construido:
         - Chequear la restricción de >= 60 cartas
             - 100.2a In constructed play (a way of playing in which each player creates their own deck ahead of time), each deck has a minimum deck size of 60 cards. [...]
@@ -7,5 +13,10 @@ Current task:
             - 100.2a [...] A constructed deck may contain any number of basic land cards and no more than four of any card with a particular English name other than basic land cards. [...]
         - Texto de ayuda
             - 100.2a [...] For the purposes of deck construction, cards with interchangeable names have the same English name (see rule 201.3).
+        - Para las nuevas restricciones: devolver status, manejar el status en la interfaz y crear tests
+    - Dar la opción de empezar el juego en el que se comprueba de nuevo las restricciones y no deja empezar la partida hasta que se cumplan
+        - Se debe haber seleccionado formato de juego
+        - Todos los jugadores deben tener un mazo
+        - Restricciones de mazo según el formato
 Pending tasks:
     -
