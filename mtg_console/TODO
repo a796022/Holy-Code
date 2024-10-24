@@ -1,5 +1,10 @@
 Current task:
-    - Parsear la typeLine
-        - Tener en cuenta las dobles caras
+    - Si el juego es construido:
+        - Chequear la restricción de >= 60 cartas
+            - 100.2a In constructed play (a way of playing in which each player creates their own deck ahead of time), each deck has a minimum deck size of 60 cards. [...]
+        - Checkear la restricción de <= 4 copias de una carta menos tierras básicas
+            - 100.2a [...] A constructed deck may contain any number of basic land cards and no more than four of any card with a particular English name other than basic land cards. [...]
+        - Texto de ayuda
+            - 100.2a [...] For the purposes of deck construction, cards with interchangeable names have the same English name (see rule 201.3).
 Pending tasks:
     -
