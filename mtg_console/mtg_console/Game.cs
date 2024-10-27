@@ -251,5 +251,30 @@ namespace MTG
 
             return status;
         }
+
+        public Status Start()
+        {
+            Status status = new Status(StatusCode.OK);
+
+            foreach (Player player in players)
+            {
+                // Check if the player has a deck
+                if (!player.HasDeckPrepared())
+                {
+                    string playerId = player.GetId().ToString();
+                    status = new Status(StatusCode.DECK_NOT_PREPARED, new List<string> { playerId });
+                    break;
+                }
+
+                // Check the deck restrictions
+                status = CheckDeckRestrictions(player.GetId());
+                if (status.GetStatusCode() != StatusCode.OK)
+                {
+                    break;
+                }
+            }
+
+            return status;
+        }
     }
 }

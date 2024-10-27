@@ -37,5 +37,10 @@ namespace MTG
         {
             return sideboard;
         }
+
+        public bool HasDeckPrepared()
+        {
+            return mainDeck.Count > 0;
+        }
     }
 }

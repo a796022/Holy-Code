@@ -119,6 +119,32 @@ namespace MTG
                     }
                 }
             }
+
+            // Start the game
+            Status status2 = game.Start();
+            if (status2.GetStatusCode() != StatusCode.OK)
+            {
+                if (status2.GetStatusCode() == StatusCode.DECK_NOT_PREPARED)
+                {
+                    List<string> notPreparedPlayer = status2.GetInfo();
+
+                    gui.StartBigDialog();
+                    gui.WriteBigDialogLine("The following player have not selected their deck:");
+                    foreach (string player in notPreparedPlayer)
+                    {
+                        gui.WriteBigDialogLine("  - " + player);
+                    }
+                    gui.EndBigDialog();
+                }
+                else
+                {
+                    gui.StartBigDialog();
+                    gui.WriteBigDialogLine("An error occurred while starting the game.");
+                    gui.EndBigDialog();
+                }
+
+                return;
+            }
         }
 
         private int GetNumPlayers ()

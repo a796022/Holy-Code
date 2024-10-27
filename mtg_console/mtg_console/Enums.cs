@@ -77,7 +77,13 @@ namespace MTG
     public enum StatusCode
     {
         OK,
+
+        // If the deck has a card not found in the dictionary.
         CARD_NOT_FOUND,
+
+        // If you are tryng to start a game but a player has not selected their
+        // deck yet.
+        DECK_NOT_PREPARED,
 
         /* 100.2a In constructed play (a way of playing in which each player
         creates their own deck ahead of time), each deck has a minimum deck size
