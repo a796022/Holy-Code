@@ -254,27 +254,26 @@ namespace MTG
 
         public Status Start()
         {
-            Status status = new Status(StatusCode.OK);
-
+            // Check if all the players have selected their deck
             foreach (Player player in players)
             {
-                // Check if the player has a deck
                 if (!player.HasDeckPrepared())
                 {
-                    string playerId = player.GetId().ToString();
-                    status = new Status(StatusCode.DECK_NOT_PREPARED, new List<string> { playerId });
-                    break;
-                }
-
-                // Check the deck restrictions
-                status = CheckDeckRestrictions(player.GetId());
-                if (status.GetStatusCode() != StatusCode.OK)
-                {
-                    break;
+                    return new Status(StatusCode.DECK_NOT_PREPARED, new List<string> { player.GetId().ToString() });
                 }
             }
 
-            return status;
+            // Check the decks restrictions
+            foreach (Player player in players)
+            {
+                Status status = CheckDeckRestrictions(player.GetId());
+                if (status.GetStatusCode() != StatusCode.OK)
+                {
+                    return status;
+                }
+            }
+
+            return new Status(StatusCode.OK);
         }
     }
 }
