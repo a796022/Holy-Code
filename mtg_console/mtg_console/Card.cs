@@ -7,6 +7,8 @@ namespace MTG
         /* 100.2a [...] A constructed deck may contain any number of basic land
         cards and no more than four of any card with a particular English name
         other than basic land cards. [...] */
+        /* 100.2a [...] For the purposes of deck construction, cards with
+        interchangeable names have the same English name (see rule 201.3). */
         private string completeName;
         private TypeLine typeLine1;
         private TypeLine? typeLine2;
@@ -30,6 +32,11 @@ namespace MTG
             }
         }
 
+        /* 100.2a [...] A constructed deck may contain any number of basic land
+        cards and no more than four of any card with a particular English name
+        other than basic land cards. [...] */
+        /* 100.2a [...] For the purposes of deck construction, cards with
+        interchangeable names have the same English name (see rule 201.3). */
         public string GetCompleteName()
         {
             return completeName;
