@@ -69,7 +69,7 @@ namespace MTG
             string linePattern = @"^(\d+)(x?)\s+(.*)";
             string tagPattern = @"^(#|//)(.*)";
             string cardAssignment = "main deck";
-            Status status = new Status(StatusCode.OK, null);
+            Status status = new Status(StatusCode.OK);
 
             foreach (string card in deck)
             {
@@ -138,6 +138,7 @@ namespace MTG
             }
 
             SetPlayerMainDeck(playerId, cards);
+            SetPlayerSideboard(playerId, sideboard);
 
             if (notFoundCards.Count > 0)
             {
@@ -179,17 +180,73 @@ namespace MTG
             Player player = players[playerId];
             List<Card> mainDeck = player.GetMainDeck();
             List<Card> sideboard = player.GetSideboard();
-            Status status = new Status(StatusCode.OK, null);
+            Status status = new Status(StatusCode.OK);
 
-            /* 100.2a In constructed play (a way of playing in which each player
-            creates their own deck ahead of time), each deck has a minimum deck
-            size of 60 cards. [...] */
             if (format == Format.CONSTRUCTED)
             {
+                /* 100.2a In constructed play (a way of playing in which each
+                player creates their own deck ahead of time), each deck has a
+                minimum deck size of 60 cards. [...] */
                 if (mainDeck.Count < 60)
                 {
-                    status = new Status(StatusCode.LESS_THAN_60_CARDS, null);
+                    return new Status(StatusCode.LESS_THAN_60_CARDS);
                 }
+                
+                /* 100.2a [...] A constructed deck may contain any number of
+                basic land cards and no more than four of any card with a
+                particular English name other than basic land cards. [...] */
+                Status status2 = Check4CopiesRestriction(mainDeck.Concat(sideboard).ToList());
+                if (status2.GetStatusCode() != StatusCode.OK)
+                {
+                    return status2;
+                }
+            }
+
+            return status;
+        }
+
+        /* 100.2a [...] A constructed deck may contain any number of basic land
+        cards and no more than four of any card with a particular English name
+        other than basic land cards. [...] */
+        public Status Check4CopiesRestriction (List<Card> deck)
+        {
+            Status status = new Status(StatusCode.OK);
+            Dictionary<string, int> cardCount = new Dictionary<string, int>();
+            List<string> cardsWithMoreThan4Copies = new List<string>();
+
+            foreach (Card card in deck)
+            {
+                // Get the card name
+                string cardName = card.GetCompleteName();
+
+                if (cardCount.ContainsKey(cardName))
+                {
+                    cardCount[cardName]++;
+                }
+                else
+                {
+                    cardCount[cardName] = 1;
+                }
+            }
+
+            foreach (KeyValuePair<string, int> entry in cardCount)
+            {
+                if (entry.Value > 4)
+                {
+                    // Get the card
+                    Card card = CardsDictionary.cards[entry.Key];
+
+                    // Check if the card is a basic land
+                    if (!card.CanHaveMoreThan4Copies())
+                    {
+                        cardsWithMoreThan4Copies.Add(entry.Key);
+                    }
+                }
+            }
+
+            if (cardsWithMoreThan4Copies.Count > 0)
+            {
+                status = new Status(StatusCode.MORE_THAN_4_COPIES, cardsWithMoreThan4Copies);
             }
 
             return status;

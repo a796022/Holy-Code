@@ -69,7 +69,7 @@ namespace MTG
                 else
                 {
                     string deck = System.IO.File.ReadAllText(deckFile);
-                    Status status = new Status(StatusCode.OK, null);
+                    Status status = new Status(StatusCode.OK);
 
                     // Set the deck for each player
                     for (int i = 0; i < numPlayers; i++)
@@ -84,21 +84,11 @@ namespace MTG
                             List<string>? notFoundCards = status.GetInfo();
 
                             gui.StartBigDialog();
-
                             gui.WriteBigDialogLine("The following cards were not found:");
-
-                            if (notFoundCards == null)
+                            foreach (string card in notFoundCards)
                             {
-                                gui.WriteBigDialogLine("  - (unknown)");
+                                gui.WriteBigDialogLine("  - " + card);
                             }
-                            else
-                            {
-                                foreach (string card in notFoundCards)
-                                {
-                                    gui.WriteBigDialogLine("  - " + card);
-                                }
-                            }
-
                             gui.EndBigDialog();
                         }
                     }
@@ -111,6 +101,18 @@ namespace MTG
                             {
                                 gui.StartBigDialog();
                                 gui.WriteBigDialogLine("The main deck must have at least 60 cards.");
+                                gui.EndBigDialog();
+                            }
+
+                            if (status.GetStatusCode() == StatusCode.MORE_THAN_4_COPIES)
+                            {
+                                gui.StartBigDialog();
+                                gui.WriteBigDialogLine("The main deck and sideboard can't have more than 4 copies of the same card.");
+                                gui.WriteBigDialogLine("There are more than 4 copies of the following cards:");
+                                foreach (string card in status.GetInfo())
+                                {
+                                    gui.WriteBigDialogLine("  - " + card);
+                                }
                                 gui.EndBigDialog();
                             }
                         }

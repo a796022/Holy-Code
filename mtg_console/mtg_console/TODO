@@ -19,7 +19,7 @@ Current task:
         - Todos los jugadores deben tener un mazo
         - Restricciones de mazo según el formato
 Pending tasks:
-    -
+    - Gestionar con Status que no se creen partidas de un solo jugador
 Notas:
     - Al implementar una nueva regla:
         - Comprobar casos en los que no se cumple

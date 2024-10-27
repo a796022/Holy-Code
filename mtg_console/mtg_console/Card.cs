@@ -29,5 +29,21 @@ namespace MTG
                 typeLine2 = null;
             }
         }
+
+        public string GetCompleteName()
+        {
+            return completeName;
+        }
+
+        /* 100.2a [...] A constructed deck may contain any number of basic land
+        cards and no more than four of any card with a particular English name
+        other than basic land cards. [...] */
+        public bool CanHaveMoreThan4Copies()
+        {
+            bool imBasicLand = typeLine1.GetTypes().Contains(Type.LAND) &&
+                typeLine1.GetSupertypes().Contains(Supertype.BASIC);
+
+            return imBasicLand;
+        }
     }
 }

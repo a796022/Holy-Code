@@ -82,6 +82,11 @@ namespace MTG
         /* 100.2a In constructed play (a way of playing in which each player
         creates their own deck ahead of time), each deck has a minimum deck size
         of 60 cards. [...] */
-        LESS_THAN_60_CARDS
+        LESS_THAN_60_CARDS,
+
+        /* 100.2a [...] A constructed deck may contain any number of basic land
+        cards and no more than four of any card with a particular English name
+        other than basic land cards. [...] */
+        MORE_THAN_4_COPIES
     }
 }
