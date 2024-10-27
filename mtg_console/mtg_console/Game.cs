@@ -10,6 +10,13 @@ namespace MTG
 
         public Game(int numPlayers, Format format)
         {
+            /* 100.1. These Magic rules apply to any Magic game with two or more
+            players, [...]. */
+            if (numPlayers < 2)
+            {
+                throw new ArgumentException("The number of players must be at least 2.");
+            }
+
             players = new List<Player>();
             for (int i = 0; i < numPlayers; i++)
             {

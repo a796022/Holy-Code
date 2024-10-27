@@ -14,6 +14,23 @@ public class GameTest
     }
 
     [Fact]
+    public void TestOnePlayerGame()
+    {
+        bool exceptionThrown = false;
+
+        try
+        {
+            Game game = new Game(1, Format.CONSTRUCTED);
+        }
+        catch (ArgumentException)
+        {
+            exceptionThrown = true;
+        }
+
+        Assert.True(exceptionThrown);
+    }
+
+    [Fact]
     public void TestStatusDeckConstruction()
     {
         // Create the game

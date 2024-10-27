@@ -56,7 +56,19 @@ namespace MTG
             Format format = GetGameFormat();
 
             // Create the game
-            Game game = new Game(numPlayers, format);
+            Game game;
+            try
+            {
+                game = new Game(numPlayers, format);
+            }
+            catch (ArgumentException e)
+            {
+                gui.StartBigDialog();
+                gui.WriteBigDialogLine("An error occurred while creating the game.");
+                gui.WriteBigDialogLine(e.Message);
+                gui.EndBigDialog();
+                return;
+            }
 
             // Choose the deck (for now, the bots will have the same deck as you)
             if (format != Format.LIMITED)
@@ -147,7 +159,7 @@ namespace MTG
             }
         }
 
-        private int GetNumPlayers ()
+        private int GetNumPlayers()
         {
             string numPlayersString = gui.MakeQuestion("game menu", "How many players will play?", false, new string[]{});
 
