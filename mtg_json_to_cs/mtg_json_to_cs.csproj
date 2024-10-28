@@ -10,6 +10,7 @@
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <Compile Remove="files/out/Cards.cs" />
+    <Compile Remove="files/out/Sets.cs" />
   </ItemGroup>
 
 </Project>

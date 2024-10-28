@@ -1,28 +1,27 @@
 Current task:
-    - Hacer que se puedan correr tests
-        - Crear un enum con los status (ok y todos los errores posibles)
-        - Crear clase de status con:
-            - Enum de status
-            - Lista de strings
-        - Hacer que los setDeck devuelvan un status
-            - Si carta no existe
-    - Si el juego es construido:
-        - Chequear la restricción de >= 60 cartas
-            - 100.2a In constructed play (a way of playing in which each player creates their own deck ahead of time), each deck has a minimum deck size of 60 cards. [...]
-        - Checkear la restricción de <= 4 copias de una carta menos tierras básicas
-            - 100.2a [...] A constructed deck may contain any number of basic land cards and no more than four of any card with a particular English name other than basic land cards. [...]
-        - Texto de ayuda
-            - 100.2a [...] For the purposes of deck construction, cards with interchangeable names have the same English name (see rule 201.3).
-        - Para las nuevas restricciones: devolver status, manejar el status en la interfaz y crear tests
-    - Dar la opción de empezar el juego en el que se comprueba de nuevo las restricciones y no deja empezar la partida hasta que se cumplan
-        - Se debe haber seleccionado formato de juego
-        - Todos los jugadores deben tener un mazo
-        - Restricciones de mazo según el formato
+    - Guardar la información de los sets que ofrecen mazos preconstruidos o sobres: su identificador y su nombre
+    - Guardar las precons de cada set y permitir usarlas
+    - Guardar de cada carta la información de en qué sets aparece
+    - Crear un enum para identificar la rareza de las cartas
+    - Guardar de cada carta su rareza
+    - Guardar de cada set sus sobres distintos (hay de draft, no draft, etc.) y de cada sobre su distribución de rarezas/cartas.
+    - Al seleccionar formato limitado, dar la opción de elegir el set con el que jugar. Se pueden elegir sets distintos (pongamos, dos sobres de alpha y otros dos de arabian nights), se debe preguntar cada vez cuántos sobres se quieren elegir del set seleccionado.
+    - Ofrecer una opción de que se elijan automáticamente el número de sobres (la opción de skip).
+    - Luego, elegir el tipo de sobre
+    - Una vez elegido esto, se le da a Start() y comienza la partida
+    - Implementar la generación de sobres
+    - Implementar la solicitud de decisión por parte del backend (en este caso, las opciones son las cartas a elegir).
+    - Hacer toda la dinámica de rotación de sobres hasta que todos los jugadores han terminado de elegir cartas.
+    - Implementar los bots de decisión random
+    - solicitar al jugador que pegue o cargue el mazo final
+    - Comprobar que el mazo que ha cargado el jugador se corresponde con las cartas que tenía disponible (esta comprobación no es necesaria para tierras básicas)
+    - Hacer las comprobaciones pertinentes de un mazo de limitado.
 Pending tasks:
-    - Gestionar con Status que no se creen partidas de un solo jugador
-Notas:
+    - 
+Notes:
     - Al implementar una nueva regla:
         - Comprobar casos en los que no se cumple
         - Devolver Status
         - Manejar el status en la interfaz
         - Crear tests
+    - 100.2b In limited play (a way of playing in which each player gets the same quantity of unopened Magic product such as booster packs and creates their own deck using only this product and basic land cards), each deck has a minimum deck size of 40 cards. A limited deck may contain as many duplicates of a card as are included with the product.

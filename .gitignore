@@ -6,3 +6,4 @@ debug/
 /scryfall_wrapper/files/out
 mtg_json_to_cs/files/in/cards.json
 mtg_console/mtg_console/Cards.cs
+mtg_console/mtg_console/Sets.cs
