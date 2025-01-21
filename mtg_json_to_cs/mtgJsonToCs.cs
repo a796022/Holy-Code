@@ -36,7 +36,7 @@ namespace mtgJsonToCs
 
                     swSets.WriteLine("namespace MTG");
                     swSets.WriteLine("{");
-                    swSets.WriteLine("    public static class SetsDictionary()");
+                    swSets.WriteLine("    public static class SetsDictionary");
                     swSets.WriteLine("    {");
                     swSets.WriteLine("        public static List<Set> sets = new List<Set>()");
                     swSets.WriteLine("        {");
@@ -131,6 +131,16 @@ namespace mtgJsonToCs
                             else
                             {
                                 writeCommaSets = true;
+                            }
+
+                            // If there are info about the card, print it
+                            if (SetsInfo.setsInfo.ContainsKey(setCode))
+                            {
+                                List<string> setInfo = SetsInfo.setsInfo[setCode];
+                                foreach (string info in setInfo)
+                                {
+                                    swSets.WriteLine($"{LINE_INDENT_CARDS}// {info}");
+                                }
                             }
 
                             // Parse the fields when necessary

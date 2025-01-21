@@ -16,6 +16,7 @@ Current task:
     - solicitar al jugador que pegue o cargue el mazo final
     - Comprobar que el mazo que ha cargado el jugador se corresponde con las cartas que tenía disponible (esta comprobación no es necesaria para tierras básicas)
     - Hacer las comprobaciones pertinentes de un mazo de limitado.
+    - Hacer el modo de juego en el que se combinan dos mini-mazos preconstruidos (ver Rivals Quick Start Set)
 Pending tasks:
     - 
 Notes:
