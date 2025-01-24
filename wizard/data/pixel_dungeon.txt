@@ -6,5 +6,28 @@ Shattered Pixel Dungeon
         Huntress
         Duelist
     Equipment
+        Weapons
+        Armors
+        Missile Weapons
+        Wands
+        Rings
+        Artifacts
+        Trinkets
+        Enchantments
+        Curses
     Consumables
+        Potions
+        Scrolls
+        Runestones
+        Seeds
+        Food
+        Miscellaneous
+        Alchemy
     Dungeon
+        Regions
+        Enemies
+        Bosses
+        NPCs
+        Traps
+        Floor Generation
+        Ascension

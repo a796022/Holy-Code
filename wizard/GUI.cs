@@ -52,13 +52,9 @@ namespace GUI
             // Create the Gtk.Paned (vertical split)
             Paned paned = new Paned(Orientation.Horizontal);
 
-            // Create widgets for each side of the Paned (labels)
-            Label leftLabel = new Label("Left side");
-            Label rightLabel = new Label("Right side");
-
             // Add the widgets to the Paned
-            paned.Pack1(leftLabel, PANED_RESIZABLE, PANED_SHRINK);
-            paned.Pack2(rightLabel, PANED_RESIZABLE, PANED_SHRINK);
+            AddTreeNode(paned);
+            paned.Pack2(new Label("Right side"), PANED_RESIZABLE, PANED_SHRINK);
 
             // Add the paned to the box
             bool expand = true; /* If true, the child will be allocated all
@@ -67,6 +63,32 @@ namespace GUI
                 full height of the box. */
             uint padding = 0; /* Extra space in pixels around the widget. */
             vbox.PackStart(paned, expand, fill, padding);
+        }
+
+        private void AddTreeNode(Paned paned)
+        {
+            // Create a TreeView for the left panel
+            TreeStore treeStore = new TreeStore(typeof(string));
+            TreeView treeView = new TreeView(treeStore);
+
+            // Add a column to the TreeView
+            TreeViewColumn column = new TreeViewColumn { Title = "Nodes" };
+            CellRendererText cellRenderer = new CellRendererText();
+            column.PackStart(cellRenderer, true);
+            column.AddAttribute(cellRenderer, "text", 0);
+            treeView.AppendColumn(column);
+
+            // Populate the TreeStore with sample data
+            TreeIter root = treeStore.AppendValues("Root Node");
+            treeStore.AppendValues(root, "Child Node 1");
+            treeStore.AppendValues(root, "Child Node 2");
+
+            // Add the TreeView to a ScrolledWindow
+            ScrolledWindow scrolledWindow = new ScrolledWindow();
+            scrolledWindow.Add(treeView);
+
+            // Add the ScrolledWindow to the left panel of the Paned
+            paned.Pack1(scrolledWindow, true, false);
         }
 
         private Box AddMenuBar(Window window)
