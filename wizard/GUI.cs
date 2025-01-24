@@ -43,6 +43,12 @@ namespace GUI
 
         private void SetWindowComponents(Window window)
         {
+            Box box_aux = AddMenuBar(window);
+            AddPaned(box_aux);
+        }
+
+        private void AddPaned(Box vbox)
+        {
             // Create the Gtk.Paned (vertical split)
             Paned paned = new Paned(Orientation.Horizontal);
 
@@ -54,8 +60,49 @@ namespace GUI
             paned.Pack1(leftLabel, PANED_RESIZABLE, PANED_SHRINK);
             paned.Pack2(rightLabel, PANED_RESIZABLE, PANED_SHRINK);
 
-            // Add the Paned to the window
-            window.Add(paned);
+            // Add the paned to the box
+            bool expand = true; /* If true, the child will be allocated all
+                the extra space in the box. */
+            bool fill = true; /* If true, the child will be allocated the
+                full height of the box. */
+            uint padding = 0; /* Extra space in pixels around the widget. */
+            vbox.PackStart(paned, expand, fill, padding);
+        }
+
+        private Box AddMenuBar(Window window)
+        {
+            // Create the vertical box
+            int box_spacing = 0; /* Space in pixels between the widgets that
+                will be added to the Box. */
+            Box vbox = new Box(Orientation.Vertical, box_spacing);
+
+            // Create the menu bar
+            MenuBar menubar = new MenuBar();
+
+            // Create the menus
+            var fileMenu = new Menu();
+            var fileMenuItem = new MenuItem("File");
+            fileMenuItem.Submenu = fileMenu;
+
+            // Create the file menu options
+            // Crear opción "Open"
+            var openMenuItem = new MenuItem("Open");
+            fileMenu.Append(openMenuItem);
+
+            menubar.Append(fileMenuItem);
+
+            // Add the menubar to the box
+            bool expand = false; /* If true, the child will be allocated all
+                the extra space in the box. */
+            bool fill = false; /* If true, the child will be allocated the
+                full height of the box. */
+            uint padding = 0; /* Extra space in pixels around the widget. */
+            vbox.PackStart(menubar, expand, fill, padding);
+
+            // Add the box to the window
+            window.Add(vbox);
+
+            return vbox;
         }
     }
 }
