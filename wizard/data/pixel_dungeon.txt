@@ -1,0 +1,10 @@
+Shattered Pixel Dungeon
+    Heroes
+        Warrior
+        Mage
+        Rogue
+        Huntress
+        Duelist
+    Equipment
+    Consumables
+    Dungeon
