@@ -1,5 +1,5 @@
 ﻿using Gtk;
-using GUI;
+using wizard;
 
 class Program
 {
@@ -8,7 +8,7 @@ class Program
         Application.Init();
         
         // Show the main window
-        GUI.GUI gui = new GUI.GUI();
+        GUI gui = new GUI();
 
         // Init the GTK main loop
         Application.Run();

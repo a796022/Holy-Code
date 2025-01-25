@@ -1,9 +1,0 @@
-Current task:
-    El siguiente paso sería añadir un box vertical a la ventana y un paned, es
-    más o menos la base de todo. Luego ya podríamos pensar en qué operaciones
-    añadiendo junto con el menu_bar, o se podría agregar un árbol a la parte
-    izquierda del paned, un por defecto (o el texto que indique que se agregue
-    un nuevo nodo, por lo que se podría empezar por el panel de la derecha)...
-    Primero, el box y el paned.
-Pending tasks:
-    -

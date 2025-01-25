@@ -1,6 +1,6 @@
 using Gtk;
 
-namespace GUI
+namespace wizard
 {
     public class GUI
     {
@@ -16,6 +16,9 @@ namespace GUI
         private const bool PANED_SHRINK = false; /* This parameter controls
             whether the widget can be reduced beyond its minimum size when
             moving the separator. */
+        
+        // Important GUI components
+        private TreeView treeView = new TreeView();
 
         public GUI()
         {
@@ -69,7 +72,7 @@ namespace GUI
         {
             // Create a TreeView for the left panel
             TreeStore treeStore = new TreeStore(typeof(string));
-            TreeView treeView = new TreeView(treeStore);
+            treeView = new TreeView(treeStore);
 
             // Add a column to the TreeView
             TreeViewColumn column = new TreeViewColumn { Title = "Nodes" };
@@ -107,10 +110,13 @@ namespace GUI
             fileMenuItem.Submenu = fileMenu;
 
             // Create the file menu options
-            // Crear opción "Open"
             var openMenuItem = new MenuItem("Open");
             fileMenu.Append(openMenuItem);
 
+            // Connect the "Open" menu item to the event handler
+            openMenuItem.Activated += OnOpenMenuItemActivated;
+
+            // Add the file menu to the menu bar
             menubar.Append(fileMenuItem);
 
             // Add the menubar to the box
@@ -125,6 +131,30 @@ namespace GUI
             window.Add(vbox);
 
             return vbox;
+        }
+
+        private void OnOpenMenuItemActivated(object? sender, EventArgs e)
+        {
+            // Create a new file chooser dialog
+            FileChooserDialog fileChooser = new FileChooserDialog(
+                "Select a File", 
+                null, 
+                FileChooserAction.Open, 
+                "Cancel", ResponseType.Cancel, 
+                "Open", ResponseType.Accept);
+
+            // Show the dialog and wait for a user response
+            ResponseType response = (ResponseType)fileChooser.Run();
+
+            if (response == ResponseType.Accept)
+            {
+                // Get the selected file's name and print it to the terminal
+                string fileName = fileChooser.Filename;
+                TreeBuilder.PopulateTree(treeView, fileName);
+            }
+
+            // Destroy the dialog to free resources
+            fileChooser.Destroy();
         }
     }
 }
