@@ -50,14 +50,14 @@ namespace wizard
             AddPaned(box_aux);
         }
 
-        private void AddPaned(Box vbox)
+        private void AddPaned(Box box)
         {
             // Create the Gtk.Paned (vertical split)
             Paned paned = new Paned(Orientation.Horizontal);
 
             // Add the widgets to the Paned
             AddTreeNode(paned);
-            paned.Pack2(new Label("Right side"), PANED_RESIZABLE, PANED_SHRINK);
+            AddExpander(paned);
 
             // Add the paned to the box
             bool expand = true; /* If true, the child will be allocated all
@@ -65,7 +65,83 @@ namespace wizard
             bool fill = true; /* If true, the child will be allocated the
                 full height of the box. */
             uint padding = 0; /* Extra space in pixels around the widget. */
-            vbox.PackStart(paned, expand, fill, padding);
+            box.PackStart(paned, expand, fill, padding);
+        }
+
+        private void AddExpander(Paned paned)
+        {
+            // Create the right-side content
+            int box_spacing = 0; /* Space in pixels between the widgets that
+                will be added to the Box. */
+            Box rightSide = new Box(Orientation.Vertical, box_spacing);
+
+            // Create the expander
+            Expander expander = new Expander("Add Nodes");
+
+            // Create the containers of the inputs
+            int box_spacing_2 = 0; /* Space in pixels between the widgets that
+                will be added to the Box. */
+            Box expanderContent = new Box(Orientation.Vertical, box_spacing_2);
+
+            int box_spacing_3 = 0; /* Space in pixels between the widgets that
+                will be added to the Box. */
+            Box expanderContent_2 = new Box(Orientation.Horizontal, box_spacing_3){
+                MarginTop = 5
+            };
+
+            // Create the entry for node text input
+            Entry inputEntry = new Entry
+            {
+                PlaceholderText = "Node Text"
+            };
+
+            // Create a button to add the node
+            Button addButton = new Button("Add Node")
+            {
+                MarginEnd = 15
+            };
+
+            // Connect the button to the event handler
+            addButton.Clicked += (sender, args) =>
+            {
+                string nodeText = inputEntry.Text;
+                if (!string.IsNullOrEmpty(nodeText))
+                {
+                    // Logic to add the node can go here
+                    Console.WriteLine($"Node added: {nodeText}");
+
+                    // Clear the input after adding the node
+                    inputEntry.Text = string.Empty;
+                }
+            };
+
+            // Pack the input label, entry, and button into the expander content
+            bool expand = true; /* If true, the child will be allocated all
+                the extra space in the box. */
+            bool fill = true; /* If true, the child will be allocated the
+                full height of the box. */
+            uint padding = 15; /* Extra space in pixels around the widget. */
+            expanderContent_2.PackStart(inputEntry, expand, fill, padding);
+
+            // Pack the input label, entry, and button into the expander content
+            bool expand_2 = false; /* If true, the child will be allocated all
+                the extra space in the box. */
+            bool fill_2 = false; /* If true, the child will be allocated the
+                full height of the box. */
+            uint padding_2 = 0; /* Extra space in pixels around the widget. */
+            expanderContent_2.PackStart(addButton, expand_2, fill_2, padding_2);
+
+            // Add the expander content to the expander
+            expanderContent.Add(expanderContent_2);
+
+            // Add the content to the expander
+            expander.Add(expanderContent);
+
+            // Add the expander to the right-side content
+            rightSide.PackStart(expander, expand, fill, padding);
+
+            // Add the right-side content to the Paned
+            paned.Pack2(rightSide, PANED_RESIZABLE, PANED_SHRINK);
         }
 
         private void AddTreeNode(Paned paned)
@@ -91,7 +167,7 @@ namespace wizard
             scrolledWindow.Add(treeView);
 
             // Add the ScrolledWindow to the left panel of the Paned
-            paned.Pack1(scrolledWindow, true, false);
+            paned.Pack1(scrolledWindow, PANED_RESIZABLE, PANED_SHRINK);
         }
 
         private Box AddMenuBar(Window window)
@@ -99,7 +175,7 @@ namespace wizard
             // Create the vertical box
             int box_spacing = 0; /* Space in pixels between the widgets that
                 will be added to the Box. */
-            Box vbox = new Box(Orientation.Vertical, box_spacing);
+            Box box = new Box(Orientation.Vertical, box_spacing);
 
             // Create the menu bar
             MenuBar menubar = new MenuBar();
@@ -125,12 +201,12 @@ namespace wizard
             bool fill = false; /* If true, the child will be allocated the
                 full height of the box. */
             uint padding = 0; /* Extra space in pixels around the widget. */
-            vbox.PackStart(menubar, expand, fill, padding);
+            box.PackStart(menubar, expand, fill, padding);
 
             // Add the box to the window
-            window.Add(vbox);
+            window.Add(box);
 
-            return vbox;
+            return box;
         }
 
         private void OnOpenMenuItemActivated(object? sender, EventArgs e)
