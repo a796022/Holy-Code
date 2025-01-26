@@ -7,6 +7,43 @@ Shattered Pixel Dungeon
         Duelist
     Equipment
         Weapons
+            Tier 1
+                Worn Shortsword
+                Dagger
+                Studded Gloves
+                Rapier
+                Mage's Staff
+            Tier 2
+                Shortsword
+                Hand Axe
+                Spear
+                Dirk
+                Quarterstaff
+                Sickle
+                Pickaxe
+            Tier 3
+                Sword
+                Mace
+                Scimitar
+                Sai
+                Round Shield
+                Whip
+            Tier 4
+                Longsword
+                Battle Axe
+                Flail
+                Assassin's Blade
+                Runic Blade
+                Crossbow
+                Katana
+            Tier 5
+                Greatsword
+                War Hammer
+                Glaive
+                Greataxe
+                Greatshield
+                Stone Gauntlet
+                War Scythe
         Armors
         Missile Weapons
         Wands
