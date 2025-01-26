@@ -4,7 +4,7 @@ namespace wizard
 {
     public class TreeBuilder
     {
-        public static void PopulateTree(TreeView treeView, string fileName)
+        public static void PopulateTree(TreeStore treeStore, string fileName)
         {
             // Validate file existence
             if (!File.Exists(fileName))
@@ -13,9 +13,8 @@ namespace wizard
                 return;
             }
 
-            // Initialize TreeStore
-            TreeStore treeStore = new TreeStore(typeof(string));
-            treeView.Model = treeStore;
+            // Clear the tree
+            treeStore.Clear();
 
             // Read file lines and build the tree
             string[] lines = File.ReadAllLines(fileName);

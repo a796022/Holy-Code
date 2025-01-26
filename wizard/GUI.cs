@@ -25,6 +25,9 @@ namespace wizard
             PlaceholderText = "Node Text"
         };
 
+        // File path of the currently opened file
+        private string currentFile = string.Empty;
+
         public GUI()
         {
             NewWindow();
@@ -189,16 +192,19 @@ namespace wizard
             MenuBar menubar = new MenuBar();
 
             // Create the menus
-            var fileMenu = new Menu();
-            var fileMenuItem = new MenuItem("File");
+            Menu fileMenu = new Menu();
+            MenuItem fileMenuItem = new MenuItem("File");
             fileMenuItem.Submenu = fileMenu;
 
             // Create the file menu options
-            var openMenuItem = new MenuItem("Open");
+            MenuItem openMenuItem = new MenuItem("Open");
+            MenuItem saveMenuItem = new MenuItem("Save");
             fileMenu.Append(openMenuItem);
+            fileMenu.Append(saveMenuItem);
 
             // Connect the "Open" menu item to the event handler
             openMenuItem.Activated += OnOpenMenuItemActivated;
+            saveMenuItem.Activated += OnSaveMenuItemActivated;
 
             // Add the file menu to the menu bar
             menubar.Append(fileMenuItem);
@@ -215,6 +221,14 @@ namespace wizard
             window.Add(box);
 
             return box;
+        }
+
+        private void OnSaveMenuItemActivated(object? sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(currentFile))
+            {
+                TreeNodeSaver.SaveTreeToFile(treeStore, currentFile);
+            }
         }
 
         private void OnOpenMenuItemActivated(object? sender, EventArgs e)
@@ -234,7 +248,8 @@ namespace wizard
             {
                 // Get the selected file's name and print it to the terminal
                 string fileName = fileChooser.Filename;
-                TreeBuilder.PopulateTree(treeView, fileName);
+                TreeBuilder.PopulateTree(treeStore, fileName);
+                currentFile = fileName;
             }
 
             // Destroy the dialog to free resources
