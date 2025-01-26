@@ -173,12 +173,31 @@ namespace wizard
             treeStore.AppendValues(root, "Child Node 1");
             treeStore.AppendValues(root, "Child Node 2");
 
+            // Connect the event handler to the TreeView
+            treeView.RowActivated += OnRowActivated;
+
             // Add the TreeView to a ScrolledWindow
-            ScrolledWindow scrolledWindow = new ScrolledWindow();
-            scrolledWindow.Add(treeView);
+            ScrolledWindow scrolledWindow = [treeView];
 
             // Add the ScrolledWindow to the left panel of the Paned
             paned.Pack1(scrolledWindow, PANED_RESIZABLE, PANED_SHRINK);
+        }
+
+        private void OnRowActivated(object? sender, RowActivatedArgs e)
+        {
+            if (sender is TreeView treeView)
+            {
+                TreePath path = e.Path;
+
+                if (treeView.GetRowExpanded(path))
+                {
+                    treeView.CollapseRow(path); // Contract
+                }
+                else
+                {
+                    treeView.ExpandRow(path, false); // Expand
+                }
+            }
         }
 
         private Box AddMenuBar(Window window)
