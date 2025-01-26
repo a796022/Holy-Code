@@ -18,7 +18,12 @@ namespace wizard
             moving the separator. */
         
         // Important GUI components
+        private TreeStore treeStore = new TreeStore(typeof(string));
         private TreeView treeView = new TreeView();
+        private Entry addInputEntry = new Entry
+        {
+            PlaceholderText = "Node Text"
+        };
 
         public GUI()
         {
@@ -89,12 +94,6 @@ namespace wizard
                 MarginTop = 5
             };
 
-            // Create the entry for node text input
-            Entry inputEntry = new Entry
-            {
-                PlaceholderText = "Node Text"
-            };
-
             // Create a button to add the node
             Button addButton = new Button("Add Node")
             {
@@ -102,18 +101,7 @@ namespace wizard
             };
 
             // Connect the button to the event handler
-            addButton.Clicked += (sender, args) =>
-            {
-                string nodeText = inputEntry.Text;
-                if (!string.IsNullOrEmpty(nodeText))
-                {
-                    // Logic to add the node can go here
-                    Console.WriteLine($"Node added: {nodeText}");
-
-                    // Clear the input after adding the node
-                    inputEntry.Text = string.Empty;
-                }
-            };
+            addButton.Clicked += OnAddButtonClicked;
 
             // Pack the input label, entry, and button into the expander content
             bool expand = true; /* If true, the child will be allocated all
@@ -121,7 +109,7 @@ namespace wizard
             bool fill = true; /* If true, the child will be allocated the
                 full height of the box. */
             uint padding = 15; /* Extra space in pixels around the widget. */
-            expanderContent_2.PackStart(inputEntry, expand, fill, padding);
+            expanderContent_2.PackStart(addInputEntry, expand, fill, padding);
 
             // Pack the input label, entry, and button into the expander content
             bool expand_2 = false; /* If true, the child will be allocated all
@@ -144,10 +132,30 @@ namespace wizard
             paned.Pack2(rightSide, PANED_RESIZABLE, PANED_SHRINK);
         }
 
+        // Event handler function for the add button
+        private void OnAddButtonClicked(object? sender, EventArgs args)
+        {
+            string nodeText = addInputEntry.Text;
+            if (!string.IsNullOrEmpty(nodeText))
+            {
+                // Get the selected node from the TreeView
+                TreeIter selectedNode;
+                TreeSelection selection = treeView.Selection;
+
+                if (selection.GetSelected(out _, out selectedNode))
+                {
+                    // Add as a child of the selected node
+                    treeStore.AppendValues(selectedNode, nodeText);
+                }
+
+                // Clear the input after adding the node
+                addInputEntry.Text = string.Empty;
+            }
+        }
+
         private void AddTreeNode(Paned paned)
         {
             // Create a TreeView for the left panel
-            TreeStore treeStore = new TreeStore(typeof(string));
             treeView = new TreeView(treeStore);
 
             // Add a column to the TreeView

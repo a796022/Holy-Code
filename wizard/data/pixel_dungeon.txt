@@ -45,6 +45,11 @@ Shattered Pixel Dungeon
                 Stone Gauntlet
                 War Scythe
         Armors
+            Cloth Armor
+            Leather Armor
+            Mail Armor
+            Scale Armor
+            Plate Armor
         Missile Weapons
         Wands
         Rings
