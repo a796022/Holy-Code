@@ -67,6 +67,9 @@ namespace wizard
             AddTreeNode(paned);
             AddExpander(paned);
 
+            // Connect to the "realize" signal to set the initial position
+            paned.Realized += SetPanedInitialPosition;
+
             // Add the paned to the box
             bool expand = true; /* If true, the child will be allocated all
                 the extra space in the box. */
@@ -74,6 +77,30 @@ namespace wizard
                 full height of the box. */
             uint padding = 0; /* Extra space in pixels around the widget. */
             box.PackStart(paned, expand, fill, padding);
+        }
+
+        private void SetPanedInitialPosition(object? sender, EventArgs e)
+        {
+            // Cast the sender to a Paned object
+            Paned? paned = sender as Paned;
+
+            // Ensure the sender is a Paned
+            if (paned == null)
+            {
+                throw new ArgumentException("Sender must be a Gtk.Paned object.");
+            }
+
+            // Get the total width of the Paned
+            int panedWidth = paned.AllocatedWidth;
+
+            // Calculate the midpoint
+            int midpoint = panedWidth / 2;
+
+            // Set the initial position to the midpoint
+            paned.Position = midpoint;
+
+            // Lock the position unless the user drags it
+            paned.PositionSet = true;
         }
 
         private void AddExpander(Paned paned)
