@@ -18,7 +18,7 @@ namespace wizard
 
             // Read file lines and build the tree
             string[] lines = File.ReadAllLines(fileName);
-            List<TreeIter?> parentNodes = new List<TreeIter?>(); // Dynamic depth handling
+            List<TreeIter?> parentNodes = new List<TreeIter?>();
 
             foreach (string line in lines)
             {

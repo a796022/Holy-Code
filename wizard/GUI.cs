@@ -195,10 +195,16 @@ namespace wizard
             column.AddAttribute(cellRenderer, "text", 0);
             treeView.AppendColumn(column);
 
-            // Populate the TreeStore with sample data
-            TreeIter root = treeStore.AppendValues("Root Node");
-            treeStore.AppendValues(root, "Child Node 1");
-            treeStore.AppendValues(root, "Child Node 2");
+            // Populate the TreeStore with sample data (if empty)
+            if (!treeStore.GetIterFirst(out _))
+            {
+                TreeIter root = treeStore.AppendValues("Root Node");
+                treeStore.AppendValues(root, "Child Node 1");
+                treeStore.AppendValues(root, "Child Node 2");
+
+                // Expand the first node
+                ExpandFirstNodeInTreeView();
+            }
 
             // Connect the event handler to the TreeView
             treeView.RowActivated += OnRowActivated;
@@ -288,18 +294,41 @@ namespace wizard
                 "Open", ResponseType.Accept);
 
             // Show the dialog and wait for a user response
-            ResponseType response = (ResponseType)fileChooser.Run();
-
-            if (response == ResponseType.Accept)
+            if (fileChooser.Run() == (int)ResponseType.Accept)
             {
-                // Get the selected file's name and print it to the terminal
+                // Get the selected file name
                 string fileName = fileChooser.Filename;
-                TreeBuilder.PopulateTree(treeStore, fileName);
                 currentFile = fileName;
+
+                // Load the file into the TreeStore
+                treeStore.Clear();
+                TreeBuilder.PopulateTree(treeStore, fileName);
+
+                // Expand the first node in the TreeView
+                ExpandFirstNodeInTreeView();
             }
 
             // Destroy the dialog to free resources
             fileChooser.Destroy();
+        }
+
+        private void ExpandFirstNodeInTreeView(bool expandChildrenRecursively = false)
+        {
+            if (treeStore == null || treeView == null)
+            {
+                Console.WriteLine("Warning: TreeStore or TreeView is not initialized. Cannot expand first node.");
+                return;
+            }
+
+            if (treeStore.GetIterFirst(out TreeIter firstNodeIter))
+            {
+                TreePath firstNodePath = treeStore.GetPath(firstNodeIter);
+
+                if (firstNodePath != null)
+                {
+                    treeView.ExpandRow(firstNodePath, expandChildrenRecursively);
+                }
+            }
         }
     }
 }
