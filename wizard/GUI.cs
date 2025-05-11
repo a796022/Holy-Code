@@ -113,6 +113,9 @@ namespace wizard
             // Create the expander
             Expander expander = new Expander("Add Nodes");
 
+            // Set the expander properties
+            expander.Expanded = true;
+
             // Create the containers of the inputs
             int box_spacing_2 = 0; /* Space in pixels between the widgets that
                 will be added to the Box. */
