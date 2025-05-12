@@ -25,13 +25,21 @@ namespace wizard
         // File path of the currently opened file
         private string currentFile = string.Empty;
 
-        // Keyboard shortcut manager
+        // Managers
         private KeyboardShortcutManager shortcutManager;
+        private readonly SessionManager sessionManager;
 
         public GUI()
         {
+            sessionManager = new SessionManager();
             Window window = NewWindow();
             shortcutManager = new KeyboardShortcutManager(window, this);
+
+            // Cargar el último archivo si existe
+            if (!string.IsNullOrEmpty(sessionManager.LastOpenedFile))
+            {
+                LoadFile(sessionManager.LastOpenedFile);
+            }
         }
 
         private Window NewWindow()
@@ -327,6 +335,21 @@ namespace wizard
             if (!string.IsNullOrEmpty(currentFile))
             {
                 TreeNodeSaver.SaveTreeToFile(treeStore, currentFile);
+                sessionManager.LastOpenedFile = currentFile;
+            }
+        }
+
+        private void LoadFile(string filePath)
+        {
+            if (File.Exists(filePath))
+            {
+                currentFile = filePath;
+                treeStore.Clear();
+                TreeBuilder.PopulateTree(treeStore, currentFile);
+                sessionManager.LastOpenedFile = currentFile;
+
+                // Expand the first node in the TreeView
+                ExpandFirstNodeInTreeView();
             }
         }
 
@@ -334,29 +357,22 @@ namespace wizard
         {
             // Create a new file chooser dialog
             FileChooserDialog fileChooser = new FileChooserDialog(
-                "Select a File", 
-                null, 
+                "Open", null,
                 FileChooserAction.Open, 
-                "Cancel", ResponseType.Cancel, 
+                "Cancel", ResponseType.Cancel,
                 "Open", ResponseType.Accept);
 
-            // Show the dialog and wait for a user response
-            if (fileChooser.Run() == (int)ResponseType.Accept)
+            try
             {
-                // Get the selected file name
-                string fileName = fileChooser.Filename;
-                currentFile = fileName;
-
-                // Load the file into the TreeStore
-                treeStore.Clear();
-                TreeBuilder.PopulateTree(treeStore, fileName);
-
-                // Expand the first node in the TreeView
-                ExpandFirstNodeInTreeView();
+                if (fileChooser.Run() == (int)ResponseType.Accept)
+                {
+                    LoadFile(fileChooser.Filename);
+                }
             }
-
-            // Destroy the dialog to free resources
-            fileChooser.Destroy();
+            finally
+            {
+                fileChooser.Destroy();
+            }
         }
 
         private void ExpandFirstNodeInTreeView(bool expandChildrenRecursively = false)
