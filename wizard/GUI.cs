@@ -28,12 +28,16 @@ namespace wizard
         // File path of the currently opened file
         private string currentFile = string.Empty;
 
+        // Keyboard shortcut manager
+        private KeyboardShortcutManager shortcutManager;
+
         public GUI()
         {
-            NewWindow();
+            Window window = NewWindow();
+            shortcutManager = new KeyboardShortcutManager(window, this);
         }
 
-        private void NewWindow()
+        private Window NewWindow()
         {
             // Create the main window
             Window window = new Window(MAIN_WINDOW_DEFAULT_TITLE);
@@ -43,13 +47,21 @@ namespace wizard
                                   MAIN_WINDOW_DEFAULT_MIN_HEIGHT);
             
             // Sets the behavior of the window in case of different events
-            window.DeleteEvent += (sender, e) => Application.Quit();
+            window.DeleteEvent += Window_DeleteEvent;
 
             // Set the window components
             SetWindowComponents(window);
 
             // Show the window
             window.ShowAll();
+            
+            return window;
+        }
+
+        private void Window_DeleteEvent(object sender, DeleteEventArgs args)
+        {
+            shortcutManager.Dispose();
+            Application.Quit();
         }
 
         private void SetWindowComponents(Window window)
@@ -243,6 +255,10 @@ namespace wizard
                 will be added to the Box. */
             Box box = new Box(Orientation.Vertical, box_spacing);
 
+            // Create and add AccelGroup to the window
+            AccelGroup accelGroup = new AccelGroup();
+            window.AddAccelGroup(accelGroup);
+
             // Create the menu bar
             MenuBar menubar = new MenuBar();
 
@@ -251,9 +267,17 @@ namespace wizard
             MenuItem fileMenuItem = new MenuItem("File");
             fileMenuItem.Submenu = fileMenu;
 
-            // Create the file menu options
-            MenuItem openMenuItem = new MenuItem("Open");
-            MenuItem saveMenuItem = new MenuItem("Save");
+            // Create the file menu options with accelerator labels
+            MenuItem openMenuItem = new MenuItem("_Open");
+            openMenuItem.UseUnderline = true;
+            openMenuItem.AddAccelerator("activate", accelGroup, (uint)Gdk.Key.o, 
+                                      Gdk.ModifierType.ControlMask, AccelFlags.Visible);
+
+            MenuItem saveMenuItem = new MenuItem("_Save");
+            saveMenuItem.UseUnderline = true;
+            saveMenuItem.AddAccelerator("activate", accelGroup, (uint)Gdk.Key.s, 
+                                      Gdk.ModifierType.ControlMask, AccelFlags.Visible);
+            
             fileMenu.Append(openMenuItem);
             fileMenu.Append(saveMenuItem);
 
@@ -278,7 +302,7 @@ namespace wizard
             return box;
         }
 
-        private void OnSaveMenuItemActivated(object? sender, EventArgs e)
+        public void OnSaveMenuItemActivated(object? sender, EventArgs e)
         {
             if (!string.IsNullOrEmpty(currentFile))
             {
@@ -286,7 +310,7 @@ namespace wizard
             }
         }
 
-        private void OnOpenMenuItemActivated(object? sender, EventArgs e)
+        public void OnOpenMenuItemActivated(object? sender, EventArgs e)
         {
             // Create a new file chooser dialog
             FileChooserDialog fileChooser = new FileChooserDialog(

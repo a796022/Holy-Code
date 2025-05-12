@@ -1,5 +1,16 @@
 // DataManager.cs
 
+/*
+data
+├── iteration 1
+│   ├── content.json / content.xml
+│   └── {ID}.txt x n
+├── iteration 2
+│   ├── content.json / content.xml
+│   └── {ID}.txt x n
+...
+*/
+
 using System;
 using System.IO;
 using System.Linq;
