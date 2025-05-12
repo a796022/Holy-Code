@@ -6,7 +6,8 @@ namespace wizard
 {
     public class SessionManager
     {
-        private const string SESSION_FILE_NAME = ".wizard_session";
+        private const string APP_NAME = "wizard";
+        private const string SESSION_FILE_NAME = "session.json";
         private readonly string _sessionFilePath;
         private SessionData _currentSession = new();
 
@@ -14,7 +15,19 @@ namespace wizard
         {
             // Obtener el directorio home del usuario
             string homeDirectory = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
-            _sessionFilePath = Path.Combine(homeDirectory, SESSION_FILE_NAME);
+            
+            // Construir la ruta base según XDG
+            string? xdgDataHome = Environment.GetEnvironmentVariable("XDG_DATA_HOME");
+            string dataBaseDirectory = !string.IsNullOrEmpty(xdgDataHome) 
+                ? xdgDataHome 
+                : Path.Combine(homeDirectory, ".local", "share");
+
+            // Crear el directorio específico de la aplicación
+            string appDataDirectory = Path.Combine(dataBaseDirectory, APP_NAME);
+            Directory.CreateDirectory(appDataDirectory);
+
+            // Ruta final del archivo de sesión
+            _sessionFilePath = Path.Combine(appDataDirectory, SESSION_FILE_NAME);
             LoadSession();
         }
 
