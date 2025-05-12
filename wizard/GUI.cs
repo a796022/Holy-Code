@@ -20,10 +20,7 @@ namespace wizard
         // Important GUI components
         private TreeStore treeStore = new TreeStore(typeof(string));
         private TreeView treeView = new TreeView();
-        private Entry addInputEntry = new Entry
-        {
-            PlaceholderText = "Node Text"
-        };
+        private Entry addInputEntry = new Entry { PlaceholderText = "Node Text" };
 
         // File path of the currently opened file
         private string currentFile = string.Empty;
@@ -154,6 +151,11 @@ namespace wizard
             bool fill = true; /* If true, the child will be allocated the
                 full height of the box. */
             uint padding = 15; /* Extra space in pixels around the widget. */
+
+            // Configure the input entry
+            addInputEntry.Activated += OnAddButtonClicked;
+
+            // Pack the input entry into the expander content
             expanderContent_2.PackStart(addInputEntry, expand, fill, padding);
 
             // Pack the input label, entry, and button into the expander content
@@ -162,6 +164,8 @@ namespace wizard
             bool fill_2 = false; /* If true, the child will be allocated the
                 full height of the box. */
             uint padding_2 = 0; /* Extra space in pixels around the widget. */
+
+            // Pack the button into the expander content
             expanderContent_2.PackStart(addButton, expand_2, fill_2, padding_2);
 
             // Add the expander content to the expander
