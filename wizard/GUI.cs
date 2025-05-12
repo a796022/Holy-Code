@@ -177,23 +177,39 @@ namespace wizard
             paned.Pack2(rightSide, PANED_RESIZABLE, PANED_SHRINK);
         }
 
-        // Event handler function for the add button
+        /// <summary>
+        /// Añade un nuevo nodo al árbol como hijo del nodo seleccionado actualmente
+        /// </summary>
+        /// <param name="nodeText">Texto del nuevo nodo</param>
+        /// <returns>true si se añadió el nodo, false si no había nodo seleccionado o el texto estaba vacío</returns>
+        private bool AddNodeToTree(string nodeText)
+        {
+            if (string.IsNullOrEmpty(nodeText))
+                return false;
+
+            // Get the selected node from the TreeView
+            TreeIter selectedNode;
+            TreeSelection selection = treeView.Selection;
+
+            if (!selection.GetSelected(out _, out selectedNode))
+                return false;
+
+            // Add as a child of the selected node
+            TreeIter newNode = treeStore.AppendValues(selectedNode, nodeText);
+
+            // Expand the parent node
+            TreePath parentPath = treeStore.GetPath(selectedNode);
+            treeView.ExpandRow(parentPath, false);
+
+            return true;
+        }
+
         private void OnAddButtonClicked(object? sender, EventArgs args)
         {
             string nodeText = addInputEntry.Text;
-            if (!string.IsNullOrEmpty(nodeText))
+            if (AddNodeToTree(nodeText))
             {
-                // Get the selected node from the TreeView
-                TreeIter selectedNode;
-                TreeSelection selection = treeView.Selection;
-
-                if (selection.GetSelected(out _, out selectedNode))
-                {
-                    // Add as a child of the selected node
-                    treeStore.AppendValues(selectedNode, nodeText);
-                }
-
-                // Clear the input after adding the node
+                // Clear the input after successfully adding the node
                 addInputEntry.Text = string.Empty;
             }
         }
